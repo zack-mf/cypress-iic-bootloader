@@ -1,0 +1,8 @@
+D:/qcs40x/Cypress/project/4025LQIS412_workspace/4025LQIS412-EZIIC/EZIIC_wadge.cydsn/CortexM0p/ARM_GCC_541/Debug/CyBootAsmGnu.o : D:/qcs40x/Cypress/project/4025LQIS412_workspace/4025LQIS412-EZIIC/EZIIC_wadge.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s D:/qcs40x/Cypress/project/4025LQIS412_workspace/4025LQIS412-EZIIC/EZIIC_wadge.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc D:/qcs40x/Cypress/project/4025LQIS412_workspace/4025LQIS412-EZIIC/EZIIC_wadge.cydsn/Generated_Source/PSoC4/cyfittergnu.inc 
+
+D:/qcs40x/Cypress/project/4025LQIS412_workspace/4025LQIS412-EZIIC/EZIIC_wadge.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s : 
+
+D:/qcs40x/Cypress/project/4025LQIS412_workspace/4025LQIS412-EZIIC/EZIIC_wadge.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc : 
+
+D:/qcs40x/Cypress/project/4025LQIS412_workspace/4025LQIS412-EZIIC/EZIIC_wadge.cydsn/Generated_Source/PSoC4/cyfittergnu.inc : 
+

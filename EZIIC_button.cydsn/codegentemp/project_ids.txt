@@ -1,0 +1,6 @@
+D:\_Project\_MD\cypress_button-485\EZIIC_button.cydsn\EZIIC_button.cyprj|9cec2e89-15d4-4190-966e-0b880c4ca81f
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|5666995d-53c6-4e8c-8465-5100db5daaa0
+C:\Users\zack.li\Documents\PSoC Creator\4.2\Downloads ( 4.2).cylib\Downloads ( 4.2).cyprj|7340ef5f-64ae-4cc4-99a4-cf64fad03d06
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|67ef1978-47ee-4d40-a25a-363ed32906c8
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|ebcbde61-6188-4f4a-aa9f-3535dfcc1540
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|2066a20d-0cbb-424a-9a82-f75c48c97da9

@@ -1,0 +1,22 @@
+# EZIIC_button
+# 2020-05-25 08:32:53Z
+
+# IO_2@[IOP=(3)][IoId=(2)] is reserved: SWDDebugEnabled
+dont_use_io iocell 3 2
+# IO_3@[IOP=(3)][IoId=(3)] is reserved: SWDDebugEnabled
+dont_use_io iocell 3 3
+set_location "ClockGenBlock" m0s8clockgenblockcell -1 -1 0
+set_io "\EZI2C:sda(0)\" iocell 4 1
+set_io "\EZI2C:scl(0)\" iocell 4 0
+set_io "\CapSense:Cmod(0)\" iocell 4 2
+set_io "\CapSense:Sns(0)\" iocell 4 5
+set_io "\CapSense:Sns(1)\" iocell 3 4
+set_io "\CapSense:Sns(2)\" iocell 4 6
+set_io "\CapSense:Sns(3)\" iocell 3 5
+set_io "\CapSense:Shield(0)\" iocell 6 2
+set_io "CAP_INT(0)" iocell 0 6
+set_io "\UART:tx(0)\" iocell 7 1
+set_io "\UART:rx(0)\" iocell 7 0
+set_location "\CapSense:IDACComp:cy_psoc4_idac\" p4csidac7cell -1 -1 0
+set_location "\CapSense:CSD\" p4csdcell -1 -1 0
+set_location "\CapSense:IDACMod:cy_psoc4_idac\" p4csidac8cell -1 -1 0

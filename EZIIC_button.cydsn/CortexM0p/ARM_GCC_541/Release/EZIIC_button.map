@@ -1,0 +1,1681 @@
+Archive member included to satisfy reference by file (symbol)
+
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+                              .\CortexM0p\ARM_GCC_541\Release\main.o (EZI2C_Start)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o) (EZI2C_EzI2CInit)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o) (EZI2C_EZI2C_STRETCH_ISR)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+                              .\CortexM0p\ARM_GCC_541\Release\main.o (CapSense_Start)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o) (CapSense_DpInitialize)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o) (CapSense_DsInitialize)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o) (CapSense_TuInitialize)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                              .\CortexM0p\ARM_GCC_541\Release\main.o (CapSense_InitializeSensorBaseline)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                              .\CortexM0p\ARM_GCC_541\Release\main.o (CapSense_IsBusy)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o) (CapSense_SsCSDSetShieldElectrodesState)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o) (CapSense_ISR_StartEx)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o) (CyIntSetVector)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o) (CySysClkWcoEnabled)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+                              .\CortexM0p\ARM_GCC_541\Release\main.o (UART_Start)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o) (UART_UartInit)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+                              .\CortexM0p\ARM_GCC_541\Release\main.o (CAP_INT_Write)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+                              .\CortexM0p\ARM_GCC_541\Release\main.o (TC_Interrupt_StartEx)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+                              .\CortexM0p\ARM_GCC_541\Release\main.o (Timer_Start)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyBootAsmGnu.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o) (CyDelayCycles)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o) (CapSense_CSDPostSingleScan)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o) (CySysFlashSetWaitCycles)
+.\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o) (UART_SpiUartReadRxData)
+c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_thumb1_case_uqi.o)
+                              .\CortexM0p\ARM_GCC_541\Release\main.o (__gnu_thumb1_case_uqi)
+c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_udivsi3.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o) (__aeabi_uidiv)
+c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_dvmd_tls.o)
+                              c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_udivsi3.o) (__aeabi_idiv0)
+c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+                              .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o (__errno)
+c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o)
+                              c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o (exit)
+c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-impure.o)
+                              c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o) (_global_impure_ptr)
+c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
+                              c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o (__libc_init_array)
+c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memcpy-stub.o)
+                              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o) (memcpy)
+c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
+                              c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o (memset)
+
+Allocating common symbols
+Common symbol       size              file
+
+EZI2C_offsetBuf1    0x1               .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+EZI2C_indexBuf1     0x2               .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+EZI2C_fsmState      0x1               .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+EZI2C_protectBuf1   0x2               .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+EZI2C_curStatus     0x1               .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+CapSense_dsRam      0xb0              .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+i2c                 0x12              .\CortexM0p\ARM_GCC_541\Release\main.o
+CapSense_curRamSnsPtr
+                    0x4               .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+EZI2C_dataBuffer1   0x4               .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+EZI2C_bufSizeBuf1   0x2               .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+CapSense_curSnsIOPtr
+                    0x4               .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+
+Discarded input sections
+
+ .text          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+ .data          0x00000000        0x4 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+ .text          0x00000000       0x78 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .ARM.extab     0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .ARM.exidx     0x00000000        0x8 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\main.o
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\main.o
+ .text.ProcessCapsenseEvent_1_1
+                0x00000000       0xe0 .\CortexM0p\ARM_GCC_541\Release\main.o
+ .text.ProcessI2CCommand
+                0x00000000        0x2 .\CortexM0p\ARM_GCC_541\Release\main.o
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .data          0x00000000        0x4 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .text._exit    0x00000000        0xa .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .text._sbrk    0x00000000       0x2c .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .text.EZI2C_Init
+                0x00000000        0x8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .text.EZI2C_Stop
+                0x00000000       0x2c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .text.EZI2C_SetRxFifoLevel
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .text.EZI2C_SetTxFifoLevel
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .text.EZI2C_SetCustomInterruptHandler
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .text.EZI2C_EzI2CStop
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .text.EZI2C_EzI2CGetActivity
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .text.EZI2C_EzI2CSetAddress1
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .text.EZI2C_EzI2CGetAddress1
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .text.EZI2C_EzI2CSetReadBoundaryBuffer1
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .text.CapSense_Stop
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .text.CapSense_Resume
+                0x00000000       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .text.CapSense_ProcessWidget
+                0x00000000       0x3c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .text.CapSense_ProcessWidgetExt
+                0x00000000       0x58 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .text.CapSense_ProcessSensorExt
+                0x00000000       0x38 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .text.CapSense_Sleep
+                0x00000000        0x2 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .text.CapSense_Wakeup
+                0x00000000        0x2 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .text.CapSense_DpProcessCsdSensorRawCountsExt
+                0x00000000       0x3c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .text.DsParseParamId
+                0x00000000       0x5c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .text.CapSense_GetParam
+                0x00000000       0x48 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .text.CapSense_SetParam
+                0x00000000       0x48 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .text.CapSense_IsWidgetActive
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .text.CapSense_IsSensorActive
+                0x00000000       0x3c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .text.CapSense_IsProximitySensorActive
+                0x00000000       0x3c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .text.CapSense_RunTuner
+                0x00000000       0xd0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_UpdateSensorBaseline
+                0x00000000       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_UpdateWidgetBaseline
+                0x00000000       0x2c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_UpdateAllBaselines
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_InitializeIIR
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_RunIIR
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_InitializeMedian
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_RunMedian
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_InitializeAverage
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_RunAverage
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_FtRunEnabledFilters
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_FtMedian
+                0x00000000       0x1a .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text.CapSense_FtIIR1stOrder
+                0x00000000       0x12 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .text.CapSense_SetupWidgetExt
+                0x00000000       0x40 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .text.CapSense_ScanExt
+                0x00000000       0x30 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .text.CapSense_SetPinState
+                0x00000000       0x8c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .text.CapSense_SsIsrInitialize
+                0x00000000        0x8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .text.CapSense_SsSetSnsClockDivider
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .text.CapSense_SsSetClockDividers
+                0x00000000       0x12 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .text.CapSense_SsCSDGetColSnsClkDivider
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .text.CapSense_SetInactiveElectrodeState
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ .text.CapSense_SsCSDDisconnectSnsExt
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text.CapSense_ISR_Interrupt
+                0x00000000        0x2 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text.CapSense_ISR_Stop
+                0x00000000       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text.CapSense_ISR_SetVector
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text.CapSense_ISR_GetVector
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text.CapSense_ISR_Start
+                0x00000000       0x2c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text.CapSense_ISR_GetPriority
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text.CapSense_ISR_Enable
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text.CapSense_ISR_GetState
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text.CapSense_ISR_Disable
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text.CapSense_ISR_SetPending
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text.CapSense_ISR_ClearPending
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .bss           0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysClkImoStart
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysClkImoStop
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysClkWriteHfclkDirect
+                0x00000000       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysEnablePumpClock
+                0x00000000       0x30 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysClkGetSysclkSource
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysClkWriteSysclkDiv
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysClkWriteHfclkDiv
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysGetResetReason
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CyDisableInts
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CyEnableInts
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CyIntSetSysVector
+                0x00000000        0xe .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CyIntGetSysVector
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CyIntGetVector
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CyIntGetPriority
+                0x00000000       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CyIntGetState
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CyIntSetPending
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CyHalt   0x00000000        0x4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySoftwareReset
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CyDelayFreq
+                0x00000000       0x48 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickInit
+                0x00000000       0x54 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickStop
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickEnableInterrupt
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickEnable
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickStart
+                0x00000000       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickDisableInterrupt
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickSetReload
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickGetReload
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickGetValue
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickSetClockSource
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickGetClockSource
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickGetCountFlag
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickServiceCallbacks
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickClear
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickSetCallback
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CySysTickGetCallback
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text.CyGetUniqueId
+                0x00000000       0x74 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .bss           0x00000000        0x8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysClkWcoSetHighPowerMode
+                0x00000000       0x34 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysClkIloStart
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysClkIloStop
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysClkIloStartMeasurement
+                0x00000000       0x34 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysClkIloStopMeasurement
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysClkIloCompensate
+                0x00000000       0xe8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysClkWcoStart
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysClkWcoStop
+                0x00000000       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysClkWcoSetPowerMode
+                0x00000000       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysClkWcoClockOutSelect
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtGetEnabledStatus
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtEnable
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtSetMatch
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtGetMatch
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtGetCount
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtSetIgnoreBits
+                0x00000000       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtGetIgnoreBits
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtClearInterrupt
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtMaskInterrupt
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtUnmaskInterrupt
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtSetInterruptCallback
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtGetInterruptCallback
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text.CySysWdtIsr
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .text.UART_Init
+                0x00000000        0x8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .text.UART_Stop
+                0x00000000       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .text.UART_SetRxFifoLevel
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .text.UART_SetTxFifoLevel
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartStop
+                0x00000000       0x2c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartSetRxAddress
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartSetRxAddressMask
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartGetChar
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartGetByte
+                0x00000000       0x34 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartSetRtsPolarity
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartSetRtsFifoLevel
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartPutString
+                0x00000000       0x16 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartPutCRLF
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartEnableCts
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartDisableCts
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartSetCtsPolarity
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text.UART_UartSendBreakBlocking
+                0x00000000       0x58 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .text.CAP_INT_SetDriveMode
+                0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .text.CAP_INT_Read
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .text.CAP_INT_ReadDataReg
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .text.CAP_INT_SetInterruptMode
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .text.CAP_INT_ClearInterrupt
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text.TC_Interrupt_Interrupt
+                0x00000000        0x2 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text.TC_Interrupt_Stop
+                0x00000000       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text.TC_Interrupt_SetVector
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text.TC_Interrupt_GetVector
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text.TC_Interrupt_Start
+                0x00000000       0x2c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text.TC_Interrupt_GetPriority
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text.TC_Interrupt_Enable
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text.TC_Interrupt_GetState
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text.TC_Interrupt_Disable
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text.TC_Interrupt_SetPending
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text.TC_Interrupt_ClearPending
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_Stop
+                0x00000000       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetMode
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetQDMode
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetPrescaler
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetOneShot
+                0x00000000       0x30 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetPWMMode
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetPWMSyncKill
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetPWMStopOnKill
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetPWMDeadTime
+                0x00000000       0x2c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetPWMInvert
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_WriteCounter
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_ReadCounter
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetCounterMode
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_WritePeriod
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_ReadPeriod
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetCompareSwap
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_WritePeriodBuf
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_ReadPeriodBuf
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetPeriodSwap
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_WriteCompare
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_ReadCompare
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_WriteCompareBuf
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_ReadCompareBuf
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_ReadCapture
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_ReadCaptureBuf
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetCaptureMode
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetReloadMode
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetStartMode
+                0x00000000       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetStopMode
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetCountMode
+                0x00000000       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_ReadStatus
+                0x00000000       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetInterruptMode
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_GetInterruptSourceMasked
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_GetInterruptSource
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .text.Timer_SetInterrupt
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyBootAsmGnu.o)
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyBootAsmGnu.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .bss           0x00000000       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .text.CySysFlashClockBackup
+                0x00000000       0x48 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .text.CySysFlashClockConfig
+                0x00000000       0x38 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .text.CySysFlashClockRestore
+                0x00000000       0x48 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .text.CySysFlashWriteRow
+                0x00000000       0xdc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .text.CySysSFlashWriteUserRow
+                0x00000000       0xcc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .text          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .data          0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .bss           0x00000000        0x0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .text.UART_SpiUartReadRxData
+                0x00000000        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .text.UART_SpiUartGetRxBufferSize
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .text.UART_SpiUartClearRxBuffer
+                0x00000000       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .text.UART_SpiUartWriteTxData
+                0x00000000       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .text.UART_SpiUartPutArray
+                0x00000000       0x16 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .text.UART_SpiUartGetTxBufferSize
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .text.UART_SpiUartClearTxBuffer
+                0x00000000       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .text.UART_SpiUartDisableIntRx
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .text.UART_SpiUartDisableIntTx
+                0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_thumb1_case_uqi.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_thumb1_case_uqi.o)
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_udivsi3.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_udivsi3.o)
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_dvmd_tls.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_dvmd_tls.o)
+ .text          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+ .text          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o)
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o)
+ .text.exit     0x00000000       0x2c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o)
+ .text          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-impure.o)
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-impure.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-impure.o)
+ .rodata._global_impure_ptr
+                0x00000000        0x4 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-impure.o)
+ .text          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
+ .text          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memcpy-stub.o)
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memcpy-stub.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memcpy-stub.o)
+ .text          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
+ .text          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtend.o
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtend.o
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtend.o
+ .text          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ .data          0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ .bss           0x00000000        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+rom              0x00000000         0x00008000         xr
+ram              0x20000000         0x00001000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+START GROUP
+LOAD .\CortexM0p\ARM_GCC_541\Release\main.o
+LOAD .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+LOAD .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+LOAD .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+LOAD .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a
+LOAD C:\Users\zack.li\Documents\PSoC Creator\4.2\Downloads ( 4.2).cylib\CapSense_P4_v7_0\PSoC4\Library\Capsense_P4Library_GCCp.a
+END GROUP
+START GROUP
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libc_nano.a
+END GROUP
+START GROUP
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libc_nano.a
+END GROUP
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtend.o
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+START GROUP
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libc.a
+LOAD c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys.a
+END GROUP
+                0x00000000                CY_APPL_ORIGIN = 0x0
+                0x00000080                CY_FLASH_ROW_SIZE = 0x80
+                0x00000001                CY_APPL_NUM = 0x1
+                0x00000001                CY_APPL_MAX = 0x1
+                0x00000040                CY_METADATA_SIZE = 0x40
+                0x00000000                CY_APPL_LOADABLE = 0x0
+                0x00000000                CY_CHECKSUM_EXCLUDE_SIZE = ALIGN (0x0, CY_FLASH_ROW_SIZE)
+                0x00000000                CY_APP_FOR_STACK_AND_COPIER = 0x0
+                [!provide]                PROVIDE (__cy_heap_start, _end)
+                0x00000001                PROVIDE (__cy_region_num, ((__cy_regions_end - __cy_regions) / 0x10))
+                0x20001000                PROVIDE (__cy_stack, (ORIGIN (ram) + LENGTH (ram)))
+                [!provide]                PROVIDE (__cy_heap_end, (__cy_stack - 0x400))
+
+.cybootloader   0x00000000        0x0
+ *(.cybootloader)
+                0x00000000                appl1_start = CY_APPL_ORIGIN?CY_APPL_ORIGIN:ALIGN (CY_FLASH_ROW_SIZE)
+                0x00003f80                appl2_start = (appl1_start + ALIGN ((((LENGTH (rom) - appl1_start) - (0x2 * CY_FLASH_ROW_SIZE)) / 0x2), CY_FLASH_ROW_SIZE))
+                0x00000000                appl_start = (CY_APPL_NUM == 0x1)?appl1_start:appl2_start
+                0x00000001                cy_project_type_bootloader = (appl_start == 0x0)?0x1:0x0
+                0x00000000                cy_project_type_app_for_stack_and_copier = (CY_APP_FOR_STACK_AND_COPIER == 0x1)?0x1:0x0
+
+.text           0x00000000     0x22a2
+ CREATE_OBJECT_SYMBOLS
+                0x00000000                PROVIDE (__cy_interrupt_vector, RomVectors)
+ *(.romvectors)
+ .romvectors    0x00000000       0x10 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+                0x00000000                RomVectors
+                0x00000001                ASSERT ((. != __cy_interrupt_vector), No interrupt vector)
+                0x00000001                ASSERT (CY_APPL_ORIGIN?(SIZEOF (.cybootloader) <= CY_APPL_ORIGIN):0x1, Wrong image location)
+                0x00000010                PROVIDE (__cy_reset, Reset)
+ *(.text.Reset)
+ .text.Reset    0x00000010        0xa .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+                0x00000010                Reset
+                0x00000001                ASSERT ((. != __cy_reset), No reset code)
+ *(.psocinit)
+ *fill*         0x0000001a        0x2 
+ .psocinit      0x0000001c      0x13c .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+                0x0000001c                cyfitter_cfg
+                0x00000158                . = MAX (., 0x100)
+ *(.text .text.* .gnu.linkonce.t.*)
+ .text          0x00000158       0x60 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+ .text.TC_InterruptHandler
+                0x000001b8       0x18 .\CortexM0p\ARM_GCC_541\Release\main.o
+                0x000001b8                TC_InterruptHandler
+ .text.ProcessCapsenseEvent
+                0x000001d0      0x100 .\CortexM0p\ARM_GCC_541\Release\main.o
+                0x000001d0                ProcessCapsenseEvent
+ .text.startup.main
+                0x000002d0       0x5c .\CortexM0p\ARM_GCC_541\Release\main.o
+                0x000002d0                main
+ .text.SetAnalogRoutingPumps
+                0x0000032c       0x38 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+                0x0000032c                SetAnalogRoutingPumps
+ .text.IntDefaultHandler
+                0x00000364       0x10 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+                0x00000364                IntDefaultHandler
+ .text.Start_c  0x00000374       0x4c .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+                0x00000374                Start_c
+ .text.startup.initialize_psoc
+                0x000003c0       0x3c .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+                0x000003c0                initialize_psoc
+ .text.EZI2C_Enable
+                0x000003fc       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+                0x000003fc                EZI2C_Enable
+ .text.EZI2C_Start
+                0x00000418       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+                0x00000418                EZI2C_Start
+ .text.EZI2C_EzI2CInit
+                0x00000434       0xc0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+                0x00000434                EZI2C_EzI2CInit
+ .text.EZI2C_EzI2CSetBuffer1
+                0x000004f4       0x30 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+                0x000004f4                EZI2C_EzI2CSetBuffer1
+ .text.EZI2C_EZI2C_STRETCH_ISR
+                0x00000524      0x2f8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+                0x00000524                EZI2C_EZI2C_STRETCH_ISR
+ .text.CapSense_Initialize
+                0x0000081c       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+                0x0000081c                CapSense_Initialize
+ .text.CapSense_Start
+                0x00000840       0x44 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+                0x00000840                CapSense_Start
+ .text.CapSense_ProcessAllWidgets
+                0x00000884       0x3c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+                0x00000884                CapSense_ProcessAllWidgets
+ .text.CapSense_DpInitialize
+                0x000008c0       0x5c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+                0x000008c0                CapSense_DpInitialize
+ .text.CapSense_DpUpdateDifferences
+                0x0000091c       0x16 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+                0x0000091c                CapSense_DpUpdateDifferences
+ .text.CapSense_DpProcessCsdWidgetRawCounts
+                0x00000932       0x54 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+                0x00000932                CapSense_DpProcessCsdWidgetRawCounts
+ .text.CapSense_DpProcessButton
+                0x00000986       0x66 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+                0x00000986                CapSense_DpProcessButton
+ .text.CapSense_DpProcessProximity
+                0x000009ec       0x74 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+                0x000009ec                CapSense_DpProcessProximity
+ .text.CapSense_DpProcessCsdWidgetStatus
+                0x00000a60       0x4c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+                0x00000a60                CapSense_DpProcessCsdWidgetStatus
+ .text.CapSense_DsInitialize
+                0x00000aac       0x78 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+                0x00000aac                CapSense_DsInitialize
+ .text.CapSense_IsAnyWidgetActive
+                0x00000b24        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+                0x00000b24                CapSense_IsAnyWidgetActive
+ .text.CapSense_TuInitialize
+                0x00000b30       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+                0x00000b30                CapSense_TuInitialize
+ .text.CapSense_FtInitializeBaselineChannel
+                0x00000b44       0x12 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000b44                CapSense_FtInitializeBaselineChannel
+ .text.CapSense_FtInitializeBaseline
+                0x00000b56        0xa .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000b56                CapSense_FtInitializeBaseline
+ .text.CapSense_InitializeSensorBaseline
+                0x00000b60       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000b60                CapSense_InitializeSensorBaseline
+ .text.CapSense_InitializeWidgetBaseline
+                0x00000b80       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000b80                CapSense_InitializeWidgetBaseline
+ .text.CapSense_InitializeAllBaselines
+                0x00000ba8       0x12 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000ba8                CapSense_InitializeAllBaselines
+ .text.CapSense_FtUpdateBaseline
+                0x00000bba       0x66 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000bba                CapSense_FtUpdateBaseline
+ .text.CapSense_InitializeIIRInternal
+                0x00000c20        0x6 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000c20                CapSense_InitializeIIRInternal
+ .text.CapSense_RunIIRInternal
+                0x00000c26       0x2e .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000c26                CapSense_RunIIRInternal
+ .text.CapSense_InitializeMedianInternal
+                0x00000c54        0x8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000c54                CapSense_InitializeMedianInternal
+ .text.CapSense_RunMedianInternal
+                0x00000c5c       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000c5c                CapSense_RunMedianInternal
+ .text.CapSense_InitializeAverageInternal
+                0x00000c84        0xa .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000c84                CapSense_InitializeAverageInternal
+ *fill*         0x00000c8e        0x2 
+ .text.CapSense_InitializeWidgetFilter
+                0x00000c90       0x78 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000c90                CapSense_InitializeWidgetFilter
+ .text.CapSense_InitializeAllFilters
+                0x00000d08       0x12 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000d08                CapSense_InitializeAllFilters
+ .text.CapSense_FtInitialize
+                0x00000d1a        0x8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000d1a                CapSense_FtInitialize
+ .text.CapSense_RunAverageInternal
+                0x00000d22       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000d22                CapSense_RunAverageInternal
+ .text.CapSense_FtRunEnabledFiltersInternal
+                0x00000d3e       0x22 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                0x00000d3e                CapSense_FtRunEnabledFiltersInternal
+ .text.CapSense_IsBusy
+                0x00000d60       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00000d60                CapSense_IsBusy
+ .text.CapSense_SetupWidget
+                0x00000d70       0x30 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00000d70                CapSense_SetupWidget
+ .text.CapSense_Scan
+                0x00000da0       0x30 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00000da0                CapSense_Scan
+ .text.CapSense_ScanAllWidgets
+                0x00000dd0       0x3c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00000dd0                CapSense_ScanAllWidgets
+ .text.CapSense_SsSetAllIOsState
+                0x00000e0c       0x80 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00000e0c                CapSense_SsSetAllIOsState
+ .text.CapSense_SsPostAllWidgetsScan
+                0x00000e8c       0x68 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00000e8c                CapSense_SsPostAllWidgetsScan
+ .text.CapSense_SsSetModClkClockDivider
+                0x00000ef4       0x2c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00000ef4                CapSense_SsSetModClkClockDivider
+ .text.CapSense_CalibrateWidget
+                0x00000f20       0x12 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00000f20                CapSense_CalibrateWidget
+ .text.CapSense_CalibrateAllWidgets
+                0x00000f32       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00000f32                CapSense_CalibrateAllWidgets
+ .text.CapSense_SsCSDCalcPrsSize
+                0x00000f4a       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00000f4a                CapSense_SsCSDCalcPrsSize
+ *fill*         0x00000f6a        0x2 
+ .text.CapSense_SsInitializeSourceSenseClk
+                0x00000f6c       0xc8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00000f6c                CapSense_SsInitializeSourceSenseClk
+ .text.CapSense_DischargeExtCapacitors
+                0x00001034       0xa8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00001034                CapSense_DischargeExtCapacitors
+ .text.CapSense_WriteBitsSafe
+                0x000010dc       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x000010dc                CapSense_WriteBitsSafe
+ .text.CapSense_SsSwitchSensingMode
+                0x000010f8       0x50 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x000010f8                CapSense_SsSwitchSensingMode
+ .text.CapSense_SsInitialize
+                0x00001148       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x00001148                CapSense_SsInitialize
+ .text.CapSense_SsCSDSetShieldElectrodesState
+                0x00001170       0x68 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x00001170                CapSense_SsCSDSetShieldElectrodesState
+ .text.CapSense_SsCSDEnableShieldElectrodes
+                0x000011d8        0xa .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x000011d8                CapSense_SsCSDEnableShieldElectrodes
+ .text.CapSense_SsCSDDisableShieldElectrodes
+                0x000011e2        0xa .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x000011e2                CapSense_SsCSDDisableShieldElectrodes
+ .text.CapSense_SsCSDInitialize
+                0x000011ec      0x194 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x000011ec                CapSense_SsCSDInitialize
+ .text.CapSense_SsCSDSetUpIdacs
+                0x00001380       0x60 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x00001380                CapSense_SsCSDSetUpIdacs
+ .text.CapSense_SsCSDGetNumberOfConversions
+                0x000013e0       0x30 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x000013e0                CapSense_SsCSDGetNumberOfConversions
+ .text.CapSense_SsCSDConfigClock
+                0x00001410       0x44 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x00001410                CapSense_SsCSDConfigClock
+ .text.CapSense_SsCSDCalculateScanDuration
+                0x00001454       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x00001454                CapSense_SsCSDCalculateScanDuration
+ .text.CapSense_SsCSDStartSample
+                0x0000146c      0x110 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x0000146c                CapSense_SsCSDStartSample
+ .text.CapSense_CSDScanExt
+                0x0000157c       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x0000157c                CapSense_CSDScanExt
+ .text.CapSense_CSDConnectSns
+                0x0000159c       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x0000159c                CapSense_CSDConnectSns
+ *fill*         0x000015ce        0x2 
+ .text.CapSense_CSDScan
+                0x000015d0       0x8c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x000015d0                CapSense_CSDScan
+ .text.CapSense_SsCSDConnectSensorExt
+                0x0000165c       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x0000165c                CapSense_SsCSDConnectSensorExt
+ .text.CapSense_CSDDisconnectSns
+                0x00001680       0x70 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x00001680                CapSense_CSDDisconnectSns
+ .text.CapSense_SsCSDElectrodeCheck
+                0x000016f0       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x000016f0                CapSense_SsCSDElectrodeCheck
+ .text.CapSense_CSDSetupWidget
+                0x00001710       0x58 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x00001710                CapSense_CSDSetupWidget
+ .text.CapSense_CSDSetupWidgetExt
+                0x00001768       0x64 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x00001768                CapSense_CSDSetupWidgetExt
+ .text.CapSense_CSDCalibrateWidget
+                0x000017cc      0x27c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x000017cc                CapSense_CSDCalibrateWidget
+ .text.CapSense_ISR_SetPriority
+                0x00001a48       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+                0x00001a48                CapSense_ISR_SetPriority
+ .text.CapSense_ISR_StartEx
+                0x00001a6c       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+                0x00001a6c                CapSense_ISR_StartEx
+ .text.CySysClkImoDisableWcoLock
+                0x00001a94       0x48 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x00001a94                CySysClkImoDisableWcoLock
+ .text.CySysClkImoGetWcoLock
+                0x00001adc       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x00001adc                CySysClkImoGetWcoLock
+ .text.CyIntSetVector
+                0x00001aec       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x00001aec                CyIntSetVector
+ .text.CyIntSetPriority
+                0x00001afc       0x34 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x00001afc                CyIntSetPriority
+ .text.CyIntEnable
+                0x00001b30       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x00001b30                CyIntEnable
+ .text.CyIntDisable
+                0x00001b44       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x00001b44                CyIntDisable
+ .text.CyIntClearPending
+                0x00001b58       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x00001b58                CyIntClearPending
+ .text.CyDelay  0x00001b6c       0x2c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x00001b6c                CyDelay
+ .text.CySysClkImoEnableWcoLock
+                0x00001b98       0xc4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x00001b98                CySysClkImoEnableWcoLock
+ .text.CySysClkWriteImoFreq
+                0x00001c5c       0xb8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x00001c5c                CySysClkWriteImoFreq
+ .text.CyDelayUs
+                0x00001d14       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x00001d14                CyDelayUs
+ .text.CySysClkWcoEnabled
+                0x00001d28        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+                0x00001d28                CySysClkWcoEnabled
+ .text.CySysWdtDisable
+                0x00001d34       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+                0x00001d34                CySysWdtDisable
+ .text.UART_Enable
+                0x00001d44       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+                0x00001d44                UART_Enable
+ .text.UART_Start
+                0x00001d5c       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+                0x00001d5c                UART_Start
+ .text.UART_UartInit
+                0x00001d78       0xa8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+                0x00001d78                UART_UartInit
+ .text.UART_UartPostEnable
+                0x00001e20       0x2c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+                0x00001e20                UART_UartPostEnable
+ .text.CAP_INT_Write
+                0x00001e4c       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+                0x00001e4c                CAP_INT_Write
+ .text.TC_Interrupt_SetPriority
+                0x00001e64       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+                0x00001e64                TC_Interrupt_SetPriority
+ .text.TC_Interrupt_StartEx
+                0x00001e84       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+                0x00001e84                TC_Interrupt_StartEx
+ .text.Timer_Init
+                0x00001eac       0x38 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+                0x00001eac                Timer_Init
+ .text.Timer_TriggerCommand
+                0x00001ee4       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+                0x00001ee4                Timer_TriggerCommand
+ .text.Timer_Enable
+                0x00001f00       0x24 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+                0x00001f00                Timer_Enable
+ .text.Timer_Start
+                0x00001f24       0x1c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+                0x00001f24                Timer_Start
+ .text.Timer_ClearInterrupt
+                0x00001f40        0xc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+                0x00001f40                Timer_ClearInterrupt
+ *fill*         0x00001f4c        0x4 
+ .text          0x00001f50       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyBootAsmGnu.o)
+                0x00001f50                CyDelayCycles
+                0x00001f62                CyEnterCriticalSection
+                0x00001f6a                CyExitCriticalSection
+ .text.CapSense_SsCSDPostScan
+                0x00001f70       0x58 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .text.CapSense_CSDPostSingleScan
+                0x00001fc8       0x2c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+                0x00001fc8                CapSense_CSDPostSingleScan
+ .text.CapSense_CSDPostMultiScan
+                0x00001ff4       0xc4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+                0x00001ff4                CapSense_CSDPostMultiScan
+ .text.CySysFlashSetWaitCycles
+                0x000020b8       0x44 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+                0x000020b8                CySysFlashSetWaitCycles
+ .text          0x000020fc       0x14 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_thumb1_case_uqi.o)
+                0x000020fc                __gnu_thumb1_case_uqi
+ .text          0x00002110      0x114 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_udivsi3.o)
+                0x00002110                __aeabi_uidiv
+                0x00002110                __udivsi3
+                0x0000221c                __aeabi_uidivmod
+ .text          0x00002224        0x4 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_dvmd_tls.o)
+                0x00002224                __aeabi_idiv0
+                0x00002224                __aeabi_ldiv0
+ .text.__errno  0x00002228        0xc c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+                0x00002228                __errno
+ .text.__libc_init_array
+                0x00002234       0x4c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
+                0x00002234                __libc_init_array
+ .text.memcpy   0x00002280       0x12 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memcpy-stub.o)
+                0x00002280                memcpy
+ .text.memset   0x00002292       0x10 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
+                0x00002292                memset
+ *(.plt)
+ *(.gnu.warning)
+ *(.glue_7t)
+ .glue_7t       0x000022a2        0x0 linker stubs
+ *(.glue_7)
+ .glue_7        0x000022a2        0x0 linker stubs
+ *(.vfp11_veneer)
+ .vfp11_veneer  0x000022a2        0x0 linker stubs
+ *(.bootloader)
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+ *(.gcc_except_table)
+
+.v4_bx          0x000022a4        0x0
+ .v4_bx         0x000022a4        0x0 linker stubs
+
+.iplt           0x000022a4        0x0
+ .iplt          0x000022a4        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+
+.eh_frame_hdr
+ *(.eh_frame_hdr)
+
+.eh_frame       0x000022a4        0x4
+ *(.eh_frame)
+ .eh_frame      0x000022a4        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+ .eh_frame      0x000022a4        0x4 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtend.o
+                [!provide]                PROVIDE (__exidx_start, .)
+
+.ARM.exidx
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x000022a8                __exidx_end = .
+
+.rodata         0x000022a8      0x1f0
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata        0x000022a8      0x184 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+                0x000022a8                CapSense_ramIdacInit
+                0x000022ae                CapSense_ramWidgetInit
+                0x00002300                CapSense_dsFlash
+                0x0000238c                CapSense_shieldIoList
+                0x000023a0                CapSense_ioList
+ .rodata        0x0000242c       0x31 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x0000242c                CapSense_idacGainTable
+                0x0000245c                CapSense_scanFreqIndex
+ .rodata.str1.1
+                0x0000245d        0x2 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-impure.o)
+                0x00002460                . = ALIGN (0x4)
+ *fill*         0x0000245f        0x1 
+ *(.init)
+ .init          0x00002460        0x4 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x00002460                _init
+ .init          0x00002464        0x8 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+                0x0000246c                . = ALIGN (0x4)
+                0x0000246c                __preinit_array_start = .
+ *(.preinit_array)
+                0x0000246c                __preinit_array_end = .
+                0x0000246c                . = ALIGN (0x4)
+                0x0000246c                __init_array_start = .
+ *(SORT(.init_array.*))
+ *(.init_array)
+ .init_array    0x0000246c        0x4 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+ .init_array    0x00002470        0x4 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+                0x00002474                __init_array_end = .
+                0x00002474                . = ALIGN (0x4)
+ *(.fini)
+ .fini          0x00002474        0x4 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x00002474                _fini
+ .fini          0x00002478        0x8 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+                0x00002480                . = ALIGN (0x4)
+                0x00002480                __fini_array_start = .
+ *(.fini_array)
+ .fini_array    0x00002480        0x4 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+ *(SORT(.fini_array.*))
+                0x00002484                __fini_array_end = .
+                0x00002484                . = ALIGN (0x4)
+ *crtbegin.o(.ctors)
+ *(EXCLUDE_FILE(*crtend.o) .ctors)
+ *(SORT(.ctors.*))
+ *crtend.o(.ctors)
+                0x00002484                . = ALIGN (0x4)
+ *crtbegin.o(.dtors)
+ *(EXCLUDE_FILE(*crtend.o) .dtors)
+ *(SORT(.dtors.*))
+ *crtend.o(.dtors)
+                0x00002484                . = ALIGN (0x4)
+                0x00002484                __cy_regions = .
+                0x00002484        0x4 LONG 0x2498 __cy_region_init_ram
+                0x00002488        0x4 LONG 0x20000080 __cy_region_start_data
+                0x0000248c        0x4 LONG 0x80 __cy_region_init_size_ram
+                0x00002490        0x4 LONG 0x168 __cy_region_zero_size_ram
+                0x00002494                __cy_regions_end = .
+                0x00002498                . = ALIGN (0x8)
+ *fill*         0x00002494        0x4 
+                0x00002498                _etext = .
+
+.cy_checksum_exclude
+                0x00002498        0x0
+ *(.cy_checksum_exclude)
+
+.ramvectors     0x20000000       0x80
+                0x20000000                __cy_region_start_ram = .
+ *(.ramvectors)
+ .ramvectors    0x20000000       0x80 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+                0x20000000                CyRamVectors
+
+.noinit
+ *(.noinit)
+
+.data           0x20000080       0x80 load address 0x00002498
+                0x20000080                __cy_region_start_data = .
+ *(.jcr)
+ .jcr           0x20000080        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+ .jcr           0x20000080        0x4 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtend.o
+ *(.got.plt)
+ *(.got)
+ *(.shdata)
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x20000084        0x4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                0x20000084                CapSense_configCsd
+ .data          0x20000088       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                0x20000088                CySysClkPumpConfig
+                0x2000008c                cydelay32kMs
+                0x20000090                cydelayFreqKhz
+                0x20000094                cydelayFreqMhz
+                0x20000098                cydelayFreqHz
+ .data.impure_data
+                0x2000009c       0x60 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-impure.o)
+ .data._impure_ptr
+                0x200000fc        0x4 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-impure.o)
+                0x200000fc                _impure_ptr
+                0x20000100                . = ALIGN (0x8)
+ *(.ram)
+                0x20000100                _edata = .
+
+.igot.plt       0x20000100        0x0 load address 0x00002518
+ .igot.plt      0x20000100        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+
+.bss            0x20000100      0x168 load address 0x00002518
+                0x20000100                PROVIDE (__bss_start__, .)
+ *(.shbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x20000100       0x1c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+ .bss           0x2000011c        0x6 .\CortexM0p\ARM_GCC_541\Release\main.o
+                0x2000011c                time_counts
+                0x2000011d                CapSense_status
+                0x2000011e                key_press
+                0x2000011f                send_status
+                0x20000120                default_flag
+                0x20000121                last_capsense
+ *fill*         0x20000122        0x2 
+ .bss           0x20000124        0x8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+                0x20000124                EZI2C_initVar
+                0x20000128                EZI2C_customIntrHandler
+ .bss           0x2000012c        0x2 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .bss           0x2000012e        0x1 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ *fill*         0x2000012f        0x1 
+ .bss           0x20000130       0x42 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ *fill*         0x20000172        0x2 
+ .bss           0x20000174        0x4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .bss           0x20000178        0x4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x20000178                CapSense_currentSenseMethod
+                0x20000179                CapSense_requestScanAllWidget
+                0x2000017a                CapSense_widgetIndex
+                0x2000017b                CapSense_sensorIndex
+ .bss           0x2000017c        0x1 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ *fill*         0x2000017d        0x1 
+ .bss           0x2000017e        0x4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+                0x2000017e                UART_initVar
+                0x20000180                UART_IntrTxMask
+ .bss           0x20000182        0x1 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+                0x20000182                Timer_initVar
+ *(COMMON)
+ COMMON         0x20000183       0x12 .\CortexM0p\ARM_GCC_541\Release\main.o
+                0x20000183                i2c
+ *fill*         0x20000195        0x3 
+ COMMON         0x20000198       0x12 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+                0x20000198                EZI2C_offsetBuf1
+                0x2000019a                EZI2C_indexBuf1
+                0x2000019c                EZI2C_fsmState
+                0x2000019e                EZI2C_protectBuf1
+                0x200001a0                EZI2C_curStatus
+                0x200001a4                EZI2C_dataBuffer1
+                0x200001a8                EZI2C_bufSizeBuf1
+ *fill*         0x200001aa        0x2 
+ COMMON         0x200001ac       0xb0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+                0x200001ac                CapSense_dsRam
+ COMMON         0x2000025c        0x8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                0x2000025c                CapSense_curRamSnsPtr
+                0x20000260                CapSense_curSnsIOPtr
+                0x20000268                . = ALIGN (0x8)
+ *fill*         0x20000264        0x4 
+ *(.ram.b)
+                0x20000268                _end = .
+                0x20000268                __end = .
+                0x20000268                PROVIDE (end, .)
+                0x20000268                PROVIDE (__bss_end__, .)
+                0x00002498                __cy_region_init_ram = LOADADDR (.data)
+                0x00000080                __cy_region_init_size_ram = (_edata - ADDR (.data))
+                0x00000168                __cy_region_zero_size_ram = (_end - _edata)
+
+.heap           0x20000268       0x80 load address 0x00002518
+                0x20000268                . = _end
+                0x200002e8                . = (. + 0x80)
+ *fill*         0x20000268       0x80 
+                0x200002e8                __cy_heap_limit = .
+
+.stack          0x20000c00      0x400
+                0x20000c00                __cy_stack_limit = .
+                0x20001000                . = (. + 0x400)
+ *fill*         0x20000c00      0x400 
+                0x00000001                ASSERT ((__cy_stack_limit >= __cy_heap_limit), region RAM overflowed with stack)
+                0x00000000                cy_checksum_exclude_size = (CY_APPL_LOADABLE == 0x1)?SIZEOF (.cy_checksum_exclude):0x0
+                0x00000001                ASSERT ((cy_checksum_exclude_size <= CY_CHECKSUM_EXCLUDE_SIZE), CY_BOOT: Section .cy_checksum_exclude size exceedes specified limit.)
+                0x00007fc0                cyloadermeta_start = (cy_project_type_bootloader || cy_project_type_app_for_stack_and_copier)?(LENGTH (rom) - CY_METADATA_SIZE):0xf0000000
+
+.cyloadermeta
+ *(.cyloadermeta)
+                0x00007fc0                cyloadablemeta_start = cy_project_type_app_for_stack_and_copier?((LENGTH (rom) - CY_FLASH_ROW_SIZE) - CY_METADATA_SIZE):((LENGTH (rom) - (CY_FLASH_ROW_SIZE * (CY_APPL_NUM - 0x1))) - CY_METADATA_SIZE)
+
+.cyloadablemeta
+ *(.cyloadablemeta)
+
+.cyflashprotect
+                0x90400000       0x20
+ *(.cyflashprotect)
+ .cyflashprotect
+                0x90400000       0x20 .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+                0x90400000                cy_meta_flashprotect
+
+.cymeta         0x90500000        0xc
+ *(.cymeta)
+ .cymeta        0x90500000        0xc .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+                0x90500000                cy_metadata
+
+.cychipprotect  0x90600000        0x1
+ *(.cychipprotect)
+ .cychipprotect
+                0x90600000        0x1 .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+                0x90600000                cy_meta_chipprotect
+
+.rel.dyn        0x00002518        0x0 load address 0x90600004
+ .rel.iplt      0x00002518        0x0 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0xc00
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x40 .\CortexM0p\ARM_GCC_541\Release\main.o
+ .debug_aranges
+                0x00000040       0x28 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .debug_aranges
+                0x00000068       0x18 .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+ .debug_aranges
+                0x00000080       0x48 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .debug_aranges
+                0x000000c8       0x50 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .debug_aranges
+                0x00000118       0x50 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .debug_aranges
+                0x00000168       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .debug_aranges
+                0x00000188       0x60 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .debug_aranges
+                0x000001e8       0x50 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .debug_aranges
+                0x00000238       0x58 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .debug_aranges
+                0x00000290       0x28 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .debug_aranges
+                0x000002b8       0xf8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .debug_aranges
+                0x000003b0       0xd0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .debug_aranges
+                0x00000480       0xb0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ .debug_aranges
+                0x00000530       0x80 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .debug_aranges
+                0x000005b0      0x190 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .debug_aranges
+                0x00000740       0xe0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .debug_aranges
+                0x00000820       0x48 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .debug_aranges
+                0x00000868       0x90 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .debug_aranges
+                0x000008f8       0x48 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .debug_aranges
+                0x00000940       0x80 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .debug_aranges
+                0x000009c0      0x148 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .debug_aranges
+                0x00000b08       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyBootAsmGnu.o)
+ .debug_aranges
+                0x00000b28       0x30 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .debug_aranges
+                0x00000b58       0x48 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .debug_aranges
+                0x00000ba0       0x60 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x00000000     0xb4a6
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000      0x84f .\CortexM0p\ARM_GCC_541\Release\main.o
+ .debug_info    0x0000084f      0x160 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .debug_info    0x000009af       0xf8 .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+ .debug_info    0x00000aa7      0x3a1 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .debug_info    0x00000e48      0x2b1 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .debug_info    0x000010f9      0x31b .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .debug_info    0x00001414      0x1c9 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .debug_info    0x000015dd      0xba2 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .debug_info    0x0000217f      0xc81 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .debug_info    0x00002e00      0xdcc .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .debug_info    0x00003bcc      0x70b .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .debug_info    0x000042d7     0x10b7 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .debug_info    0x0000538e     0x141a .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .debug_info    0x000067a8     0x1631 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ .debug_info    0x00007dd9      0x352 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .debug_info    0x0000812b      0xc61 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .debug_info    0x00008d8c      0x40a .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .debug_info    0x00009196      0x24f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .debug_info    0x000093e5      0x3b5 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .debug_info    0x0000979a      0x19b .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .debug_info    0x00009935      0x352 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .debug_info    0x00009c87      0x923 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .debug_info    0x0000a5aa       0x80 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyBootAsmGnu.o)
+ .debug_info    0x0000a62a      0x862 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .debug_info    0x0000ae8c      0x3f6 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .debug_info    0x0000b282      0x224 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+
+.debug_abbrev   0x00000000     0x2a5d
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000      0x1f9 .\CortexM0p\ARM_GCC_541\Release\main.o
+ .debug_abbrev  0x000001f9       0xe7 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .debug_abbrev  0x000002e0       0x5d .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+ .debug_abbrev  0x0000033d      0x1ce .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .debug_abbrev  0x0000050b      0x152 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .debug_abbrev  0x0000065d      0x12b .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .debug_abbrev  0x00000788       0x97 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .debug_abbrev  0x0000081f      0x221 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .debug_abbrev  0x00000a40      0x1de .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .debug_abbrev  0x00000c1e      0x201 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .debug_abbrev  0x00000e1f      0x166 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .debug_abbrev  0x00000f85      0x2ab .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .debug_abbrev  0x00001230      0x2f4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .debug_abbrev  0x00001524      0x2e4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ .debug_abbrev  0x00001808      0x233 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .debug_abbrev  0x00001a3b      0x320 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .debug_abbrev  0x00001d5b      0x17f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .debug_abbrev  0x00001eda      0x10f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .debug_abbrev  0x00001fe9      0x132 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .debug_abbrev  0x0000211b       0xc6 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .debug_abbrev  0x000021e1      0x233 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .debug_abbrev  0x00002414      0x193 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .debug_abbrev  0x000025a7       0x14 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyBootAsmGnu.o)
+ .debug_abbrev  0x000025bb      0x1b5 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .debug_abbrev  0x00002770      0x19e .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .debug_abbrev  0x0000290e      0x14f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+
+.debug_line     0x00000000     0x3948
+ *(.debug_line)
+ .debug_line    0x00000000      0x312 .\CortexM0p\ARM_GCC_541\Release\main.o
+ .debug_line    0x00000312       0xda .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .debug_line    0x000003ec      0x141 .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+ .debug_line    0x0000052d      0x23f .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .debug_line    0x0000076c      0x12e .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .debug_line    0x0000089a      0x13c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .debug_line    0x000009d6      0x156 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .debug_line    0x00000b2c      0x1f8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .debug_line    0x00000d24      0x306 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .debug_line    0x0000102a      0x1ca .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .debug_line    0x000011f4      0x11e .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .debug_line    0x00001312      0x3d7 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .debug_line    0x000016e9      0x5ad .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .debug_line    0x00001c96      0x513 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ .debug_line    0x000021a9      0x1a2 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .debug_line    0x0000234b      0x52c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .debug_line    0x00002877      0x2e5 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .debug_line    0x00002b5c      0x106 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .debug_line    0x00002c62      0x208 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .debug_line    0x00002e6a       0xca .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .debug_line    0x00002f34      0x1a4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .debug_line    0x000030d8      0x3bb .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .debug_line    0x00003493       0x68 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyBootAsmGnu.o)
+ .debug_line    0x000034fb      0x14c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .debug_line    0x00003647      0x1d8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .debug_line    0x0000381f      0x129 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+
+.debug_frame    0x00000000     0x1f70
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x98 .\CortexM0p\ARM_GCC_541\Release\main.o
+ .debug_frame   0x00000098       0x48 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .debug_frame   0x000000e0       0xc8 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .debug_frame   0x000001a8       0xb0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .debug_frame   0x00000258       0xa8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .debug_frame   0x00000300       0x38 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .debug_frame   0x00000338      0x124 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .debug_frame   0x0000045c      0x118 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .debug_frame   0x00000574       0xf0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .debug_frame   0x00000664       0x48 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .debug_frame   0x000006ac      0x308 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .debug_frame   0x000009b4      0x28c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .debug_frame   0x00000c40      0x298 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ .debug_frame   0x00000ed8      0x104 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .debug_frame   0x00000fdc      0x400 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .debug_frame   0x000013dc      0x200 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .debug_frame   0x000015dc       0xa0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .debug_frame   0x0000167c      0x14c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .debug_frame   0x000017c8       0x70 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .debug_frame   0x00001838      0x104 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .debug_frame   0x0000193c      0x384 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .debug_frame   0x00001cc0       0x70 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .debug_frame   0x00001d30       0xb4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .debug_frame   0x00001de4       0xb0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .debug_frame   0x00001e94       0x20 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_udivsi3.o)
+ .debug_frame   0x00001eb4       0x20 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+ .debug_frame   0x00001ed4       0x28 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o)
+ .debug_frame   0x00001efc       0x2c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
+ .debug_frame   0x00001f28       0x28 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x00001f50       0x20 c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
+
+.debug_str      0x00000000     0x384d
+ *(.debug_str)
+ .debug_str     0x00000000      0x60c .\CortexM0p\ARM_GCC_541\Release\main.o
+                                0x663 (size before relaxing)
+ .debug_str     0x0000060c       0x91 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+                                0x20d (size before relaxing)
+ .debug_str     0x0000069d       0x59 .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+                                0x1bc (size before relaxing)
+ .debug_str     0x000006f6      0x155 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+                                0x303 (size before relaxing)
+ .debug_str     0x0000084b      0x15c .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+                                0x2ea (size before relaxing)
+ .debug_str     0x000009a7      0x145 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+                                0x32c (size before relaxing)
+ .debug_str     0x00000aec       0x97 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+                                0x2bb (size before relaxing)
+ .debug_str     0x00000b83      0x524 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+                                0x9a7 (size before relaxing)
+ .debug_str     0x000010a7      0x188 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+                                0x8e3 (size before relaxing)
+ .debug_str     0x0000122f      0x2fb .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+                                0x9db (size before relaxing)
+ .debug_str     0x0000152a      0x171 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+                                0x67b (size before relaxing)
+ .debug_str     0x0000169b      0x353 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+                                0x909 (size before relaxing)
+ .debug_str     0x000019ee      0x6ff .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+                                0xdb7 (size before relaxing)
+ .debug_str     0x000020ed      0x3d2 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+                                0xd95 (size before relaxing)
+ .debug_str     0x000024bf      0x14b .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+                                0x340 (size before relaxing)
+ .debug_str     0x0000260a      0x48b .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+                                0x6ff (size before relaxing)
+ .debug_str     0x00002a95      0x2d0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+                                0x4a1 (size before relaxing)
+ .debug_str     0x00002d65       0xee .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+                                0x29e (size before relaxing)
+ .debug_str     0x00002e53      0x1e2 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+                                0x3bc (size before relaxing)
+ .debug_str     0x00003035       0xab .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+                                0x238 (size before relaxing)
+ .debug_str     0x000030e0      0x133 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+                                0x340 (size before relaxing)
+ .debug_str     0x00003213      0x396 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+                                0x57e (size before relaxing)
+ .debug_str     0x000035a9       0xa4 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+                                0x6fe (size before relaxing)
+ .debug_str     0x0000364d      0x11d .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+                                0x30f (size before relaxing)
+ .debug_str     0x0000376a       0xe3 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+                                0x2c2 (size before relaxing)
+
+.debug_loc      0x00000000     0x4f6b
+ *(.debug_loc)
+ .debug_loc     0x00000000       0x40 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .debug_loc     0x00000040      0x1de .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .debug_loc     0x0000021e       0x7e .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .debug_loc     0x0000029c      0x105 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .debug_loc     0x000003a1      0x141 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .debug_loc     0x000004e2      0x38b .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .debug_loc     0x0000086d      0x6c3 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .debug_loc     0x00000f30      0x384 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .debug_loc     0x000012b4      0x122 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .debug_loc     0x000013d6      0xe4d .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .debug_loc     0x00002223      0xa2b .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .debug_loc     0x00002c4e      0xd6d .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ .debug_loc     0x000039bb       0xa6 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .debug_loc     0x00003a61      0x660 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .debug_loc     0x000040c1      0x216 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .debug_loc     0x000042d7       0x7e .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .debug_loc     0x00004355      0x257 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .debug_loc     0x000045ac       0xa1 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .debug_loc     0x0000464d       0xaf .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .debug_loc     0x000046fc      0x57a .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .debug_loc     0x00004c76       0x4a .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .debug_loc     0x00004cc0      0x1bd .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .debug_loc     0x00004e7d       0xee .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_ranges   0x00000000      0xc48
+ *(.debug_ranges)
+ .debug_ranges  0x00000000       0x30 .\CortexM0p\ARM_GCC_541\Release\main.o
+ .debug_ranges  0x00000030       0x58 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .debug_ranges  0x00000088       0x50 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .debug_ranges  0x000000d8       0x40 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .debug_ranges  0x00000118       0x40 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .debug_ranges  0x00000158       0x10 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .debug_ranges  0x00000168       0x50 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .debug_ranges  0x000001b8       0x40 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .debug_ranges  0x000001f8       0x48 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .debug_ranges  0x00000240       0x18 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .debug_ranges  0x00000258       0xe8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .debug_ranges  0x00000340      0x110 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .debug_ranges  0x00000450       0xe0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ .debug_ranges  0x00000530       0xd0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .debug_ranges  0x00000600      0x1d8 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .debug_ranges  0x000007d8       0xd0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .debug_ranges  0x000008a8       0x38 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .debug_ranges  0x000008e0       0x80 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .debug_ranges  0x00000960       0x38 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .debug_ranges  0x00000998       0xd0 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .debug_ranges  0x00000a68      0x138 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .debug_ranges  0x00000ba0       0x20 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .debug_ranges  0x00000bc0       0x38 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .debug_ranges  0x00000bf8       0x50 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+
+.comment        0x00000000       0x6e
+ .comment       0x00000000       0x6e .\CortexM0p\ARM_GCC_541\Release\main.o
+                                 0x6f (size before relaxing)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .comment       0x0000006e       0x6f .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.note.gnu.arm.ident
+ *(.note.gnu.arm.ident)
+
+.ARM.attributes
+                0x00000000       0x28
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x00000000       0x1e c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+ .ARM.attributes
+                0x0000001e       0x2c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+ .ARM.attributes
+                0x0000004a       0x1b c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .ARM.attributes
+                0x00000065       0x32 .\CortexM0p\ARM_GCC_541\Release\main.o
+ .ARM.attributes
+                0x00000097       0x32 .\CortexM0p\ARM_GCC_541\Release\cyfitter_cfg.o
+ .ARM.attributes
+                0x000000c9       0x32 .\CortexM0p\ARM_GCC_541\Release\cymetadata.o
+ .ARM.attributes
+                0x000000fb       0x32 .\CortexM0p\ARM_GCC_541\Release\Cm0plusStart.o
+ .ARM.attributes
+                0x0000012d       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C.o)
+ .ARM.attributes
+                0x0000015f       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C.o)
+ .ARM.attributes
+                0x00000191       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(EZI2C_EZI2C_INT.o)
+ .ARM.attributes
+                0x000001c3       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Control.o)
+ .ARM.attributes
+                0x000001f5       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Processing.o)
+ .ARM.attributes
+                0x00000227       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Structure.o)
+ .ARM.attributes
+                0x00000259       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Tuner.o)
+ .ARM.attributes
+                0x0000028b       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Filter.o)
+ .ARM.attributes
+                0x000002bd       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_Sensing.o)
+ .ARM.attributes
+                0x000002ef       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_SensingCSD_LL.o)
+ .ARM.attributes
+                0x00000321       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_ISR.o)
+ .ARM.attributes
+                0x00000353       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLib.o)
+ .ARM.attributes
+                0x00000385       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyLFClk.o)
+ .ARM.attributes
+                0x000003b7       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART.o)
+ .ARM.attributes
+                0x000003e9       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_UART.o)
+ .ARM.attributes
+                0x0000041b       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CAP_INT.o)
+ .ARM.attributes
+                0x0000044d       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(TC_Interrupt.o)
+ .ARM.attributes
+                0x0000047f       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(Timer.o)
+ .ARM.attributes
+                0x000004b1       0x22 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyBootAsmGnu.o)
+ .ARM.attributes
+                0x000004d3       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CapSense_INT.o)
+ .ARM.attributes
+                0x00000505       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(CyFlash.o)
+ .ARM.attributes
+                0x00000537       0x32 .\CortexM0p\ARM_GCC_541\Release\EZIIC_button.a(UART_SPI_UART.o)
+ .ARM.attributes
+                0x00000569       0x1e c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_thumb1_case_uqi.o)
+ .ARM.attributes
+                0x00000587       0x1e c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_udivsi3.o)
+ .ARM.attributes
+                0x000005a5       0x1e c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(_dvmd_tls.o)
+ .ARM.attributes
+                0x000005c3       0x2c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-errno.o)
+ .ARM.attributes
+                0x000005ef       0x2c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-exit.o)
+ .ARM.attributes
+                0x0000061b       0x2c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-impure.o)
+ .ARM.attributes
+                0x00000647       0x2c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-init.o)
+ .ARM.attributes
+                0x00000673       0x2c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memcpy-stub.o)
+ .ARM.attributes
+                0x0000069f       0x2c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_nano.a(lib_a-memset.o)
+ .ARM.attributes
+                0x000006cb       0x2c c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtend.o
+ .ARM.attributes
+                0x000006f7       0x1e c:/program files (x86)/cypress/psoc creator/4.2/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+
+/DISCARD/
+ *(.note.GNU-stack)
+OUTPUT(D:\_Project\_MD\cypress_button\EZIIC_button.cydsn\CortexM0p\ARM_GCC_541\Release\EZIIC_button.elf elf32-littlearm)

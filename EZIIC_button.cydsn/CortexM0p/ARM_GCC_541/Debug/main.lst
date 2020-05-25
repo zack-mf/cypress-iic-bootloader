@@ -1,0 +1,2660 @@
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0plus
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.Init_I2C_Communication,"ax",%progbits
+  20              		.align	2
+  21              		.code	16
+  22              		.thumb_func
+  23              		.type	Init_I2C_Communication, %function
+  24              	Init_I2C_Communication:
+  25              	.LFB34:
+  26              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * Copyright YOUR COMPANY, THE YEAR
+   4:main.c        ****  * All Rights Reserved
+   5:main.c        ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:main.c        ****  *
+   7:main.c        ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:main.c        ****  * WHICH IS THE PROPERTY OF your company.
+   9:main.c        ****  *
+  10:main.c        ****  * ========================================
+  11:main.c        **** */
+  12:main.c        **** #include "project.h"
+  13:main.c        **** #include "string.h"
+  14:main.c        **** #include "stdio.h"
+  15:main.c        **** 
+  16:main.c        **** /* button event */
+  17:main.c        **** #define NOT_TOUCH		 0
+  18:main.c        **** #define PROX      	   	 32
+  19:main.c        **** #define VOL_UP        	 33
+  20:main.c        **** #define VOL_DOWN         34
+  21:main.c        **** #define LIBERTY_PULL     40
+  22:main.c        **** #define FORMATION     	 48
+  23:main.c        **** #define PLAY_PAUSE    	 36
+  24:main.c        **** 
+  25:main.c        **** 
+  26:main.c        **** #define SCAN_TIME_MS  1
+  27:main.c        **** 
+  28:main.c        **** #define RUN_UART_TUNER  1
+  29:main.c        **** 
+  30:main.c        **** #if RUN_UART_TUNER
+  31:main.c        ****     /* Packet header and tail information */
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 2
+
+
+  32:main.c        ****     static const uint8 header[]  = {0x0Du, 0x0Au};
+  33:main.c        ****     static const uint8 tail[]    = {0x00u, 0xFFu, 0xFFu};
+  34:main.c        **** #endif
+  35:main.c        **** 
+  36:main.c        **** // I2C COMMAND
+  37:main.c        **** #define REG15_UPDATE_MCU_CMD  0x36
+  38:main.c        **** 
+  39:main.c        **** typedef union
+  40:main.c        **** {
+  41:main.c        ****     struct{
+  42:main.c        ****         uint8_t reserve_reg[15]; // 0~14
+  43:main.c        ****         uint8_t updat_posc;      // register 15
+  44:main.c        ****     }reg;
+  45:main.c        ****     uint8_t reg_array[16];
+  46:main.c        **** } RW_I2C_REG;
+  47:main.c        **** 
+  48:main.c        **** // I2C registers
+  49:main.c        **** // R : Read only, R/W : Read and Write
+  50:main.c        **** typedef struct 
+  51:main.c        **** {                               
+  52:main.c        ****                              // reg number    | access right |      comment
+  53:main.c        ****     RW_I2C_REG  rw;          //    0 ~ 15     |    R/W       |   reserved R/W
+  54:main.c        ****     uint8  button_stat;      //    16         |    R         |   status of button 0 ~ 7 
+  55:main.c        ****     
+  56:main.c        **** }__attribute__ ((packed)) I2C_REG;
+  57:main.c        **** 
+  58:main.c        **** /* EZI2C buffer */
+  59:main.c        **** I2C_REG i2c;
+  60:main.c        **** #define EZI2C_RW_SIZE     (sizeof(i2c.rw))
+  61:main.c        **** #define EZI2C_SIZE        (sizeof(i2c))
+  62:main.c        **** 
+  63:main.c        **** uint8 CapSense_status = 0;
+  64:main.c        **** uint8 send_status = 0;
+  65:main.c        **** 
+  66:main.c        **** #define UART_DEBUG 0
+  67:main.c        **** 
+  68:main.c        **** #if UART_DEBUG
+  69:main.c        **** char uartString[1024u] = {' '};
+  70:main.c        **** #endif
+  71:main.c        **** 
+  72:main.c        **** static void Init_I2C_Communication()
+  73:main.c        **** {
+  27              		.loc 1 73 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 10B5     		push	{r4, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 4, -8
+  34              		.cfi_offset 14, -4
+  74:main.c        ****     // Zero ezi2cBuffer buffer
+  75:main.c        ****     memset((void*)&i2c,0x00,EZI2C_SIZE);
+  35              		.loc 1 75 0
+  36 0002 074C     		ldr	r4, .L2
+  37 0004 1122     		movs	r2, #17
+  38 0006 0021     		movs	r1, #0
+  39 0008 2000     		movs	r0, r4
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 3
+
+
+  40 000a FFF7FEFF 		bl	memset
+  41              	.LVL0:
+  76:main.c        ****     EZI2C_Start(); // Start I2C (Address : 0x08 , Data Rate : 100k ) 
+  42              		.loc 1 76 0
+  43 000e FFF7FEFF 		bl	EZI2C_Start
+  44              	.LVL1:
+  77:main.c        ****     /* EZI2C buffer parameters: 
+  78:main.c        ****     *  EZI2C_SIZE - is thesize of the memory exposed to the I2C interface.
+  79:main.c        ****     *  EZI2C_RW_SIZE - sets the boundary between the read/write and read only areas.
+  80:main.c        ****     *                  The read/write area is first, followed by the read only area.
+  81:main.c        ****     *  (void *)ezi2cBuffer - is the pointer to the memory exposed to the I2C interface. */
+  82:main.c        ****     EZI2C_EzI2CSetBuffer1(EZI2C_SIZE, EZI2C_RW_SIZE , (void *)&i2c);
+  45              		.loc 1 82 0
+  46 0012 2200     		movs	r2, r4
+  47 0014 1021     		movs	r1, #16
+  48 0016 1120     		movs	r0, #17
+  49 0018 FFF7FEFF 		bl	EZI2C_EzI2CSetBuffer1
+  50              	.LVL2:
+  83:main.c        **** }
+  51              		.loc 1 83 0
+  52              		@ sp needed
+  53 001c 10BD     		pop	{r4, pc}
+  54              	.L3:
+  55 001e C046     		.align	2
+  56              	.L2:
+  57 0020 00000000 		.word	i2c
+  58              		.cfi_endproc
+  59              	.LFE34:
+  60              		.size	Init_I2C_Communication, .-Init_I2C_Communication
+  61              		.section	.text.ProcessCapsenseEvent,"ax",%progbits
+  62              		.align	2
+  63              		.global	ProcessCapsenseEvent
+  64              		.code	16
+  65              		.thumb_func
+  66              		.type	ProcessCapsenseEvent, %function
+  67              	ProcessCapsenseEvent:
+  68              	.LFB35:
+  84:main.c        **** 
+  85:main.c        **** void ProcessCapsenseEvent()
+  86:main.c        **** {
+  69              		.loc 1 86 0
+  70              		.cfi_startproc
+  71              		@ args = 0, pretend = 0, frame = 0
+  72              		@ frame_needed = 0, uses_anonymous_args = 0
+  73 0000 10B5     		push	{r4, lr}
+  74              		.cfi_def_cfa_offset 8
+  75              		.cfi_offset 4, -8
+  76              		.cfi_offset 14, -4
+  87:main.c        ****     // update button status
+  88:main.c        ****     CapSense_status = (uint8_t)  CapSense_IsAnyWidgetActive();
+  77              		.loc 1 88 0
+  78 0002 FFF7FEFF 		bl	CapSense_IsAnyWidgetActive
+  79              	.LVL3:
+  80 0006 C0B2     		uxtb	r0, r0
+  81 0008 1B4B     		ldr	r3, .L17
+  82 000a 1870     		strb	r0, [r3]
+  89:main.c        ****     switch(CapSense_status){
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 4
+
+
+  83              		.loc 1 89 0
+  84 000c 3028     		cmp	r0, #48
+  85 000e 1FD8     		bhi	.L5
+  86 0010 8000     		lsls	r0, r0, #2
+  87 0012 1A4B     		ldr	r3, .L17+4
+  88 0014 1B58     		ldr	r3, [r3, r0]
+  89 0016 9F46     		mov	pc, r3
+  90              		.section	.rodata
+  91              		.align	2
+  92              	.L7:
+  93 0000 18000000 		.word	.L6
+  94 0004 50000000 		.word	.L5
+  95 0008 50000000 		.word	.L5
+  96 000c 50000000 		.word	.L5
+  97 0010 50000000 		.word	.L5
+  98 0014 50000000 		.word	.L5
+  99 0018 50000000 		.word	.L5
+ 100 001c 50000000 		.word	.L5
+ 101 0020 50000000 		.word	.L5
+ 102 0024 50000000 		.word	.L5
+ 103 0028 50000000 		.word	.L5
+ 104 002c 50000000 		.word	.L5
+ 105 0030 50000000 		.word	.L5
+ 106 0034 50000000 		.word	.L5
+ 107 0038 50000000 		.word	.L5
+ 108 003c 50000000 		.word	.L5
+ 109 0040 50000000 		.word	.L5
+ 110 0044 50000000 		.word	.L5
+ 111 0048 50000000 		.word	.L5
+ 112 004c 50000000 		.word	.L5
+ 113 0050 50000000 		.word	.L5
+ 114 0054 50000000 		.word	.L5
+ 115 0058 50000000 		.word	.L5
+ 116 005c 50000000 		.word	.L5
+ 117 0060 50000000 		.word	.L5
+ 118 0064 50000000 		.word	.L5
+ 119 0068 50000000 		.word	.L5
+ 120 006c 50000000 		.word	.L5
+ 121 0070 50000000 		.word	.L5
+ 122 0074 50000000 		.word	.L5
+ 123 0078 50000000 		.word	.L5
+ 124 007c 50000000 		.word	.L5
+ 125 0080 20000000 		.word	.L8
+ 126 0084 28000000 		.word	.L9
+ 127 0088 30000000 		.word	.L10
+ 128 008c 50000000 		.word	.L5
+ 129 0090 38000000 		.word	.L11
+ 130 0094 50000000 		.word	.L5
+ 131 0098 50000000 		.word	.L5
+ 132 009c 50000000 		.word	.L5
+ 133 00a0 40000000 		.word	.L12
+ 134 00a4 50000000 		.word	.L5
+ 135 00a8 50000000 		.word	.L5
+ 136 00ac 50000000 		.word	.L5
+ 137 00b0 50000000 		.word	.L5
+ 138 00b4 50000000 		.word	.L5
+ 139 00b8 50000000 		.word	.L5
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 5
+
+
+ 140 00bc 50000000 		.word	.L5
+ 141 00c0 48000000 		.word	.L13
+ 142              		.section	.text.ProcessCapsenseEvent
+ 143              	.L6:
+  90:main.c        ****         case NOT_TOUCH:
+  91:main.c        ****             send_status = NOT_TOUCH;
+ 144              		.loc 1 91 0
+ 145 0018 0022     		movs	r2, #0
+ 146 001a 174B     		ldr	r3, .L17
+ 147 001c 5A70     		strb	r2, [r3, #1]
+  92:main.c        ****             break;
+ 148              		.loc 1 92 0
+ 149 001e 1AE0     		b	.L14
+ 150              	.L8:
+  93:main.c        ****         case PROX:   
+  94:main.c        ****             send_status = PROX;
+ 151              		.loc 1 94 0
+ 152 0020 2022     		movs	r2, #32
+ 153 0022 154B     		ldr	r3, .L17
+ 154 0024 5A70     		strb	r2, [r3, #1]
+  95:main.c        ****             break;
+ 155              		.loc 1 95 0
+ 156 0026 16E0     		b	.L14
+ 157              	.L9:
+  96:main.c        ****         case VOL_UP:
+  97:main.c        ****             send_status = VOL_UP;
+ 158              		.loc 1 97 0
+ 159 0028 2122     		movs	r2, #33
+ 160 002a 134B     		ldr	r3, .L17
+ 161 002c 5A70     		strb	r2, [r3, #1]
+  98:main.c        ****             break;
+ 162              		.loc 1 98 0
+ 163 002e 12E0     		b	.L14
+ 164              	.L10:
+  99:main.c        ****         case VOL_DOWN:
+ 100:main.c        ****             send_status = VOL_DOWN;
+ 165              		.loc 1 100 0
+ 166 0030 2222     		movs	r2, #34
+ 167 0032 114B     		ldr	r3, .L17
+ 168 0034 5A70     		strb	r2, [r3, #1]
+ 101:main.c        ****             break;
+ 169              		.loc 1 101 0
+ 170 0036 0EE0     		b	.L14
+ 171              	.L11:
+ 102:main.c        ****         case PLAY_PAUSE:
+ 103:main.c        ****             send_status = PLAY_PAUSE;
+ 172              		.loc 1 103 0
+ 173 0038 2422     		movs	r2, #36
+ 174 003a 0F4B     		ldr	r3, .L17
+ 175 003c 5A70     		strb	r2, [r3, #1]
+ 104:main.c        ****             break;
+ 176              		.loc 1 104 0
+ 177 003e 0AE0     		b	.L14
+ 178              	.L12:
+ 105:main.c        ****         case LIBERTY_PULL:
+ 106:main.c        ****             send_status = LIBERTY_PULL;
+ 179              		.loc 1 106 0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 6
+
+
+ 180 0040 2822     		movs	r2, #40
+ 181 0042 0D4B     		ldr	r3, .L17
+ 182 0044 5A70     		strb	r2, [r3, #1]
+ 107:main.c        ****             break;
+ 183              		.loc 1 107 0
+ 184 0046 06E0     		b	.L14
+ 185              	.L13:
+ 108:main.c        ****         case FORMATION:
+ 109:main.c        ****             send_status = FORMATION;
+ 186              		.loc 1 109 0
+ 187 0048 3022     		movs	r2, #48
+ 188 004a 0B4B     		ldr	r3, .L17
+ 189 004c 5A70     		strb	r2, [r3, #1]
+ 110:main.c        ****             break;
+ 190              		.loc 1 110 0
+ 191 004e 02E0     		b	.L14
+ 192              	.L5:
+ 111:main.c        ****         default:
+ 112:main.c        ****             send_status = PROX;
+ 193              		.loc 1 112 0
+ 194 0050 2022     		movs	r2, #32
+ 195 0052 094B     		ldr	r3, .L17
+ 196 0054 5A70     		strb	r2, [r3, #1]
+ 197              	.L14:
+ 113:main.c        ****             break;
+ 114:main.c        ****     }
+ 115:main.c        ****     i2c.button_stat = send_status;
+ 198              		.loc 1 115 0
+ 199 0056 084B     		ldr	r3, .L17
+ 200 0058 5A78     		ldrb	r2, [r3, #1]
+ 201 005a 094B     		ldr	r3, .L17+8
+ 202 005c 1A74     		strb	r2, [r3, #16]
+ 116:main.c        ****     // notify host mcu
+ 117:main.c        ****     (CapSense_dsRam.wdgtStatus[0] != 0) ? CAP_INT_Write(0) :  CAP_INT_Write(1);
+ 203              		.loc 1 117 0
+ 204 005e 094B     		ldr	r3, .L17+12
+ 205 0060 5B69     		ldr	r3, [r3, #20]
+ 206 0062 002B     		cmp	r3, #0
+ 207 0064 03D0     		beq	.L15
+ 208              		.loc 1 117 0 is_stmt 0 discriminator 1
+ 209 0066 0020     		movs	r0, #0
+ 210 0068 FFF7FEFF 		bl	CAP_INT_Write
+ 211              	.LVL4:
+ 212 006c 02E0     		b	.L4
+ 213              	.L15:
+ 214              		.loc 1 117 0 discriminator 2
+ 215 006e 0120     		movs	r0, #1
+ 216 0070 FFF7FEFF 		bl	CAP_INT_Write
+ 217              	.LVL5:
+ 218              	.L4:
+ 118:main.c        **** #if UART_DEBUG   
+ 119:main.c        ****     sprintf(uartString,"\r\n . CapSense_status= %d  send_status= %d i2c.button_stat= %d ",CapSense_
+ 120:main.c        ****     UART_UartPutString(uartString);
+ 121:main.c        **** #endif
+ 122:main.c        **** }
+ 219              		.loc 1 122 0 is_stmt 1
+ 220              		@ sp needed
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 7
+
+
+ 221 0074 10BD     		pop	{r4, pc}
+ 222              	.L18:
+ 223 0076 C046     		.align	2
+ 224              	.L17:
+ 225 0078 00000000 		.word	.LANCHOR0
+ 226 007c 00000000 		.word	.L7
+ 227 0080 00000000 		.word	i2c
+ 228 0084 00000000 		.word	CapSense_dsRam
+ 229              		.cfi_endproc
+ 230              	.LFE35:
+ 231              		.size	ProcessCapsenseEvent, .-ProcessCapsenseEvent
+ 232              		.section	.text.ProcessI2CCommand,"ax",%progbits
+ 233              		.align	2
+ 234              		.global	ProcessI2CCommand
+ 235              		.code	16
+ 236              		.thumb_func
+ 237              		.type	ProcessI2CCommand, %function
+ 238              	ProcessI2CCommand:
+ 239              	.LFB36:
+ 123:main.c        **** 
+ 124:main.c        **** void ProcessI2CCommand()
+ 125:main.c        **** {
+ 240              		.loc 1 125 0
+ 241              		.cfi_startproc
+ 242              		@ args = 0, pretend = 0, frame = 0
+ 243              		@ frame_needed = 0, uses_anonymous_args = 0
+ 244              		@ link register save eliminated.
+ 126:main.c        ****     if (REG15_UPDATE_MCU_CMD == i2c.rw.reg.updat_posc)
+ 127:main.c        ****     {
+ 128:main.c        ****         /*
+ 129:main.c        ****         Schedules the Bootloader/Launcher to be launched and then performs a software reset to 
+ 130:main.c        ****         launch it.
+ 131:main.c        ****         Returns:
+ 132:main.c        ****         This method will never return. It will load a new application and reset the device.
+ 133:main.c        ****         */
+ 134:main.c        ****         // Bootloadable_Load();
+ 135:main.c        ****     }
+ 136:main.c        **** }
+ 245              		.loc 1 136 0
+ 246              		@ sp needed
+ 247 0000 7047     		bx	lr
+ 248              		.cfi_endproc
+ 249              	.LFE36:
+ 250              		.size	ProcessI2CCommand, .-ProcessI2CCommand
+ 251 0002 C046     		.section	.text.main,"ax",%progbits
+ 252              		.align	2
+ 253              		.global	main
+ 254              		.code	16
+ 255              		.thumb_func
+ 256              		.type	main, %function
+ 257              	main:
+ 258              	.LFB37:
+ 137:main.c        **** 
+ 138:main.c        **** int main(void)
+ 139:main.c        **** {
+ 259              		.loc 1 139 0
+ 260              		.cfi_startproc
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 8
+
+
+ 261              		@ Volatile: function does not return.
+ 262              		@ args = 0, pretend = 0, frame = 0
+ 263              		@ frame_needed = 0, uses_anonymous_args = 0
+ 264 0000 10B5     		push	{r4, lr}
+ 265              		.cfi_def_cfa_offset 8
+ 266              		.cfi_offset 4, -8
+ 267              		.cfi_offset 14, -4
+ 140:main.c        ****     CyGlobalIntEnable; /* Enable global interrupts. */
+ 268              		.loc 1 140 0
+ 269              		.syntax divided
+ 270              	@ 140 "main.c" 1
+ 271 0002 62B6     		CPSIE   i
+ 272              	@ 0 "" 2
+ 141:main.c        ****  
+ 142:main.c        ****     UART_Start();
+ 273              		.loc 1 142 0
+ 274              		.thumb
+ 275              		.syntax unified
+ 276 0004 FFF7FEFF 		bl	UART_Start
+ 277              	.LVL6:
+ 143:main.c        ****     Init_I2C_Communication();
+ 278              		.loc 1 143 0
+ 279 0008 FFF7FEFF 		bl	Init_I2C_Communication
+ 280              	.LVL7:
+ 144:main.c        ****     
+ 145:main.c        ****     /* Start CapSense Component */
+ 146:main.c        ****     CapSense_Start();
+ 281              		.loc 1 146 0
+ 282 000c FFF7FEFF 		bl	CapSense_Start
+ 283              	.LVL8:
+ 147:main.c        **** #if RUN_UART_TUNER    
+ 148:main.c        ****     CapSense_TuInitialize();
+ 284              		.loc 1 148 0
+ 285 0010 FFF7FEFF 		bl	CapSense_TuInitialize
+ 286              	.LVL9:
+ 149:main.c        **** #endif    
+ 150:main.c        ****     CapSense_InitializeAllBaselines();
+ 287              		.loc 1 150 0
+ 288 0014 FFF7FEFF 		bl	CapSense_InitializeAllBaselines
+ 289              	.LVL10:
+ 151:main.c        ****     /* Start initial scan */
+ 152:main.c        ****     CapSense_ScanAllWidgets();
+ 290              		.loc 1 152 0
+ 291 0018 FFF7FEFF 		bl	CapSense_ScanAllWidgets
+ 292              	.LVL11:
+ 293              	.L22:
+ 153:main.c        ****     for(;;)
+ 154:main.c        ****     {
+ 155:main.c        ****        
+ 156:main.c        ****         /* Do this only when a scan is done */
+ 157:main.c        ****         if(CapSense_NOT_BUSY == CapSense_IsBusy())
+ 294              		.loc 1 157 0
+ 295 001c FFF7FEFF 		bl	CapSense_IsBusy
+ 296              	.LVL12:
+ 297 0020 0028     		cmp	r0, #0
+ 298 0022 14D1     		bne	.L21
+ 158:main.c        ****         {
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 9
+
+
+ 159:main.c        ****             /* Process all widgets */
+ 160:main.c        ****             CapSense_ProcessAllWidgets();
+ 299              		.loc 1 160 0
+ 300 0024 FFF7FEFF 		bl	CapSense_ProcessAllWidgets
+ 301              	.LVL13:
+ 161:main.c        ****             
+ 162:main.c        **** #if  RUN_UART_TUNER           
+ 163:main.c        ****             /* To sync with Tuner application */
+ 164:main.c        ****             CapSense_RunTuner();
+ 302              		.loc 1 164 0
+ 303 0028 FFF7FEFF 		bl	CapSense_RunTuner
+ 304              	.LVL14:
+ 165:main.c        ****             
+ 166:main.c        ****              /* Send packet header */
+ 167:main.c        ****             UART_SpiUartPutArray((uint8 *)(&header), sizeof(header));
+ 305              		.loc 1 167 0
+ 306 002c 0A4C     		ldr	r4, .L23
+ 307 002e 0221     		movs	r1, #2
+ 308 0030 2000     		movs	r0, r4
+ 309 0032 FFF7FEFF 		bl	UART_SpiUartPutArray
+ 310              	.LVL15:
+ 168:main.c        ****             /* Send packet with CapSense data */
+ 169:main.c        ****             UART_SpiUartPutArray((uint8 *)(&CapSense_dsRam), sizeof(CapSense_dsRam));
+ 311              		.loc 1 169 0
+ 312 0036 C821     		movs	r1, #200
+ 313 0038 0848     		ldr	r0, .L23+4
+ 314 003a FFF7FEFF 		bl	UART_SpiUartPutArray
+ 315              	.LVL16:
+ 170:main.c        ****             /* Send packet tail */
+ 171:main.c        ****             UART_SpiUartPutArray((uint8 *)(&tail), sizeof(tail));
+ 316              		.loc 1 171 0
+ 317 003e 201D     		adds	r0, r4, #4
+ 318 0040 0321     		movs	r1, #3
+ 319 0042 FFF7FEFF 		bl	UART_SpiUartPutArray
+ 320              	.LVL17:
+ 172:main.c        **** #endif            
+ 173:main.c        ****             /* process capsnese event and host interrupt */
+ 174:main.c        ****             ProcessCapsenseEvent();
+ 321              		.loc 1 174 0
+ 322 0046 FFF7FEFF 		bl	ProcessCapsenseEvent
+ 323              	.LVL18:
+ 175:main.c        ****             /* Start next scan */
+ 176:main.c        ****             CapSense_ScanAllWidgets();
+ 324              		.loc 1 176 0
+ 325 004a FFF7FEFF 		bl	CapSense_ScanAllWidgets
+ 326              	.LVL19:
+ 327              	.L21:
+ 177:main.c        ****         }
+ 178:main.c        ****         ProcessI2CCommand();
+ 179:main.c        ****         
+ 180:main.c        ****         CyDelay(SCAN_TIME_MS);
+ 328              		.loc 1 180 0
+ 329 004e 0120     		movs	r0, #1
+ 330 0050 FFF7FEFF 		bl	CyDelay
+ 331              	.LVL20:
+ 181:main.c        ****     }
+ 332              		.loc 1 181 0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 10
+
+
+ 333 0054 E2E7     		b	.L22
+ 334              	.L24:
+ 335 0056 C046     		.align	2
+ 336              	.L23:
+ 337 0058 C4000000 		.word	.LANCHOR1
+ 338 005c 00000000 		.word	CapSense_dsRam
+ 339              		.cfi_endproc
+ 340              	.LFE37:
+ 341              		.size	main, .-main
+ 342              		.global	send_status
+ 343              		.global	CapSense_status
+ 344              		.comm	i2c,17,4
+ 345              		.section	.rodata
+ 346              		.align	2
+ 347              		.set	.LANCHOR1,. + 0
+ 348              		.type	header, %object
+ 349              		.size	header, 2
+ 350              	header:
+ 351 00c4 0D       		.byte	13
+ 352 00c5 0A       		.byte	10
+ 353 00c6 0000     		.space	2
+ 354              		.type	tail, %object
+ 355              		.size	tail, 3
+ 356              	tail:
+ 357 00c8 00       		.byte	0
+ 358 00c9 FF       		.byte	-1
+ 359 00ca FF       		.byte	-1
+ 360              		.bss
+ 361              		.set	.LANCHOR0,. + 0
+ 362              		.type	CapSense_status, %object
+ 363              		.size	CapSense_status, 1
+ 364              	CapSense_status:
+ 365 0000 00       		.space	1
+ 366              		.type	send_status, %object
+ 367              		.size	send_status, 1
+ 368              	send_status:
+ 369 0001 00       		.space	1
+ 370              		.text
+ 371              	.Letext0:
+ 372              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 373              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 374              		.file 4 "Generated_Source\\PSoC4/cytypes.h"
+ 375              		.file 5 "Generated_Source\\PSoC4/CapSense_Configuration.h"
+ 376              		.file 6 "Generated_Source\\PSoC4/CapSense_Structure.h"
+ 377              		.file 7 "Generated_Source\\PSoC4/EZI2C.h"
+ 378              		.file 8 "Generated_Source\\PSoC4/EZI2C_EZI2C.h"
+ 379              		.file 9 "Generated_Source\\PSoC4/CAP_INT.h"
+ 380              		.file 10 "Generated_Source\\PSoC4/UART.h"
+ 381              		.file 11 "Generated_Source\\PSoC4/CapSense_Control.h"
+ 382              		.file 12 "Generated_Source\\PSoC4/CapSense_Tuner.h"
+ 383              		.file 13 "Generated_Source\\PSoC4/CapSense_Filter.h"
+ 384              		.file 14 "Generated_Source\\PSoC4/CapSense_Sensing.h"
+ 385              		.file 15 "Generated_Source\\PSoC4/UART_SPI_UART.h"
+ 386              		.file 16 "Generated_Source\\PSoC4/CyLib.h"
+ 387              		.section	.debug_info,"",%progbits
+ 388              	.Ldebug_info0:
+ 389 0000 15080000 		.4byte	0x815
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 11
+
+
+ 390 0004 0400     		.2byte	0x4
+ 391 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 392 000a 04       		.byte	0x4
+ 393 000b 01       		.uleb128 0x1
+ 394 000c F1000000 		.4byte	.LASF94
+ 395 0010 0C       		.byte	0xc
+ 396 0011 B8040000 		.4byte	.LASF95
+ 397 0015 F3040000 		.4byte	.LASF96
+ 398 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 399 001d 00000000 		.4byte	0
+ 400 0021 00000000 		.4byte	.Ldebug_line0
+ 401 0025 02       		.uleb128 0x2
+ 402 0026 01       		.byte	0x1
+ 403 0027 06       		.byte	0x6
+ 404 0028 1B020000 		.4byte	.LASF0
+ 405 002c 03       		.uleb128 0x3
+ 406 002d A0020000 		.4byte	.LASF9
+ 407 0031 02       		.byte	0x2
+ 408 0032 1D       		.byte	0x1d
+ 409 0033 37000000 		.4byte	0x37
+ 410 0037 02       		.uleb128 0x2
+ 411 0038 01       		.byte	0x1
+ 412 0039 08       		.byte	0x8
+ 413 003a FB020000 		.4byte	.LASF1
+ 414 003e 02       		.uleb128 0x2
+ 415 003f 02       		.byte	0x2
+ 416 0040 05       		.byte	0x5
+ 417 0041 A0000000 		.4byte	.LASF2
+ 418 0045 02       		.uleb128 0x2
+ 419 0046 02       		.byte	0x2
+ 420 0047 07       		.byte	0x7
+ 421 0048 51040000 		.4byte	.LASF3
+ 422 004c 02       		.uleb128 0x2
+ 423 004d 04       		.byte	0x4
+ 424 004e 05       		.byte	0x5
+ 425 004f 80020000 		.4byte	.LASF4
+ 426 0053 02       		.uleb128 0x2
+ 427 0054 04       		.byte	0x4
+ 428 0055 07       		.byte	0x7
+ 429 0056 CA040000 		.4byte	.LASF5
+ 430 005a 02       		.uleb128 0x2
+ 431 005b 08       		.byte	0x8
+ 432 005c 05       		.byte	0x5
+ 433 005d 0A060000 		.4byte	.LASF6
+ 434 0061 02       		.uleb128 0x2
+ 435 0062 08       		.byte	0x8
+ 436 0063 07       		.byte	0x7
+ 437 0064 4E030000 		.4byte	.LASF7
+ 438 0068 04       		.uleb128 0x4
+ 439 0069 04       		.byte	0x4
+ 440 006a 05       		.byte	0x5
+ 441 006b 696E7400 		.ascii	"int\000"
+ 442 006f 02       		.uleb128 0x2
+ 443 0070 04       		.byte	0x4
+ 444 0071 07       		.byte	0x7
+ 445 0072 96030000 		.4byte	.LASF8
+ 446 0076 03       		.uleb128 0x3
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 12
+
+
+ 447 0077 06020000 		.4byte	.LASF10
+ 448 007b 03       		.byte	0x3
+ 449 007c 18       		.byte	0x18
+ 450 007d 2C000000 		.4byte	0x2c
+ 451 0081 05       		.uleb128 0x5
+ 452 0082 0E020000 		.4byte	.LASF11
+ 453 0086 04       		.byte	0x4
+ 454 0087 E401     		.2byte	0x1e4
+ 455 0089 37000000 		.4byte	0x37
+ 456 008d 05       		.uleb128 0x5
+ 457 008e D8010000 		.4byte	.LASF12
+ 458 0092 04       		.byte	0x4
+ 459 0093 E501     		.2byte	0x1e5
+ 460 0095 45000000 		.4byte	0x45
+ 461 0099 05       		.uleb128 0x5
+ 462 009a B1040000 		.4byte	.LASF13
+ 463 009e 04       		.byte	0x4
+ 464 009f E601     		.2byte	0x1e6
+ 465 00a1 53000000 		.4byte	0x53
+ 466 00a5 02       		.uleb128 0x2
+ 467 00a6 04       		.byte	0x4
+ 468 00a7 04       		.byte	0x4
+ 469 00a8 3C020000 		.4byte	.LASF14
+ 470 00ac 02       		.uleb128 0x2
+ 471 00ad 08       		.byte	0x8
+ 472 00ae 04       		.byte	0x4
+ 473 00af B1050000 		.4byte	.LASF15
+ 474 00b3 02       		.uleb128 0x2
+ 475 00b4 01       		.byte	0x1
+ 476 00b5 08       		.byte	0x8
+ 477 00b6 7B020000 		.4byte	.LASF16
+ 478 00ba 06       		.uleb128 0x6
+ 479 00bb 99000000 		.4byte	0x99
+ 480 00bf 02       		.uleb128 0x2
+ 481 00c0 08       		.byte	0x8
+ 482 00c1 04       		.byte	0x4
+ 483 00c2 D8020000 		.4byte	.LASF17
+ 484 00c6 02       		.uleb128 0x2
+ 485 00c7 04       		.byte	0x4
+ 486 00c8 07       		.byte	0x7
+ 487 00c9 DA000000 		.4byte	.LASF18
+ 488 00cd 05       		.uleb128 0x5
+ 489 00ce 0E030000 		.4byte	.LASF19
+ 490 00d2 05       		.byte	0x5
+ 491 00d3 3201     		.2byte	0x132
+ 492 00d5 8D000000 		.4byte	0x8d
+ 493 00d9 05       		.uleb128 0x5
+ 494 00da F9030000 		.4byte	.LASF20
+ 495 00de 05       		.byte	0x5
+ 496 00df 3601     		.2byte	0x136
+ 497 00e1 81000000 		.4byte	0x81
+ 498 00e5 07       		.uleb128 0x7
+ 499 00e6 81000000 		.4byte	0x81
+ 500 00ea F5000000 		.4byte	0xf5
+ 501 00ee 08       		.uleb128 0x8
+ 502 00ef C6000000 		.4byte	0xc6
+ 503 00f3 00       		.byte	0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 13
+
+
+ 504 00f4 00       		.byte	0
+ 505 00f5 09       		.uleb128 0x9
+ 506 00f6 10       		.byte	0x10
+ 507 00f7 06       		.byte	0x6
+ 508 00f8 F3       		.byte	0xf3
+ 509 00f9 8B010000 		.4byte	0x18b
+ 510 00fd 0A       		.uleb128 0xa
+ 511 00fe 46040000 		.4byte	.LASF21
+ 512 0102 06       		.byte	0x6
+ 513 0103 F8       		.byte	0xf8
+ 514 0104 8D000000 		.4byte	0x8d
+ 515 0108 00       		.byte	0
+ 516 0109 0A       		.uleb128 0xa
+ 517 010a 97020000 		.4byte	.LASF22
+ 518 010e 06       		.byte	0x6
+ 519 010f FD       		.byte	0xfd
+ 520 0110 CD000000 		.4byte	0xcd
+ 521 0114 02       		.byte	0x2
+ 522 0115 0B       		.uleb128 0xb
+ 523 0116 C7010000 		.4byte	.LASF23
+ 524 011a 06       		.byte	0x6
+ 525 011b 0201     		.2byte	0x102
+ 526 011d 81000000 		.4byte	0x81
+ 527 0121 04       		.byte	0x4
+ 528 0122 0B       		.uleb128 0xb
+ 529 0123 94040000 		.4byte	.LASF24
+ 530 0127 06       		.byte	0x6
+ 531 0128 0701     		.2byte	0x107
+ 532 012a 81000000 		.4byte	0x81
+ 533 012e 05       		.byte	0x5
+ 534 012f 0B       		.uleb128 0xb
+ 535 0130 C4020000 		.4byte	.LASF25
+ 536 0134 06       		.byte	0x6
+ 537 0135 0D01     		.2byte	0x10d
+ 538 0137 81000000 		.4byte	0x81
+ 539 013b 06       		.byte	0x6
+ 540 013c 0B       		.uleb128 0xb
+ 541 013d C8000000 		.4byte	.LASF26
+ 542 0141 06       		.byte	0x6
+ 543 0142 1301     		.2byte	0x113
+ 544 0144 81000000 		.4byte	0x81
+ 545 0148 07       		.byte	0x7
+ 546 0149 0B       		.uleb128 0xb
+ 547 014a 68000000 		.4byte	.LASF27
+ 548 014e 06       		.byte	0x6
+ 549 014f 1A01     		.2byte	0x11a
+ 550 0151 D9000000 		.4byte	0xd9
+ 551 0155 08       		.byte	0x8
+ 552 0156 0B       		.uleb128 0xb
+ 553 0157 98000000 		.4byte	.LASF28
+ 554 015b 06       		.byte	0x6
+ 555 015c 2101     		.2byte	0x121
+ 556 015e E5000000 		.4byte	0xe5
+ 557 0162 09       		.byte	0x9
+ 558 0163 0B       		.uleb128 0xb
+ 559 0164 5A000000 		.4byte	.LASF29
+ 560 0168 06       		.byte	0x6
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 14
+
+
+ 561 0169 2601     		.2byte	0x126
+ 562 016b 81000000 		.4byte	0x81
+ 563 016f 0A       		.byte	0xa
+ 564 0170 0B       		.uleb128 0xb
+ 565 0171 14020000 		.4byte	.LASF30
+ 566 0175 06       		.byte	0x6
+ 567 0176 2E01     		.2byte	0x12e
+ 568 0178 8D000000 		.4byte	0x8d
+ 569 017c 0C       		.byte	0xc
+ 570 017d 0B       		.uleb128 0xb
+ 571 017e B3010000 		.4byte	.LASF31
+ 572 0182 06       		.byte	0x6
+ 573 0183 3301     		.2byte	0x133
+ 574 0185 81000000 		.4byte	0x81
+ 575 0189 0E       		.byte	0xe
+ 576 018a 00       		.byte	0
+ 577 018b 05       		.uleb128 0x5
+ 578 018c AA000000 		.4byte	.LASF32
+ 579 0190 06       		.byte	0x6
+ 580 0191 3401     		.2byte	0x134
+ 581 0193 F5000000 		.4byte	0xf5
+ 582 0197 0C       		.uleb128 0xc
+ 583 0198 12       		.byte	0x12
+ 584 0199 06       		.byte	0x6
+ 585 019a 3901     		.2byte	0x139
+ 586 019c 3D020000 		.4byte	0x23d
+ 587 01a0 0B       		.uleb128 0xb
+ 588 01a1 46040000 		.4byte	.LASF21
+ 589 01a5 06       		.byte	0x6
+ 590 01a6 3E01     		.2byte	0x13e
+ 591 01a8 8D000000 		.4byte	0x8d
+ 592 01ac 00       		.byte	0
+ 593 01ad 0B       		.uleb128 0xb
+ 594 01ae 97020000 		.4byte	.LASF22
+ 595 01b2 06       		.byte	0x6
+ 596 01b3 4301     		.2byte	0x143
+ 597 01b5 CD000000 		.4byte	0xcd
+ 598 01b9 02       		.byte	0x2
+ 599 01ba 0B       		.uleb128 0xb
+ 600 01bb C7010000 		.4byte	.LASF23
+ 601 01bf 06       		.byte	0x6
+ 602 01c0 4801     		.2byte	0x148
+ 603 01c2 81000000 		.4byte	0x81
+ 604 01c6 04       		.byte	0x4
+ 605 01c7 0B       		.uleb128 0xb
+ 606 01c8 94040000 		.4byte	.LASF24
+ 607 01cc 06       		.byte	0x6
+ 608 01cd 4D01     		.2byte	0x14d
+ 609 01cf 81000000 		.4byte	0x81
+ 610 01d3 05       		.byte	0x5
+ 611 01d4 0B       		.uleb128 0xb
+ 612 01d5 C4020000 		.4byte	.LASF25
+ 613 01d9 06       		.byte	0x6
+ 614 01da 5301     		.2byte	0x153
+ 615 01dc 81000000 		.4byte	0x81
+ 616 01e0 06       		.byte	0x6
+ 617 01e1 0B       		.uleb128 0xb
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 15
+
+
+ 618 01e2 C8000000 		.4byte	.LASF26
+ 619 01e6 06       		.byte	0x6
+ 620 01e7 5901     		.2byte	0x159
+ 621 01e9 81000000 		.4byte	0x81
+ 622 01ed 07       		.byte	0x7
+ 623 01ee 0B       		.uleb128 0xb
+ 624 01ef 68000000 		.4byte	.LASF27
+ 625 01f3 06       		.byte	0x6
+ 626 01f4 6001     		.2byte	0x160
+ 627 01f6 D9000000 		.4byte	0xd9
+ 628 01fa 08       		.byte	0x8
+ 629 01fb 0B       		.uleb128 0xb
+ 630 01fc 98000000 		.4byte	.LASF28
+ 631 0200 06       		.byte	0x6
+ 632 0201 6701     		.2byte	0x167
+ 633 0203 E5000000 		.4byte	0xe5
+ 634 0207 09       		.byte	0x9
+ 635 0208 0B       		.uleb128 0xb
+ 636 0209 5A000000 		.4byte	.LASF29
+ 637 020d 06       		.byte	0x6
+ 638 020e 6C01     		.2byte	0x16c
+ 639 0210 81000000 		.4byte	0x81
+ 640 0214 0A       		.byte	0xa
+ 641 0215 0B       		.uleb128 0xb
+ 642 0216 14020000 		.4byte	.LASF30
+ 643 021a 06       		.byte	0x6
+ 644 021b 7401     		.2byte	0x174
+ 645 021d 8D000000 		.4byte	0x8d
+ 646 0221 0C       		.byte	0xc
+ 647 0222 0B       		.uleb128 0xb
+ 648 0223 B3010000 		.4byte	.LASF31
+ 649 0227 06       		.byte	0x6
+ 650 0228 7901     		.2byte	0x179
+ 651 022a 81000000 		.4byte	0x81
+ 652 022e 0E       		.byte	0xe
+ 653 022f 0B       		.uleb128 0xb
+ 654 0230 A7010000 		.4byte	.LASF33
+ 655 0234 06       		.byte	0x6
+ 656 0235 7E01     		.2byte	0x17e
+ 657 0237 CD000000 		.4byte	0xcd
+ 658 023b 10       		.byte	0x10
+ 659 023c 00       		.byte	0
+ 660 023d 05       		.uleb128 0x5
+ 661 023e 6A050000 		.4byte	.LASF34
+ 662 0242 06       		.byte	0x6
+ 663 0243 7F01     		.2byte	0x17f
+ 664 0245 97010000 		.4byte	0x197
+ 665 0249 0C       		.uleb128 0xc
+ 666 024a 62       		.byte	0x62
+ 667 024b 06       		.byte	0x6
+ 668 024c 8501     		.2byte	0x185
+ 669 024e A1020000 		.4byte	0x2a1
+ 670 0252 0B       		.uleb128 0xb
+ 671 0253 D3000000 		.4byte	.LASF35
+ 672 0257 06       		.byte	0x6
+ 673 0258 8A01     		.2byte	0x18a
+ 674 025a 8B010000 		.4byte	0x18b
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 16
+
+
+ 675 025e 00       		.byte	0
+ 676 025f 0B       		.uleb128 0xb
+ 677 0260 27020000 		.4byte	.LASF36
+ 678 0264 06       		.byte	0x6
+ 679 0265 8F01     		.2byte	0x18f
+ 680 0267 8B010000 		.4byte	0x18b
+ 681 026b 10       		.byte	0x10
+ 682 026c 0B       		.uleb128 0xb
+ 683 026d AA020000 		.4byte	.LASF37
+ 684 0271 06       		.byte	0x6
+ 685 0272 9401     		.2byte	0x194
+ 686 0274 8B010000 		.4byte	0x18b
+ 687 0278 20       		.byte	0x20
+ 688 0279 0B       		.uleb128 0xb
+ 689 027a 5E020000 		.4byte	.LASF38
+ 690 027e 06       		.byte	0x6
+ 691 027f 9901     		.2byte	0x199
+ 692 0281 8B010000 		.4byte	0x18b
+ 693 0285 30       		.byte	0x30
+ 694 0286 0B       		.uleb128 0xb
+ 695 0287 50000000 		.4byte	.LASF39
+ 696 028b 06       		.byte	0x6
+ 697 028c 9E01     		.2byte	0x19e
+ 698 028e 8B010000 		.4byte	0x18b
+ 699 0292 40       		.byte	0x40
+ 700 0293 0B       		.uleb128 0xb
+ 701 0294 A2050000 		.4byte	.LASF40
+ 702 0298 06       		.byte	0x6
+ 703 0299 A301     		.2byte	0x1a3
+ 704 029b 3D020000 		.4byte	0x23d
+ 705 029f 50       		.byte	0x50
+ 706 02a0 00       		.byte	0
+ 707 02a1 05       		.uleb128 0x5
+ 708 02a2 42020000 		.4byte	.LASF41
+ 709 02a6 06       		.byte	0x6
+ 710 02a7 A401     		.2byte	0x1a4
+ 711 02a9 49020000 		.4byte	0x249
+ 712 02ad 0C       		.uleb128 0xc
+ 713 02ae 0A       		.byte	0xa
+ 714 02af 06       		.byte	0x6
+ 715 02b0 AA01     		.2byte	0x1aa
+ 716 02b2 05030000 		.4byte	0x305
+ 717 02b6 0D       		.uleb128 0xd
+ 718 02b7 72617700 		.ascii	"raw\000"
+ 719 02bb 06       		.byte	0x6
+ 720 02bc AF01     		.2byte	0x1af
+ 721 02be 05030000 		.4byte	0x305
+ 722 02c2 00       		.byte	0
+ 723 02c3 0B       		.uleb128 0xb
+ 724 02c4 E3000000 		.4byte	.LASF42
+ 725 02c8 06       		.byte	0x6
+ 726 02c9 B401     		.2byte	0x1b4
+ 727 02cb 05030000 		.4byte	0x305
+ 728 02cf 02       		.byte	0x2
+ 729 02d0 0B       		.uleb128 0xb
+ 730 02d1 A3030000 		.4byte	.LASF43
+ 731 02d5 06       		.byte	0x6
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 17
+
+
+ 732 02d6 BA01     		.2byte	0x1ba
+ 733 02d8 E5000000 		.4byte	0xe5
+ 734 02dc 04       		.byte	0x4
+ 735 02dd 0B       		.uleb128 0xb
+ 736 02de 73000000 		.4byte	.LASF44
+ 737 02e2 06       		.byte	0x6
+ 738 02e3 BF01     		.2byte	0x1bf
+ 739 02e5 CD000000 		.4byte	0xcd
+ 740 02e9 06       		.byte	0x6
+ 741 02ea 0B       		.uleb128 0xb
+ 742 02eb 5C050000 		.4byte	.LASF45
+ 743 02ef 06       		.byte	0x6
+ 744 02f0 C401     		.2byte	0x1c4
+ 745 02f2 15030000 		.4byte	0x315
+ 746 02f6 08       		.byte	0x8
+ 747 02f7 0B       		.uleb128 0xb
+ 748 02f8 93010000 		.4byte	.LASF46
+ 749 02fc 06       		.byte	0x6
+ 750 02fd C901     		.2byte	0x1c9
+ 751 02ff E5000000 		.4byte	0xe5
+ 752 0303 09       		.byte	0x9
+ 753 0304 00       		.byte	0
+ 754 0305 07       		.uleb128 0x7
+ 755 0306 8D000000 		.4byte	0x8d
+ 756 030a 15030000 		.4byte	0x315
+ 757 030e 08       		.uleb128 0x8
+ 758 030f C6000000 		.4byte	0xc6
+ 759 0313 00       		.byte	0
+ 760 0314 00       		.byte	0
+ 761 0315 07       		.uleb128 0x7
+ 762 0316 D9000000 		.4byte	0xd9
+ 763 031a 25030000 		.4byte	0x325
+ 764 031e 08       		.uleb128 0x8
+ 765 031f C6000000 		.4byte	0xc6
+ 766 0323 00       		.byte	0
+ 767 0324 00       		.byte	0
+ 768 0325 05       		.uleb128 0x5
+ 769 0326 C1030000 		.4byte	.LASF47
+ 770 032a 06       		.byte	0x6
+ 771 032b CA01     		.2byte	0x1ca
+ 772 032d AD020000 		.4byte	0x2ad
+ 773 0331 0C       		.uleb128 0xc
+ 774 0332 3C       		.byte	0x3c
+ 775 0333 06       		.byte	0x6
+ 776 0334 D001     		.2byte	0x1d0
+ 777 0336 89030000 		.4byte	0x389
+ 778 033a 0B       		.uleb128 0xb
+ 779 033b D3000000 		.4byte	.LASF35
+ 780 033f 06       		.byte	0x6
+ 781 0340 D501     		.2byte	0x1d5
+ 782 0342 89030000 		.4byte	0x389
+ 783 0346 00       		.byte	0
+ 784 0347 0B       		.uleb128 0xb
+ 785 0348 27020000 		.4byte	.LASF36
+ 786 034c 06       		.byte	0x6
+ 787 034d DA01     		.2byte	0x1da
+ 788 034f 89030000 		.4byte	0x389
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 18
+
+
+ 789 0353 0A       		.byte	0xa
+ 790 0354 0B       		.uleb128 0xb
+ 791 0355 AA020000 		.4byte	.LASF37
+ 792 0359 06       		.byte	0x6
+ 793 035a DF01     		.2byte	0x1df
+ 794 035c 89030000 		.4byte	0x389
+ 795 0360 14       		.byte	0x14
+ 796 0361 0B       		.uleb128 0xb
+ 797 0362 5E020000 		.4byte	.LASF38
+ 798 0366 06       		.byte	0x6
+ 799 0367 E401     		.2byte	0x1e4
+ 800 0369 89030000 		.4byte	0x389
+ 801 036d 1E       		.byte	0x1e
+ 802 036e 0B       		.uleb128 0xb
+ 803 036f 50000000 		.4byte	.LASF39
+ 804 0373 06       		.byte	0x6
+ 805 0374 E901     		.2byte	0x1e9
+ 806 0376 89030000 		.4byte	0x389
+ 807 037a 28       		.byte	0x28
+ 808 037b 0B       		.uleb128 0xb
+ 809 037c A2050000 		.4byte	.LASF40
+ 810 0380 06       		.byte	0x6
+ 811 0381 EE01     		.2byte	0x1ee
+ 812 0383 89030000 		.4byte	0x389
+ 813 0387 32       		.byte	0x32
+ 814 0388 00       		.byte	0
+ 815 0389 07       		.uleb128 0x7
+ 816 038a 25030000 		.4byte	0x325
+ 817 038e 99030000 		.4byte	0x399
+ 818 0392 08       		.uleb128 0x8
+ 819 0393 C6000000 		.4byte	0xc6
+ 820 0397 00       		.byte	0
+ 821 0398 00       		.byte	0
+ 822 0399 05       		.uleb128 0x5
+ 823 039a 31030000 		.4byte	.LASF48
+ 824 039e 06       		.byte	0x6
+ 825 039f EF01     		.2byte	0x1ef
+ 826 03a1 31030000 		.4byte	0x331
+ 827 03a5 0C       		.uleb128 0xc
+ 828 03a6 C8       		.byte	0xc8
+ 829 03a7 06       		.byte	0x6
+ 830 03a8 F501     		.2byte	0x1f5
+ 831 03aa A6040000 		.4byte	0x4a6
+ 832 03ae 0B       		.uleb128 0xb
+ 833 03af E8000000 		.4byte	.LASF49
+ 834 03b3 06       		.byte	0x6
+ 835 03b4 FC01     		.2byte	0x1fc
+ 836 03b6 8D000000 		.4byte	0x8d
+ 837 03ba 00       		.byte	0
+ 838 03bb 0B       		.uleb128 0xb
+ 839 03bc CF010000 		.4byte	.LASF50
+ 840 03c0 06       		.byte	0x6
+ 841 03c1 0102     		.2byte	0x201
+ 842 03c3 8D000000 		.4byte	0x8d
+ 843 03c7 02       		.byte	0x2
+ 844 03c8 0B       		.uleb128 0xb
+ 845 03c9 1B040000 		.4byte	.LASF51
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 19
+
+
+ 846 03cd 06       		.byte	0x6
+ 847 03ce 0602     		.2byte	0x206
+ 848 03d0 8D000000 		.4byte	0x8d
+ 849 03d4 04       		.byte	0x4
+ 850 03d5 0B       		.uleb128 0xb
+ 851 03d6 CF020000 		.4byte	.LASF52
+ 852 03da 06       		.byte	0x6
+ 853 03db 0C02     		.2byte	0x20c
+ 854 03dd 8D000000 		.4byte	0x8d
+ 855 03e1 06       		.byte	0x6
+ 856 03e2 0B       		.uleb128 0xb
+ 857 03e3 88040000 		.4byte	.LASF53
+ 858 03e7 06       		.byte	0x6
+ 859 03e8 1102     		.2byte	0x211
+ 860 03ea 8D000000 		.4byte	0x8d
+ 861 03ee 08       		.byte	0x8
+ 862 03ef 0B       		.uleb128 0xb
+ 863 03f0 14040000 		.4byte	.LASF54
+ 864 03f4 06       		.byte	0x6
+ 865 03f5 1602     		.2byte	0x216
+ 866 03f7 BA000000 		.4byte	0xba
+ 867 03fb 0C       		.byte	0xc
+ 868 03fc 0B       		.uleb128 0xb
+ 869 03fd 26030000 		.4byte	.LASF55
+ 870 0401 06       		.byte	0x6
+ 871 0402 1C02     		.2byte	0x21c
+ 872 0404 A6040000 		.4byte	0x4a6
+ 873 0408 10       		.byte	0x10
+ 874 0409 0B       		.uleb128 0xb
+ 875 040a F0020000 		.4byte	.LASF56
+ 876 040e 06       		.byte	0x6
+ 877 040f 2302     		.2byte	0x223
+ 878 0411 A6040000 		.4byte	0x4a6
+ 879 0415 14       		.byte	0x14
+ 880 0416 0B       		.uleb128 0xb
+ 881 0417 EB050000 		.4byte	.LASF57
+ 882 041b 06       		.byte	0x6
+ 883 041c 3302     		.2byte	0x233
+ 884 041e B6040000 		.4byte	0x4b6
+ 885 0422 18       		.byte	0x18
+ 886 0423 0B       		.uleb128 0xb
+ 887 0424 9C010000 		.4byte	.LASF58
+ 888 0428 06       		.byte	0x6
+ 889 0429 3902     		.2byte	0x239
+ 890 042b 8D000000 		.4byte	0x8d
+ 891 042f 1E       		.byte	0x1e
+ 892 0430 0B       		.uleb128 0xb
+ 893 0431 7E040000 		.4byte	.LASF59
+ 894 0435 06       		.byte	0x6
+ 895 0436 3E02     		.2byte	0x23e
+ 896 0438 81000000 		.4byte	0x81
+ 897 043c 20       		.byte	0x20
+ 898 043d 0B       		.uleb128 0xb
+ 899 043e 12000000 		.4byte	.LASF60
+ 900 0442 06       		.byte	0x6
+ 901 0443 4302     		.2byte	0x243
+ 902 0445 A1020000 		.4byte	0x2a1
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 20
+
+
+ 903 0449 22       		.byte	0x22
+ 904 044a 0B       		.uleb128 0xb
+ 905 044b 76040000 		.4byte	.LASF61
+ 906 044f 06       		.byte	0x6
+ 907 0450 4802     		.2byte	0x248
+ 908 0452 99030000 		.4byte	0x399
+ 909 0456 84       		.byte	0x84
+ 910 0457 0B       		.uleb128 0xb
+ 911 0458 B8050000 		.4byte	.LASF62
+ 912 045c 06       		.byte	0x6
+ 913 045d 4D02     		.2byte	0x24d
+ 914 045f 81000000 		.4byte	0x81
+ 915 0463 C0       		.byte	0xc0
+ 916 0464 0B       		.uleb128 0xb
+ 917 0465 6B020000 		.4byte	.LASF63
+ 918 0469 06       		.byte	0x6
+ 919 046a 5202     		.2byte	0x252
+ 920 046c 81000000 		.4byte	0x81
+ 921 0470 C1       		.byte	0xc1
+ 922 0471 0B       		.uleb128 0xb
+ 923 0472 23040000 		.4byte	.LASF64
+ 924 0476 06       		.byte	0x6
+ 925 0477 5702     		.2byte	0x257
+ 926 0479 8D000000 		.4byte	0x8d
+ 927 047d C2       		.byte	0xc2
+ 928 047e 0B       		.uleb128 0xb
+ 929 047f 1B000000 		.4byte	.LASF65
+ 930 0483 06       		.byte	0x6
+ 931 0484 5C02     		.2byte	0x25c
+ 932 0486 05030000 		.4byte	0x305
+ 933 048a C4       		.byte	0xc4
+ 934 048b 0B       		.uleb128 0xb
+ 935 048c BF040000 		.4byte	.LASF66
+ 936 0490 06       		.byte	0x6
+ 937 0491 6102     		.2byte	0x261
+ 938 0493 81000000 		.4byte	0x81
+ 939 0497 C6       		.byte	0xc6
+ 940 0498 0B       		.uleb128 0xb
+ 941 0499 2B000000 		.4byte	.LASF67
+ 942 049d 06       		.byte	0x6
+ 943 049e 6602     		.2byte	0x266
+ 944 04a0 81000000 		.4byte	0x81
+ 945 04a4 C7       		.byte	0xc7
+ 946 04a5 00       		.byte	0
+ 947 04a6 07       		.uleb128 0x7
+ 948 04a7 99000000 		.4byte	0x99
+ 949 04ab B6040000 		.4byte	0x4b6
+ 950 04af 08       		.uleb128 0x8
+ 951 04b0 C6000000 		.4byte	0xc6
+ 952 04b4 00       		.byte	0
+ 953 04b5 00       		.byte	0
+ 954 04b6 07       		.uleb128 0x7
+ 955 04b7 81000000 		.4byte	0x81
+ 956 04bb C6040000 		.4byte	0x4c6
+ 957 04bf 08       		.uleb128 0x8
+ 958 04c0 C6000000 		.4byte	0xc6
+ 959 04c4 05       		.byte	0x5
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 21
+
+
+ 960 04c5 00       		.byte	0
+ 961 04c6 05       		.uleb128 0x5
+ 962 04c7 9D040000 		.4byte	.LASF68
+ 963 04cb 06       		.byte	0x6
+ 964 04cc 6702     		.2byte	0x267
+ 965 04ce A5030000 		.4byte	0x3a5
+ 966 04d2 09       		.uleb128 0x9
+ 967 04d3 10       		.byte	0x10
+ 968 04d4 01       		.byte	0x1
+ 969 04d5 29       		.byte	0x29
+ 970 04d6 F3040000 		.4byte	0x4f3
+ 971 04da 0A       		.uleb128 0xa
+ 972 04db 30020000 		.4byte	.LASF69
+ 973 04df 01       		.byte	0x1
+ 974 04e0 2A       		.byte	0x2a
+ 975 04e1 F3040000 		.4byte	0x4f3
+ 976 04e5 00       		.byte	0
+ 977 04e6 0A       		.uleb128 0xa
+ 978 04e7 E8040000 		.4byte	.LASF70
+ 979 04eb 01       		.byte	0x1
+ 980 04ec 2B       		.byte	0x2b
+ 981 04ed 76000000 		.4byte	0x76
+ 982 04f1 0F       		.byte	0xf
+ 983 04f2 00       		.byte	0
+ 984 04f3 07       		.uleb128 0x7
+ 985 04f4 76000000 		.4byte	0x76
+ 986 04f8 03050000 		.4byte	0x503
+ 987 04fc 08       		.uleb128 0x8
+ 988 04fd C6000000 		.4byte	0xc6
+ 989 0501 0E       		.byte	0xe
+ 990 0502 00       		.byte	0
+ 991 0503 0E       		.uleb128 0xe
+ 992 0504 10       		.byte	0x10
+ 993 0505 01       		.byte	0x1
+ 994 0506 27       		.byte	0x27
+ 995 0507 22050000 		.4byte	0x522
+ 996 050b 0F       		.uleb128 0xf
+ 997 050c 72656700 		.ascii	"reg\000"
+ 998 0510 01       		.byte	0x1
+ 999 0511 2C       		.byte	0x2c
+ 1000 0512 D2040000 		.4byte	0x4d2
+ 1001 0516 10       		.uleb128 0x10
+ 1002 0517 A7050000 		.4byte	.LASF71
+ 1003 051b 01       		.byte	0x1
+ 1004 051c 2D       		.byte	0x2d
+ 1005 051d 22050000 		.4byte	0x522
+ 1006 0521 00       		.byte	0
+ 1007 0522 07       		.uleb128 0x7
+ 1008 0523 76000000 		.4byte	0x76
+ 1009 0527 32050000 		.4byte	0x532
+ 1010 052b 08       		.uleb128 0x8
+ 1011 052c C6000000 		.4byte	0xc6
+ 1012 0530 0F       		.byte	0xf
+ 1013 0531 00       		.byte	0
+ 1014 0532 03       		.uleb128 0x3
+ 1015 0533 7C030000 		.4byte	.LASF72
+ 1016 0537 01       		.byte	0x1
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 22
+
+
+ 1017 0538 2E       		.byte	0x2e
+ 1018 0539 03050000 		.4byte	0x503
+ 1019 053d 09       		.uleb128 0x9
+ 1020 053e 11       		.byte	0x11
+ 1021 053f 01       		.byte	0x1
+ 1022 0540 32       		.byte	0x32
+ 1023 0541 5D050000 		.4byte	0x55d
+ 1024 0545 11       		.uleb128 0x11
+ 1025 0546 727700   		.ascii	"rw\000"
+ 1026 0549 01       		.byte	0x1
+ 1027 054a 35       		.byte	0x35
+ 1028 054b 32050000 		.4byte	0x532
+ 1029 054f 00       		.byte	0
+ 1030 0550 0A       		.uleb128 0xa
+ 1031 0551 FA010000 		.4byte	.LASF73
+ 1032 0555 01       		.byte	0x1
+ 1033 0556 36       		.byte	0x36
+ 1034 0557 81000000 		.4byte	0x81
+ 1035 055b 10       		.byte	0x10
+ 1036 055c 00       		.byte	0
+ 1037 055d 03       		.uleb128 0x3
+ 1038 055e F1030000 		.4byte	.LASF74
+ 1039 0562 01       		.byte	0x1
+ 1040 0563 38       		.byte	0x38
+ 1041 0564 3D050000 		.4byte	0x53d
+ 1042 0568 12       		.uleb128 0x12
+ 1043 0569 65030000 		.4byte	.LASF97
+ 1044 056d 01       		.byte	0x1
+ 1045 056e 48       		.byte	0x48
+ 1046 056f 00000000 		.4byte	.LFB34
+ 1047 0573 24000000 		.4byte	.LFE34-.LFB34
+ 1048 0577 01       		.uleb128 0x1
+ 1049 0578 9C       		.byte	0x9c
+ 1050 0579 BF050000 		.4byte	0x5bf
+ 1051 057d 13       		.uleb128 0x13
+ 1052 057e 0E000000 		.4byte	.LVL0
+ 1053 0582 73070000 		.4byte	0x773
+ 1054 0586 9B050000 		.4byte	0x59b
+ 1055 058a 14       		.uleb128 0x14
+ 1056 058b 01       		.uleb128 0x1
+ 1057 058c 50       		.byte	0x50
+ 1058 058d 02       		.uleb128 0x2
+ 1059 058e 74       		.byte	0x74
+ 1060 058f 00       		.sleb128 0
+ 1061 0590 14       		.uleb128 0x14
+ 1062 0591 01       		.uleb128 0x1
+ 1063 0592 51       		.byte	0x51
+ 1064 0593 01       		.uleb128 0x1
+ 1065 0594 30       		.byte	0x30
+ 1066 0595 14       		.uleb128 0x14
+ 1067 0596 01       		.uleb128 0x1
+ 1068 0597 52       		.byte	0x52
+ 1069 0598 01       		.uleb128 0x1
+ 1070 0599 41       		.byte	0x41
+ 1071 059a 00       		.byte	0
+ 1072 059b 15       		.uleb128 0x15
+ 1073 059c 12000000 		.4byte	.LVL1
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 23
+
+
+ 1074 05a0 7C070000 		.4byte	0x77c
+ 1075 05a4 16       		.uleb128 0x16
+ 1076 05a5 1C000000 		.4byte	.LVL2
+ 1077 05a9 87070000 		.4byte	0x787
+ 1078 05ad 14       		.uleb128 0x14
+ 1079 05ae 01       		.uleb128 0x1
+ 1080 05af 50       		.byte	0x50
+ 1081 05b0 01       		.uleb128 0x1
+ 1082 05b1 41       		.byte	0x41
+ 1083 05b2 14       		.uleb128 0x14
+ 1084 05b3 01       		.uleb128 0x1
+ 1085 05b4 51       		.byte	0x51
+ 1086 05b5 01       		.uleb128 0x1
+ 1087 05b6 40       		.byte	0x40
+ 1088 05b7 14       		.uleb128 0x14
+ 1089 05b8 01       		.uleb128 0x1
+ 1090 05b9 52       		.byte	0x52
+ 1091 05ba 02       		.uleb128 0x2
+ 1092 05bb 74       		.byte	0x74
+ 1093 05bc 00       		.sleb128 0
+ 1094 05bd 00       		.byte	0
+ 1095 05be 00       		.byte	0
+ 1096 05bf 17       		.uleb128 0x17
+ 1097 05c0 F5050000 		.4byte	.LASF98
+ 1098 05c4 01       		.byte	0x1
+ 1099 05c5 55       		.byte	0x55
+ 1100 05c6 00000000 		.4byte	.LFB35
+ 1101 05ca 88000000 		.4byte	.LFE35-.LFB35
+ 1102 05ce 01       		.uleb128 0x1
+ 1103 05cf 9C       		.byte	0x9c
+ 1104 05d0 00060000 		.4byte	0x600
+ 1105 05d4 15       		.uleb128 0x15
+ 1106 05d5 06000000 		.4byte	.LVL3
+ 1107 05d9 92070000 		.4byte	0x792
+ 1108 05dd 13       		.uleb128 0x13
+ 1109 05de 6C000000 		.4byte	.LVL4
+ 1110 05e2 9E070000 		.4byte	0x79e
+ 1111 05e6 F0050000 		.4byte	0x5f0
+ 1112 05ea 14       		.uleb128 0x14
+ 1113 05eb 01       		.uleb128 0x1
+ 1114 05ec 50       		.byte	0x50
+ 1115 05ed 01       		.uleb128 0x1
+ 1116 05ee 30       		.byte	0x30
+ 1117 05ef 00       		.byte	0
+ 1118 05f0 16       		.uleb128 0x16
+ 1119 05f1 74000000 		.4byte	.LVL5
+ 1120 05f5 9E070000 		.4byte	0x79e
+ 1121 05f9 14       		.uleb128 0x14
+ 1122 05fa 01       		.uleb128 0x1
+ 1123 05fb 50       		.byte	0x50
+ 1124 05fc 01       		.uleb128 0x1
+ 1125 05fd 31       		.byte	0x31
+ 1126 05fe 00       		.byte	0
+ 1127 05ff 00       		.byte	0
+ 1128 0600 18       		.uleb128 0x18
+ 1129 0601 64040000 		.4byte	.LASF99
+ 1130 0605 01       		.byte	0x1
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 24
+
+
+ 1131 0606 7C       		.byte	0x7c
+ 1132 0607 00000000 		.4byte	.LFB36
+ 1133 060b 02000000 		.4byte	.LFE36-.LFB36
+ 1134 060f 01       		.uleb128 0x1
+ 1135 0610 9C       		.byte	0x9c
+ 1136 0611 19       		.uleb128 0x19
+ 1137 0612 36040000 		.4byte	.LASF100
+ 1138 0616 01       		.byte	0x1
+ 1139 0617 8A       		.byte	0x8a
+ 1140 0618 68000000 		.4byte	0x68
+ 1141 061c 00000000 		.4byte	.LFB37
+ 1142 0620 60000000 		.4byte	.LFE37-.LFB37
+ 1143 0624 01       		.uleb128 0x1
+ 1144 0625 9C       		.byte	0x9c
+ 1145 0626 E3060000 		.4byte	0x6e3
+ 1146 062a 15       		.uleb128 0x15
+ 1147 062b 08000000 		.4byte	.LVL6
+ 1148 062f A9070000 		.4byte	0x7a9
+ 1149 0633 15       		.uleb128 0x15
+ 1150 0634 0C000000 		.4byte	.LVL7
+ 1151 0638 68050000 		.4byte	0x568
+ 1152 063c 15       		.uleb128 0x15
+ 1153 063d 10000000 		.4byte	.LVL8
+ 1154 0641 B4070000 		.4byte	0x7b4
+ 1155 0645 15       		.uleb128 0x15
+ 1156 0646 14000000 		.4byte	.LVL9
+ 1157 064a BF070000 		.4byte	0x7bf
+ 1158 064e 15       		.uleb128 0x15
+ 1159 064f 18000000 		.4byte	.LVL10
+ 1160 0653 CA070000 		.4byte	0x7ca
+ 1161 0657 15       		.uleb128 0x15
+ 1162 0658 1C000000 		.4byte	.LVL11
+ 1163 065c D5070000 		.4byte	0x7d5
+ 1164 0660 15       		.uleb128 0x15
+ 1165 0661 20000000 		.4byte	.LVL12
+ 1166 0665 E0070000 		.4byte	0x7e0
+ 1167 0669 15       		.uleb128 0x15
+ 1168 066a 28000000 		.4byte	.LVL13
+ 1169 066e EB070000 		.4byte	0x7eb
+ 1170 0672 15       		.uleb128 0x15
+ 1171 0673 2C000000 		.4byte	.LVL14
+ 1172 0677 F6070000 		.4byte	0x7f6
+ 1173 067b 13       		.uleb128 0x13
+ 1174 067c 36000000 		.4byte	.LVL15
+ 1175 0680 01080000 		.4byte	0x801
+ 1176 0684 94060000 		.4byte	0x694
+ 1177 0688 14       		.uleb128 0x14
+ 1178 0689 01       		.uleb128 0x1
+ 1179 068a 50       		.byte	0x50
+ 1180 068b 02       		.uleb128 0x2
+ 1181 068c 74       		.byte	0x74
+ 1182 068d 00       		.sleb128 0
+ 1183 068e 14       		.uleb128 0x14
+ 1184 068f 01       		.uleb128 0x1
+ 1185 0690 51       		.byte	0x51
+ 1186 0691 01       		.uleb128 0x1
+ 1187 0692 32       		.byte	0x32
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 25
+
+
+ 1188 0693 00       		.byte	0
+ 1189 0694 13       		.uleb128 0x13
+ 1190 0695 3E000000 		.4byte	.LVL16
+ 1191 0699 01080000 		.4byte	0x801
+ 1192 069d A8060000 		.4byte	0x6a8
+ 1193 06a1 14       		.uleb128 0x14
+ 1194 06a2 01       		.uleb128 0x1
+ 1195 06a3 51       		.byte	0x51
+ 1196 06a4 02       		.uleb128 0x2
+ 1197 06a5 08       		.byte	0x8
+ 1198 06a6 C8       		.byte	0xc8
+ 1199 06a7 00       		.byte	0
+ 1200 06a8 13       		.uleb128 0x13
+ 1201 06a9 46000000 		.4byte	.LVL17
+ 1202 06ad 01080000 		.4byte	0x801
+ 1203 06b1 C1060000 		.4byte	0x6c1
+ 1204 06b5 14       		.uleb128 0x14
+ 1205 06b6 01       		.uleb128 0x1
+ 1206 06b7 50       		.byte	0x50
+ 1207 06b8 02       		.uleb128 0x2
+ 1208 06b9 74       		.byte	0x74
+ 1209 06ba 04       		.sleb128 4
+ 1210 06bb 14       		.uleb128 0x14
+ 1211 06bc 01       		.uleb128 0x1
+ 1212 06bd 51       		.byte	0x51
+ 1213 06be 01       		.uleb128 0x1
+ 1214 06bf 33       		.byte	0x33
+ 1215 06c0 00       		.byte	0
+ 1216 06c1 15       		.uleb128 0x15
+ 1217 06c2 4A000000 		.4byte	.LVL18
+ 1218 06c6 BF050000 		.4byte	0x5bf
+ 1219 06ca 15       		.uleb128 0x15
+ 1220 06cb 4E000000 		.4byte	.LVL19
+ 1221 06cf D5070000 		.4byte	0x7d5
+ 1222 06d3 16       		.uleb128 0x16
+ 1223 06d4 54000000 		.4byte	.LVL20
+ 1224 06d8 0D080000 		.4byte	0x80d
+ 1225 06dc 14       		.uleb128 0x14
+ 1226 06dd 01       		.uleb128 0x1
+ 1227 06de 50       		.byte	0x50
+ 1228 06df 01       		.uleb128 0x1
+ 1229 06e0 31       		.byte	0x31
+ 1230 06e1 00       		.byte	0
+ 1231 06e2 00       		.byte	0
+ 1232 06e3 07       		.uleb128 0x7
+ 1233 06e4 F3060000 		.4byte	0x6f3
+ 1234 06e8 F3060000 		.4byte	0x6f3
+ 1235 06ec 08       		.uleb128 0x8
+ 1236 06ed C6000000 		.4byte	0xc6
+ 1237 06f1 01       		.byte	0x1
+ 1238 06f2 00       		.byte	0
+ 1239 06f3 1A       		.uleb128 0x1a
+ 1240 06f4 81000000 		.4byte	0x81
+ 1241 06f8 1B       		.uleb128 0x1b
+ 1242 06f9 C0010000 		.4byte	.LASF75
+ 1243 06fd 01       		.byte	0x1
+ 1244 06fe 20       		.byte	0x20
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 26
+
+
+ 1245 06ff 09070000 		.4byte	0x709
+ 1246 0703 05       		.uleb128 0x5
+ 1247 0704 03       		.byte	0x3
+ 1248 0705 C4000000 		.4byte	header
+ 1249 0709 1A       		.uleb128 0x1a
+ 1250 070a E3060000 		.4byte	0x6e3
+ 1251 070e 07       		.uleb128 0x7
+ 1252 070f F3060000 		.4byte	0x6f3
+ 1253 0713 1E070000 		.4byte	0x71e
+ 1254 0717 08       		.uleb128 0x8
+ 1255 0718 C6000000 		.4byte	0xc6
+ 1256 071c 02       		.byte	0x2
+ 1257 071d 00       		.byte	0
+ 1258 071e 1B       		.uleb128 0x1b
+ 1259 071f 09030000 		.4byte	.LASF76
+ 1260 0723 01       		.byte	0x1
+ 1261 0724 21       		.byte	0x21
+ 1262 0725 2F070000 		.4byte	0x72f
+ 1263 0729 05       		.uleb128 0x5
+ 1264 072a 03       		.byte	0x3
+ 1265 072b C8000000 		.4byte	tail
+ 1266 072f 1A       		.uleb128 0x1a
+ 1267 0730 0E070000 		.4byte	0x70e
+ 1268 0734 1C       		.uleb128 0x1c
+ 1269 0735 B5020000 		.4byte	.LASF77
+ 1270 0739 06       		.byte	0x6
+ 1271 073a 0C05     		.2byte	0x50c
+ 1272 073c C6040000 		.4byte	0x4c6
+ 1273 0740 1D       		.uleb128 0x1d
+ 1274 0741 69326300 		.ascii	"i2c\000"
+ 1275 0745 01       		.byte	0x1
+ 1276 0746 3B       		.byte	0x3b
+ 1277 0747 5D050000 		.4byte	0x55d
+ 1278 074b 05       		.uleb128 0x5
+ 1279 074c 03       		.byte	0x3
+ 1280 074d 00000000 		.4byte	i2c
+ 1281 0751 1E       		.uleb128 0x1e
+ 1282 0752 83010000 		.4byte	.LASF78
+ 1283 0756 01       		.byte	0x1
+ 1284 0757 3F       		.byte	0x3f
+ 1285 0758 81000000 		.4byte	0x81
+ 1286 075c 05       		.uleb128 0x5
+ 1287 075d 03       		.byte	0x3
+ 1288 075e 00000000 		.4byte	CapSense_status
+ 1289 0762 1E       		.uleb128 0x1e
+ 1290 0763 DC040000 		.4byte	.LASF79
+ 1291 0767 01       		.byte	0x1
+ 1292 0768 40       		.byte	0x40
+ 1293 0769 81000000 		.4byte	0x81
+ 1294 076d 05       		.uleb128 0x5
+ 1295 076e 03       		.byte	0x3
+ 1296 076f 00000000 		.4byte	send_status
+ 1297 0773 1F       		.uleb128 0x1f
+ 1298 0774 8B050000 		.4byte	.LASF101
+ 1299 0778 8B050000 		.4byte	.LASF101
+ 1300 077c 20       		.uleb128 0x20
+ 1301 077d E4020000 		.4byte	.LASF80
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 27
+
+
+ 1302 0781 E4020000 		.4byte	.LASF80
+ 1303 0785 07       		.byte	0x7
+ 1304 0786 72       		.byte	0x72
+ 1305 0787 20       		.uleb128 0x20
+ 1306 0788 AB030000 		.4byte	.LASF81
+ 1307 078c AB030000 		.4byte	.LASF81
+ 1308 0790 08       		.byte	0x8
+ 1309 0791 A2       		.byte	0xa2
+ 1310 0792 21       		.uleb128 0x21
+ 1311 0793 DF010000 		.4byte	.LASF82
+ 1312 0797 DF010000 		.4byte	.LASF82
+ 1313 079b 06       		.byte	0x6
+ 1314 079c 2705     		.2byte	0x527
+ 1315 079e 20       		.uleb128 0x20
+ 1316 079f 89020000 		.4byte	.LASF83
+ 1317 07a3 89020000 		.4byte	.LASF83
+ 1318 07a7 09       		.byte	0x9
+ 1319 07a8 33       		.byte	0x33
+ 1320 07a9 20       		.uleb128 0x20
+ 1321 07aa 3B040000 		.4byte	.LASF84
+ 1322 07ae 3B040000 		.4byte	.LASF84
+ 1323 07b2 0A       		.byte	0xa
+ 1324 07b3 72       		.byte	0x72
+ 1325 07b4 20       		.uleb128 0x20
+ 1326 07b5 87030000 		.4byte	.LASF85
+ 1327 07b9 87030000 		.4byte	.LASF85
+ 1328 07bd 0B       		.byte	0xb
+ 1329 07be 3B       		.byte	0x3b
+ 1330 07bf 20       		.uleb128 0x20
+ 1331 07c0 3A000000 		.4byte	.LASF86
+ 1332 07c4 3A000000 		.4byte	.LASF86
+ 1333 07c8 0C       		.byte	0xc
+ 1334 07c9 54       		.byte	0x54
+ 1335 07ca 20       		.uleb128 0x20
+ 1336 07cb 78000000 		.4byte	.LASF87
+ 1337 07cf 78000000 		.4byte	.LASF87
+ 1338 07d3 0D       		.byte	0xd
+ 1339 07d4 43       		.byte	0x43
+ 1340 07d5 20       		.uleb128 0x20
+ 1341 07d6 D9030000 		.4byte	.LASF88
+ 1342 07da D9030000 		.4byte	.LASF88
+ 1343 07de 0E       		.byte	0xe
+ 1344 07df 59       		.byte	0x59
+ 1345 07e0 20       		.uleb128 0x20
+ 1346 07e1 92050000 		.4byte	.LASF89
+ 1347 07e5 92050000 		.4byte	.LASF89
+ 1348 07e9 0E       		.byte	0xe
+ 1349 07ea 5A       		.byte	0x5a
+ 1350 07eb 20       		.uleb128 0x20
+ 1351 07ec C8050000 		.4byte	.LASF90
+ 1352 07f0 C8050000 		.4byte	.LASF90
+ 1353 07f4 0B       		.byte	0xb
+ 1354 07f5 3F       		.byte	0x3f
+ 1355 07f6 20       		.uleb128 0x20
+ 1356 07f7 00000000 		.4byte	.LASF91
+ 1357 07fb 00000000 		.4byte	.LASF91
+ 1358 07ff 0C       		.byte	0xc
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 28
+
+
+ 1359 0800 49       		.byte	0x49
+ 1360 0801 21       		.uleb128 0x21
+ 1361 0802 47050000 		.4byte	.LASF92
+ 1362 0806 47050000 		.4byte	.LASF92
+ 1363 080a 0F       		.byte	0xf
+ 1364 080b 4503     		.2byte	0x345
+ 1365 080d 20       		.uleb128 0x20
+ 1366 080e E3050000 		.4byte	.LASF93
+ 1367 0812 E3050000 		.4byte	.LASF93
+ 1368 0816 10       		.byte	0x10
+ 1369 0817 D9       		.byte	0xd9
+ 1370 0818 00       		.byte	0
+ 1371              		.section	.debug_abbrev,"",%progbits
+ 1372              	.Ldebug_abbrev0:
+ 1373 0000 01       		.uleb128 0x1
+ 1374 0001 11       		.uleb128 0x11
+ 1375 0002 01       		.byte	0x1
+ 1376 0003 25       		.uleb128 0x25
+ 1377 0004 0E       		.uleb128 0xe
+ 1378 0005 13       		.uleb128 0x13
+ 1379 0006 0B       		.uleb128 0xb
+ 1380 0007 03       		.uleb128 0x3
+ 1381 0008 0E       		.uleb128 0xe
+ 1382 0009 1B       		.uleb128 0x1b
+ 1383 000a 0E       		.uleb128 0xe
+ 1384 000b 55       		.uleb128 0x55
+ 1385 000c 17       		.uleb128 0x17
+ 1386 000d 11       		.uleb128 0x11
+ 1387 000e 01       		.uleb128 0x1
+ 1388 000f 10       		.uleb128 0x10
+ 1389 0010 17       		.uleb128 0x17
+ 1390 0011 00       		.byte	0
+ 1391 0012 00       		.byte	0
+ 1392 0013 02       		.uleb128 0x2
+ 1393 0014 24       		.uleb128 0x24
+ 1394 0015 00       		.byte	0
+ 1395 0016 0B       		.uleb128 0xb
+ 1396 0017 0B       		.uleb128 0xb
+ 1397 0018 3E       		.uleb128 0x3e
+ 1398 0019 0B       		.uleb128 0xb
+ 1399 001a 03       		.uleb128 0x3
+ 1400 001b 0E       		.uleb128 0xe
+ 1401 001c 00       		.byte	0
+ 1402 001d 00       		.byte	0
+ 1403 001e 03       		.uleb128 0x3
+ 1404 001f 16       		.uleb128 0x16
+ 1405 0020 00       		.byte	0
+ 1406 0021 03       		.uleb128 0x3
+ 1407 0022 0E       		.uleb128 0xe
+ 1408 0023 3A       		.uleb128 0x3a
+ 1409 0024 0B       		.uleb128 0xb
+ 1410 0025 3B       		.uleb128 0x3b
+ 1411 0026 0B       		.uleb128 0xb
+ 1412 0027 49       		.uleb128 0x49
+ 1413 0028 13       		.uleb128 0x13
+ 1414 0029 00       		.byte	0
+ 1415 002a 00       		.byte	0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 29
+
+
+ 1416 002b 04       		.uleb128 0x4
+ 1417 002c 24       		.uleb128 0x24
+ 1418 002d 00       		.byte	0
+ 1419 002e 0B       		.uleb128 0xb
+ 1420 002f 0B       		.uleb128 0xb
+ 1421 0030 3E       		.uleb128 0x3e
+ 1422 0031 0B       		.uleb128 0xb
+ 1423 0032 03       		.uleb128 0x3
+ 1424 0033 08       		.uleb128 0x8
+ 1425 0034 00       		.byte	0
+ 1426 0035 00       		.byte	0
+ 1427 0036 05       		.uleb128 0x5
+ 1428 0037 16       		.uleb128 0x16
+ 1429 0038 00       		.byte	0
+ 1430 0039 03       		.uleb128 0x3
+ 1431 003a 0E       		.uleb128 0xe
+ 1432 003b 3A       		.uleb128 0x3a
+ 1433 003c 0B       		.uleb128 0xb
+ 1434 003d 3B       		.uleb128 0x3b
+ 1435 003e 05       		.uleb128 0x5
+ 1436 003f 49       		.uleb128 0x49
+ 1437 0040 13       		.uleb128 0x13
+ 1438 0041 00       		.byte	0
+ 1439 0042 00       		.byte	0
+ 1440 0043 06       		.uleb128 0x6
+ 1441 0044 35       		.uleb128 0x35
+ 1442 0045 00       		.byte	0
+ 1443 0046 49       		.uleb128 0x49
+ 1444 0047 13       		.uleb128 0x13
+ 1445 0048 00       		.byte	0
+ 1446 0049 00       		.byte	0
+ 1447 004a 07       		.uleb128 0x7
+ 1448 004b 01       		.uleb128 0x1
+ 1449 004c 01       		.byte	0x1
+ 1450 004d 49       		.uleb128 0x49
+ 1451 004e 13       		.uleb128 0x13
+ 1452 004f 01       		.uleb128 0x1
+ 1453 0050 13       		.uleb128 0x13
+ 1454 0051 00       		.byte	0
+ 1455 0052 00       		.byte	0
+ 1456 0053 08       		.uleb128 0x8
+ 1457 0054 21       		.uleb128 0x21
+ 1458 0055 00       		.byte	0
+ 1459 0056 49       		.uleb128 0x49
+ 1460 0057 13       		.uleb128 0x13
+ 1461 0058 2F       		.uleb128 0x2f
+ 1462 0059 0B       		.uleb128 0xb
+ 1463 005a 00       		.byte	0
+ 1464 005b 00       		.byte	0
+ 1465 005c 09       		.uleb128 0x9
+ 1466 005d 13       		.uleb128 0x13
+ 1467 005e 01       		.byte	0x1
+ 1468 005f 0B       		.uleb128 0xb
+ 1469 0060 0B       		.uleb128 0xb
+ 1470 0061 3A       		.uleb128 0x3a
+ 1471 0062 0B       		.uleb128 0xb
+ 1472 0063 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 30
+
+
+ 1473 0064 0B       		.uleb128 0xb
+ 1474 0065 01       		.uleb128 0x1
+ 1475 0066 13       		.uleb128 0x13
+ 1476 0067 00       		.byte	0
+ 1477 0068 00       		.byte	0
+ 1478 0069 0A       		.uleb128 0xa
+ 1479 006a 0D       		.uleb128 0xd
+ 1480 006b 00       		.byte	0
+ 1481 006c 03       		.uleb128 0x3
+ 1482 006d 0E       		.uleb128 0xe
+ 1483 006e 3A       		.uleb128 0x3a
+ 1484 006f 0B       		.uleb128 0xb
+ 1485 0070 3B       		.uleb128 0x3b
+ 1486 0071 0B       		.uleb128 0xb
+ 1487 0072 49       		.uleb128 0x49
+ 1488 0073 13       		.uleb128 0x13
+ 1489 0074 38       		.uleb128 0x38
+ 1490 0075 0B       		.uleb128 0xb
+ 1491 0076 00       		.byte	0
+ 1492 0077 00       		.byte	0
+ 1493 0078 0B       		.uleb128 0xb
+ 1494 0079 0D       		.uleb128 0xd
+ 1495 007a 00       		.byte	0
+ 1496 007b 03       		.uleb128 0x3
+ 1497 007c 0E       		.uleb128 0xe
+ 1498 007d 3A       		.uleb128 0x3a
+ 1499 007e 0B       		.uleb128 0xb
+ 1500 007f 3B       		.uleb128 0x3b
+ 1501 0080 05       		.uleb128 0x5
+ 1502 0081 49       		.uleb128 0x49
+ 1503 0082 13       		.uleb128 0x13
+ 1504 0083 38       		.uleb128 0x38
+ 1505 0084 0B       		.uleb128 0xb
+ 1506 0085 00       		.byte	0
+ 1507 0086 00       		.byte	0
+ 1508 0087 0C       		.uleb128 0xc
+ 1509 0088 13       		.uleb128 0x13
+ 1510 0089 01       		.byte	0x1
+ 1511 008a 0B       		.uleb128 0xb
+ 1512 008b 0B       		.uleb128 0xb
+ 1513 008c 3A       		.uleb128 0x3a
+ 1514 008d 0B       		.uleb128 0xb
+ 1515 008e 3B       		.uleb128 0x3b
+ 1516 008f 05       		.uleb128 0x5
+ 1517 0090 01       		.uleb128 0x1
+ 1518 0091 13       		.uleb128 0x13
+ 1519 0092 00       		.byte	0
+ 1520 0093 00       		.byte	0
+ 1521 0094 0D       		.uleb128 0xd
+ 1522 0095 0D       		.uleb128 0xd
+ 1523 0096 00       		.byte	0
+ 1524 0097 03       		.uleb128 0x3
+ 1525 0098 08       		.uleb128 0x8
+ 1526 0099 3A       		.uleb128 0x3a
+ 1527 009a 0B       		.uleb128 0xb
+ 1528 009b 3B       		.uleb128 0x3b
+ 1529 009c 05       		.uleb128 0x5
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 31
+
+
+ 1530 009d 49       		.uleb128 0x49
+ 1531 009e 13       		.uleb128 0x13
+ 1532 009f 38       		.uleb128 0x38
+ 1533 00a0 0B       		.uleb128 0xb
+ 1534 00a1 00       		.byte	0
+ 1535 00a2 00       		.byte	0
+ 1536 00a3 0E       		.uleb128 0xe
+ 1537 00a4 17       		.uleb128 0x17
+ 1538 00a5 01       		.byte	0x1
+ 1539 00a6 0B       		.uleb128 0xb
+ 1540 00a7 0B       		.uleb128 0xb
+ 1541 00a8 3A       		.uleb128 0x3a
+ 1542 00a9 0B       		.uleb128 0xb
+ 1543 00aa 3B       		.uleb128 0x3b
+ 1544 00ab 0B       		.uleb128 0xb
+ 1545 00ac 01       		.uleb128 0x1
+ 1546 00ad 13       		.uleb128 0x13
+ 1547 00ae 00       		.byte	0
+ 1548 00af 00       		.byte	0
+ 1549 00b0 0F       		.uleb128 0xf
+ 1550 00b1 0D       		.uleb128 0xd
+ 1551 00b2 00       		.byte	0
+ 1552 00b3 03       		.uleb128 0x3
+ 1553 00b4 08       		.uleb128 0x8
+ 1554 00b5 3A       		.uleb128 0x3a
+ 1555 00b6 0B       		.uleb128 0xb
+ 1556 00b7 3B       		.uleb128 0x3b
+ 1557 00b8 0B       		.uleb128 0xb
+ 1558 00b9 49       		.uleb128 0x49
+ 1559 00ba 13       		.uleb128 0x13
+ 1560 00bb 00       		.byte	0
+ 1561 00bc 00       		.byte	0
+ 1562 00bd 10       		.uleb128 0x10
+ 1563 00be 0D       		.uleb128 0xd
+ 1564 00bf 00       		.byte	0
+ 1565 00c0 03       		.uleb128 0x3
+ 1566 00c1 0E       		.uleb128 0xe
+ 1567 00c2 3A       		.uleb128 0x3a
+ 1568 00c3 0B       		.uleb128 0xb
+ 1569 00c4 3B       		.uleb128 0x3b
+ 1570 00c5 0B       		.uleb128 0xb
+ 1571 00c6 49       		.uleb128 0x49
+ 1572 00c7 13       		.uleb128 0x13
+ 1573 00c8 00       		.byte	0
+ 1574 00c9 00       		.byte	0
+ 1575 00ca 11       		.uleb128 0x11
+ 1576 00cb 0D       		.uleb128 0xd
+ 1577 00cc 00       		.byte	0
+ 1578 00cd 03       		.uleb128 0x3
+ 1579 00ce 08       		.uleb128 0x8
+ 1580 00cf 3A       		.uleb128 0x3a
+ 1581 00d0 0B       		.uleb128 0xb
+ 1582 00d1 3B       		.uleb128 0x3b
+ 1583 00d2 0B       		.uleb128 0xb
+ 1584 00d3 49       		.uleb128 0x49
+ 1585 00d4 13       		.uleb128 0x13
+ 1586 00d5 38       		.uleb128 0x38
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 32
+
+
+ 1587 00d6 0B       		.uleb128 0xb
+ 1588 00d7 00       		.byte	0
+ 1589 00d8 00       		.byte	0
+ 1590 00d9 12       		.uleb128 0x12
+ 1591 00da 2E       		.uleb128 0x2e
+ 1592 00db 01       		.byte	0x1
+ 1593 00dc 03       		.uleb128 0x3
+ 1594 00dd 0E       		.uleb128 0xe
+ 1595 00de 3A       		.uleb128 0x3a
+ 1596 00df 0B       		.uleb128 0xb
+ 1597 00e0 3B       		.uleb128 0x3b
+ 1598 00e1 0B       		.uleb128 0xb
+ 1599 00e2 11       		.uleb128 0x11
+ 1600 00e3 01       		.uleb128 0x1
+ 1601 00e4 12       		.uleb128 0x12
+ 1602 00e5 06       		.uleb128 0x6
+ 1603 00e6 40       		.uleb128 0x40
+ 1604 00e7 18       		.uleb128 0x18
+ 1605 00e8 9742     		.uleb128 0x2117
+ 1606 00ea 19       		.uleb128 0x19
+ 1607 00eb 01       		.uleb128 0x1
+ 1608 00ec 13       		.uleb128 0x13
+ 1609 00ed 00       		.byte	0
+ 1610 00ee 00       		.byte	0
+ 1611 00ef 13       		.uleb128 0x13
+ 1612 00f0 898201   		.uleb128 0x4109
+ 1613 00f3 01       		.byte	0x1
+ 1614 00f4 11       		.uleb128 0x11
+ 1615 00f5 01       		.uleb128 0x1
+ 1616 00f6 31       		.uleb128 0x31
+ 1617 00f7 13       		.uleb128 0x13
+ 1618 00f8 01       		.uleb128 0x1
+ 1619 00f9 13       		.uleb128 0x13
+ 1620 00fa 00       		.byte	0
+ 1621 00fb 00       		.byte	0
+ 1622 00fc 14       		.uleb128 0x14
+ 1623 00fd 8A8201   		.uleb128 0x410a
+ 1624 0100 00       		.byte	0
+ 1625 0101 02       		.uleb128 0x2
+ 1626 0102 18       		.uleb128 0x18
+ 1627 0103 9142     		.uleb128 0x2111
+ 1628 0105 18       		.uleb128 0x18
+ 1629 0106 00       		.byte	0
+ 1630 0107 00       		.byte	0
+ 1631 0108 15       		.uleb128 0x15
+ 1632 0109 898201   		.uleb128 0x4109
+ 1633 010c 00       		.byte	0
+ 1634 010d 11       		.uleb128 0x11
+ 1635 010e 01       		.uleb128 0x1
+ 1636 010f 31       		.uleb128 0x31
+ 1637 0110 13       		.uleb128 0x13
+ 1638 0111 00       		.byte	0
+ 1639 0112 00       		.byte	0
+ 1640 0113 16       		.uleb128 0x16
+ 1641 0114 898201   		.uleb128 0x4109
+ 1642 0117 01       		.byte	0x1
+ 1643 0118 11       		.uleb128 0x11
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 33
+
+
+ 1644 0119 01       		.uleb128 0x1
+ 1645 011a 31       		.uleb128 0x31
+ 1646 011b 13       		.uleb128 0x13
+ 1647 011c 00       		.byte	0
+ 1648 011d 00       		.byte	0
+ 1649 011e 17       		.uleb128 0x17
+ 1650 011f 2E       		.uleb128 0x2e
+ 1651 0120 01       		.byte	0x1
+ 1652 0121 3F       		.uleb128 0x3f
+ 1653 0122 19       		.uleb128 0x19
+ 1654 0123 03       		.uleb128 0x3
+ 1655 0124 0E       		.uleb128 0xe
+ 1656 0125 3A       		.uleb128 0x3a
+ 1657 0126 0B       		.uleb128 0xb
+ 1658 0127 3B       		.uleb128 0x3b
+ 1659 0128 0B       		.uleb128 0xb
+ 1660 0129 11       		.uleb128 0x11
+ 1661 012a 01       		.uleb128 0x1
+ 1662 012b 12       		.uleb128 0x12
+ 1663 012c 06       		.uleb128 0x6
+ 1664 012d 40       		.uleb128 0x40
+ 1665 012e 18       		.uleb128 0x18
+ 1666 012f 9742     		.uleb128 0x2117
+ 1667 0131 19       		.uleb128 0x19
+ 1668 0132 01       		.uleb128 0x1
+ 1669 0133 13       		.uleb128 0x13
+ 1670 0134 00       		.byte	0
+ 1671 0135 00       		.byte	0
+ 1672 0136 18       		.uleb128 0x18
+ 1673 0137 2E       		.uleb128 0x2e
+ 1674 0138 00       		.byte	0
+ 1675 0139 3F       		.uleb128 0x3f
+ 1676 013a 19       		.uleb128 0x19
+ 1677 013b 03       		.uleb128 0x3
+ 1678 013c 0E       		.uleb128 0xe
+ 1679 013d 3A       		.uleb128 0x3a
+ 1680 013e 0B       		.uleb128 0xb
+ 1681 013f 3B       		.uleb128 0x3b
+ 1682 0140 0B       		.uleb128 0xb
+ 1683 0141 11       		.uleb128 0x11
+ 1684 0142 01       		.uleb128 0x1
+ 1685 0143 12       		.uleb128 0x12
+ 1686 0144 06       		.uleb128 0x6
+ 1687 0145 40       		.uleb128 0x40
+ 1688 0146 18       		.uleb128 0x18
+ 1689 0147 9742     		.uleb128 0x2117
+ 1690 0149 19       		.uleb128 0x19
+ 1691 014a 00       		.byte	0
+ 1692 014b 00       		.byte	0
+ 1693 014c 19       		.uleb128 0x19
+ 1694 014d 2E       		.uleb128 0x2e
+ 1695 014e 01       		.byte	0x1
+ 1696 014f 3F       		.uleb128 0x3f
+ 1697 0150 19       		.uleb128 0x19
+ 1698 0151 03       		.uleb128 0x3
+ 1699 0152 0E       		.uleb128 0xe
+ 1700 0153 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 34
+
+
+ 1701 0154 0B       		.uleb128 0xb
+ 1702 0155 3B       		.uleb128 0x3b
+ 1703 0156 0B       		.uleb128 0xb
+ 1704 0157 27       		.uleb128 0x27
+ 1705 0158 19       		.uleb128 0x19
+ 1706 0159 49       		.uleb128 0x49
+ 1707 015a 13       		.uleb128 0x13
+ 1708 015b 8701     		.uleb128 0x87
+ 1709 015d 19       		.uleb128 0x19
+ 1710 015e 11       		.uleb128 0x11
+ 1711 015f 01       		.uleb128 0x1
+ 1712 0160 12       		.uleb128 0x12
+ 1713 0161 06       		.uleb128 0x6
+ 1714 0162 40       		.uleb128 0x40
+ 1715 0163 18       		.uleb128 0x18
+ 1716 0164 9742     		.uleb128 0x2117
+ 1717 0166 19       		.uleb128 0x19
+ 1718 0167 01       		.uleb128 0x1
+ 1719 0168 13       		.uleb128 0x13
+ 1720 0169 00       		.byte	0
+ 1721 016a 00       		.byte	0
+ 1722 016b 1A       		.uleb128 0x1a
+ 1723 016c 26       		.uleb128 0x26
+ 1724 016d 00       		.byte	0
+ 1725 016e 49       		.uleb128 0x49
+ 1726 016f 13       		.uleb128 0x13
+ 1727 0170 00       		.byte	0
+ 1728 0171 00       		.byte	0
+ 1729 0172 1B       		.uleb128 0x1b
+ 1730 0173 34       		.uleb128 0x34
+ 1731 0174 00       		.byte	0
+ 1732 0175 03       		.uleb128 0x3
+ 1733 0176 0E       		.uleb128 0xe
+ 1734 0177 3A       		.uleb128 0x3a
+ 1735 0178 0B       		.uleb128 0xb
+ 1736 0179 3B       		.uleb128 0x3b
+ 1737 017a 0B       		.uleb128 0xb
+ 1738 017b 49       		.uleb128 0x49
+ 1739 017c 13       		.uleb128 0x13
+ 1740 017d 02       		.uleb128 0x2
+ 1741 017e 18       		.uleb128 0x18
+ 1742 017f 00       		.byte	0
+ 1743 0180 00       		.byte	0
+ 1744 0181 1C       		.uleb128 0x1c
+ 1745 0182 34       		.uleb128 0x34
+ 1746 0183 00       		.byte	0
+ 1747 0184 03       		.uleb128 0x3
+ 1748 0185 0E       		.uleb128 0xe
+ 1749 0186 3A       		.uleb128 0x3a
+ 1750 0187 0B       		.uleb128 0xb
+ 1751 0188 3B       		.uleb128 0x3b
+ 1752 0189 05       		.uleb128 0x5
+ 1753 018a 49       		.uleb128 0x49
+ 1754 018b 13       		.uleb128 0x13
+ 1755 018c 3F       		.uleb128 0x3f
+ 1756 018d 19       		.uleb128 0x19
+ 1757 018e 3C       		.uleb128 0x3c
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 35
+
+
+ 1758 018f 19       		.uleb128 0x19
+ 1759 0190 00       		.byte	0
+ 1760 0191 00       		.byte	0
+ 1761 0192 1D       		.uleb128 0x1d
+ 1762 0193 34       		.uleb128 0x34
+ 1763 0194 00       		.byte	0
+ 1764 0195 03       		.uleb128 0x3
+ 1765 0196 08       		.uleb128 0x8
+ 1766 0197 3A       		.uleb128 0x3a
+ 1767 0198 0B       		.uleb128 0xb
+ 1768 0199 3B       		.uleb128 0x3b
+ 1769 019a 0B       		.uleb128 0xb
+ 1770 019b 49       		.uleb128 0x49
+ 1771 019c 13       		.uleb128 0x13
+ 1772 019d 3F       		.uleb128 0x3f
+ 1773 019e 19       		.uleb128 0x19
+ 1774 019f 02       		.uleb128 0x2
+ 1775 01a0 18       		.uleb128 0x18
+ 1776 01a1 00       		.byte	0
+ 1777 01a2 00       		.byte	0
+ 1778 01a3 1E       		.uleb128 0x1e
+ 1779 01a4 34       		.uleb128 0x34
+ 1780 01a5 00       		.byte	0
+ 1781 01a6 03       		.uleb128 0x3
+ 1782 01a7 0E       		.uleb128 0xe
+ 1783 01a8 3A       		.uleb128 0x3a
+ 1784 01a9 0B       		.uleb128 0xb
+ 1785 01aa 3B       		.uleb128 0x3b
+ 1786 01ab 0B       		.uleb128 0xb
+ 1787 01ac 49       		.uleb128 0x49
+ 1788 01ad 13       		.uleb128 0x13
+ 1789 01ae 3F       		.uleb128 0x3f
+ 1790 01af 19       		.uleb128 0x19
+ 1791 01b0 02       		.uleb128 0x2
+ 1792 01b1 18       		.uleb128 0x18
+ 1793 01b2 00       		.byte	0
+ 1794 01b3 00       		.byte	0
+ 1795 01b4 1F       		.uleb128 0x1f
+ 1796 01b5 2E       		.uleb128 0x2e
+ 1797 01b6 00       		.byte	0
+ 1798 01b7 3F       		.uleb128 0x3f
+ 1799 01b8 19       		.uleb128 0x19
+ 1800 01b9 3C       		.uleb128 0x3c
+ 1801 01ba 19       		.uleb128 0x19
+ 1802 01bb 6E       		.uleb128 0x6e
+ 1803 01bc 0E       		.uleb128 0xe
+ 1804 01bd 03       		.uleb128 0x3
+ 1805 01be 0E       		.uleb128 0xe
+ 1806 01bf 00       		.byte	0
+ 1807 01c0 00       		.byte	0
+ 1808 01c1 20       		.uleb128 0x20
+ 1809 01c2 2E       		.uleb128 0x2e
+ 1810 01c3 00       		.byte	0
+ 1811 01c4 3F       		.uleb128 0x3f
+ 1812 01c5 19       		.uleb128 0x19
+ 1813 01c6 3C       		.uleb128 0x3c
+ 1814 01c7 19       		.uleb128 0x19
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 36
+
+
+ 1815 01c8 6E       		.uleb128 0x6e
+ 1816 01c9 0E       		.uleb128 0xe
+ 1817 01ca 03       		.uleb128 0x3
+ 1818 01cb 0E       		.uleb128 0xe
+ 1819 01cc 3A       		.uleb128 0x3a
+ 1820 01cd 0B       		.uleb128 0xb
+ 1821 01ce 3B       		.uleb128 0x3b
+ 1822 01cf 0B       		.uleb128 0xb
+ 1823 01d0 00       		.byte	0
+ 1824 01d1 00       		.byte	0
+ 1825 01d2 21       		.uleb128 0x21
+ 1826 01d3 2E       		.uleb128 0x2e
+ 1827 01d4 00       		.byte	0
+ 1828 01d5 3F       		.uleb128 0x3f
+ 1829 01d6 19       		.uleb128 0x19
+ 1830 01d7 3C       		.uleb128 0x3c
+ 1831 01d8 19       		.uleb128 0x19
+ 1832 01d9 6E       		.uleb128 0x6e
+ 1833 01da 0E       		.uleb128 0xe
+ 1834 01db 03       		.uleb128 0x3
+ 1835 01dc 0E       		.uleb128 0xe
+ 1836 01dd 3A       		.uleb128 0x3a
+ 1837 01de 0B       		.uleb128 0xb
+ 1838 01df 3B       		.uleb128 0x3b
+ 1839 01e0 05       		.uleb128 0x5
+ 1840 01e1 00       		.byte	0
+ 1841 01e2 00       		.byte	0
+ 1842 01e3 00       		.byte	0
+ 1843              		.section	.debug_aranges,"",%progbits
+ 1844 0000 34000000 		.4byte	0x34
+ 1845 0004 0200     		.2byte	0x2
+ 1846 0006 00000000 		.4byte	.Ldebug_info0
+ 1847 000a 04       		.byte	0x4
+ 1848 000b 00       		.byte	0
+ 1849 000c 0000     		.2byte	0
+ 1850 000e 0000     		.2byte	0
+ 1851 0010 00000000 		.4byte	.LFB34
+ 1852 0014 24000000 		.4byte	.LFE34-.LFB34
+ 1853 0018 00000000 		.4byte	.LFB35
+ 1854 001c 88000000 		.4byte	.LFE35-.LFB35
+ 1855 0020 00000000 		.4byte	.LFB36
+ 1856 0024 02000000 		.4byte	.LFE36-.LFB36
+ 1857 0028 00000000 		.4byte	.LFB37
+ 1858 002c 60000000 		.4byte	.LFE37-.LFB37
+ 1859 0030 00000000 		.4byte	0
+ 1860 0034 00000000 		.4byte	0
+ 1861              		.section	.debug_ranges,"",%progbits
+ 1862              	.Ldebug_ranges0:
+ 1863 0000 00000000 		.4byte	.LFB34
+ 1864 0004 24000000 		.4byte	.LFE34
+ 1865 0008 00000000 		.4byte	.LFB35
+ 1866 000c 88000000 		.4byte	.LFE35
+ 1867 0010 00000000 		.4byte	.LFB36
+ 1868 0014 02000000 		.4byte	.LFE36
+ 1869 0018 00000000 		.4byte	.LFB37
+ 1870 001c 60000000 		.4byte	.LFE37
+ 1871 0020 00000000 		.4byte	0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 37
+
+
+ 1872 0024 00000000 		.4byte	0
+ 1873              		.section	.debug_line,"",%progbits
+ 1874              	.Ldebug_line0:
+ 1875 0000 96020000 		.section	.debug_str,"MS",%progbits,1
+ 1875      02001802 
+ 1875      00000201 
+ 1875      FB0E0D00 
+ 1875      01010101 
+ 1876              	.LASF91:
+ 1877 0000 43617053 		.ascii	"CapSense_RunTuner\000"
+ 1877      656E7365 
+ 1877      5F52756E 
+ 1877      54756E65 
+ 1877      7200
+ 1878              	.LASF60:
+ 1879 0012 77646774 		.ascii	"wdgtList\000"
+ 1879      4C697374 
+ 1879      00
+ 1880              	.LASF65:
+ 1881 001b 736E7254 		.ascii	"snrTestRawCount\000"
+ 1881      65737452 
+ 1881      6177436F 
+ 1881      756E7400 
+ 1882              	.LASF67:
+ 1883 002b 7363616E 		.ascii	"scanCurrentISC\000"
+ 1883      43757272 
+ 1883      656E7449 
+ 1883      534300
+ 1884              	.LASF86:
+ 1885 003a 43617053 		.ascii	"CapSense_TuInitialize\000"
+ 1885      656E7365 
+ 1885      5F547549 
+ 1885      6E697469 
+ 1885      616C697A 
+ 1886              	.LASF39:
+ 1887 0050 666F726D 		.ascii	"formation\000"
+ 1887      6174696F 
+ 1887      6E00
+ 1888              	.LASF29:
+ 1889 005a 69646163 		.ascii	"idacGainIndex\000"
+ 1889      4761696E 
+ 1889      496E6465 
+ 1889      7800
+ 1890              	.LASF27:
+ 1891 0068 6C6F7742 		.ascii	"lowBslnRst\000"
+ 1891      736C6E52 
+ 1891      737400
+ 1892              	.LASF44:
+ 1893 0073 64696666 		.ascii	"diff\000"
+ 1893      00
+ 1894              	.LASF87:
+ 1895 0078 43617053 		.ascii	"CapSense_InitializeAllBaselines\000"
+ 1895      656E7365 
+ 1895      5F496E69 
+ 1895      7469616C 
+ 1895      697A6541 
+ 1896              	.LASF28:
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 38
+
+
+ 1897 0098 69646163 		.ascii	"idacMod\000"
+ 1897      4D6F6400 
+ 1898              	.LASF2:
+ 1899 00a0 73686F72 		.ascii	"short int\000"
+ 1899      7420696E 
+ 1899      7400
+ 1900              	.LASF32:
+ 1901 00aa 43617053 		.ascii	"CapSense_RAM_WD_BUTTON_STRUCT\000"
+ 1901      656E7365 
+ 1901      5F52414D 
+ 1901      5F57445F 
+ 1901      42555454 
+ 1902              	.LASF26:
+ 1903 00c8 6F6E4465 		.ascii	"onDebounce\000"
+ 1903      626F756E 
+ 1903      636500
+ 1904              	.LASF35:
+ 1905 00d3 766F6C5F 		.ascii	"vol_up\000"
+ 1905      757000
+ 1906              	.LASF18:
+ 1907 00da 73697A65 		.ascii	"sizetype\000"
+ 1907      74797065 
+ 1907      00
+ 1908              	.LASF42:
+ 1909 00e3 62736C6E 		.ascii	"bsln\000"
+ 1909      00
+ 1910              	.LASF49:
+ 1911 00e8 636F6E66 		.ascii	"configId\000"
+ 1911      69674964 
+ 1911      00
+ 1912              	.LASF94:
+ 1913 00f1 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1913      43313120 
+ 1913      352E342E 
+ 1913      31203230 
+ 1913      31363036 
+ 1914 0124 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0plus -mthumb -"
+ 1914      20726576 
+ 1914      6973696F 
+ 1914      6E203233 
+ 1914      37373135 
+ 1915 0157 67202D4F 		.ascii	"g -Og -ffunction-sections -ffat-lto-objects\000"
+ 1915      67202D66 
+ 1915      66756E63 
+ 1915      74696F6E 
+ 1915      2D736563 
+ 1916              	.LASF78:
+ 1917 0183 43617053 		.ascii	"CapSense_status\000"
+ 1917      656E7365 
+ 1917      5F737461 
+ 1917      74757300 
+ 1918              	.LASF46:
+ 1919 0193 69646163 		.ascii	"idacComp\000"
+ 1919      436F6D70 
+ 1919      00
+ 1920              	.LASF58:
+ 1921 019c 63736430 		.ascii	"csd0Config\000"
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 39
+
+
+ 1921      436F6E66 
+ 1921      696700
+ 1922              	.LASF33:
+ 1923 01a7 70726F78 		.ascii	"proxTouchTh\000"
+ 1923      546F7563 
+ 1923      68546800 
+ 1924              	.LASF31:
+ 1925 01b3 736E7343 		.ascii	"snsClkSource\000"
+ 1925      6C6B536F 
+ 1925      75726365 
+ 1925      00
+ 1926              	.LASF75:
+ 1927 01c0 68656164 		.ascii	"header\000"
+ 1927      657200
+ 1928              	.LASF23:
+ 1929 01c7 6E6F6973 		.ascii	"noiseTh\000"
+ 1929      65546800 
+ 1930              	.LASF50:
+ 1931 01cf 64657669 		.ascii	"deviceId\000"
+ 1931      63654964 
+ 1931      00
+ 1932              	.LASF12:
+ 1933 01d8 75696E74 		.ascii	"uint16\000"
+ 1933      313600
+ 1934              	.LASF82:
+ 1935 01df 43617053 		.ascii	"CapSense_IsAnyWidgetActive\000"
+ 1935      656E7365 
+ 1935      5F497341 
+ 1935      6E795769 
+ 1935      64676574 
+ 1936              	.LASF73:
+ 1937 01fa 62757474 		.ascii	"button_stat\000"
+ 1937      6F6E5F73 
+ 1937      74617400 
+ 1938              	.LASF10:
+ 1939 0206 75696E74 		.ascii	"uint8_t\000"
+ 1939      385F7400 
+ 1940              	.LASF11:
+ 1941 020e 75696E74 		.ascii	"uint8\000"
+ 1941      3800
+ 1942              	.LASF30:
+ 1943 0214 736E7343 		.ascii	"snsClk\000"
+ 1943      6C6B00
+ 1944              	.LASF0:
+ 1945 021b 7369676E 		.ascii	"signed char\000"
+ 1945      65642063 
+ 1945      68617200 
+ 1946              	.LASF36:
+ 1947 0227 766F6C5F 		.ascii	"vol_down\000"
+ 1947      646F776E 
+ 1947      00
+ 1948              	.LASF69:
+ 1949 0230 72657365 		.ascii	"reserve_reg\000"
+ 1949      7276655F 
+ 1949      72656700 
+ 1950              	.LASF14:
+ 1951 023c 666C6F61 		.ascii	"float\000"
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 40
+
+
+ 1951      7400
+ 1952              	.LASF41:
+ 1953 0242 43617053 		.ascii	"CapSense_RAM_WD_LIST_STRUCT\000"
+ 1953      656E7365 
+ 1953      5F52414D 
+ 1953      5F57445F 
+ 1953      4C495354 
+ 1954              	.LASF38:
+ 1955 025e 6C696265 		.ascii	"liberty_pull\000"
+ 1955      7274795F 
+ 1955      70756C6C 
+ 1955      00
+ 1956              	.LASF63:
+ 1957 026b 736E7254 		.ascii	"snrTestSensorId\000"
+ 1957      65737453 
+ 1957      656E736F 
+ 1957      72496400 
+ 1958              	.LASF16:
+ 1959 027b 63686172 		.ascii	"char\000"
+ 1959      00
+ 1960              	.LASF4:
+ 1961 0280 6C6F6E67 		.ascii	"long int\000"
+ 1961      20696E74 
+ 1961      00
+ 1962              	.LASF83:
+ 1963 0289 4341505F 		.ascii	"CAP_INT_Write\000"
+ 1963      494E545F 
+ 1963      57726974 
+ 1963      6500
+ 1964              	.LASF22:
+ 1965 0297 66696E67 		.ascii	"fingerTh\000"
+ 1965      65725468 
+ 1965      00
+ 1966              	.LASF9:
+ 1967 02a0 5F5F7569 		.ascii	"__uint8_t\000"
+ 1967      6E74385F 
+ 1967      7400
+ 1968              	.LASF37:
+ 1969 02aa 706C6179 		.ascii	"play_pause\000"
+ 1969      5F706175 
+ 1969      736500
+ 1970              	.LASF77:
+ 1971 02b5 43617053 		.ascii	"CapSense_dsRam\000"
+ 1971      656E7365 
+ 1971      5F647352 
+ 1971      616D00
+ 1972              	.LASF25:
+ 1973 02c4 68797374 		.ascii	"hysteresis\000"
+ 1973      65726573 
+ 1973      697300
+ 1974              	.LASF52:
+ 1975 02cf 74756E65 		.ascii	"tunerCmd\000"
+ 1975      72436D64 
+ 1975      00
+ 1976              	.LASF17:
+ 1977 02d8 6C6F6E67 		.ascii	"long double\000"
+ 1977      20646F75 
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 41
+
+
+ 1977      626C6500 
+ 1978              	.LASF80:
+ 1979 02e4 455A4932 		.ascii	"EZI2C_Start\000"
+ 1979      435F5374 
+ 1979      61727400 
+ 1980              	.LASF56:
+ 1981 02f0 77646774 		.ascii	"wdgtStatus\000"
+ 1981      53746174 
+ 1981      757300
+ 1982              	.LASF1:
+ 1983 02fb 756E7369 		.ascii	"unsigned char\000"
+ 1983      676E6564 
+ 1983      20636861 
+ 1983      7200
+ 1984              	.LASF76:
+ 1985 0309 7461696C 		.ascii	"tail\000"
+ 1985      00
+ 1986              	.LASF19:
+ 1987 030e 43617053 		.ascii	"CapSense_THRESHOLD_TYPE\000"
+ 1987      656E7365 
+ 1987      5F544852 
+ 1987      4553484F 
+ 1987      4C445F54 
+ 1988              	.LASF55:
+ 1989 0326 77646774 		.ascii	"wdgtEnable\000"
+ 1989      456E6162 
+ 1989      6C6500
+ 1990              	.LASF48:
+ 1991 0331 43617053 		.ascii	"CapSense_RAM_SNS_LIST_STRUCT\000"
+ 1991      656E7365 
+ 1991      5F52414D 
+ 1991      5F534E53 
+ 1991      5F4C4953 
+ 1992              	.LASF7:
+ 1993 034e 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1993      206C6F6E 
+ 1993      6720756E 
+ 1993      7369676E 
+ 1993      65642069 
+ 1994              	.LASF97:
+ 1995 0365 496E6974 		.ascii	"Init_I2C_Communication\000"
+ 1995      5F493243 
+ 1995      5F436F6D 
+ 1995      6D756E69 
+ 1995      63617469 
+ 1996              	.LASF72:
+ 1997 037c 52575F49 		.ascii	"RW_I2C_REG\000"
+ 1997      32435F52 
+ 1997      454700
+ 1998              	.LASF85:
+ 1999 0387 43617053 		.ascii	"CapSense_Start\000"
+ 1999      656E7365 
+ 1999      5F537461 
+ 1999      727400
+ 2000              	.LASF8:
+ 2001 0396 756E7369 		.ascii	"unsigned int\000"
+ 2001      676E6564 
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 42
+
+
+ 2001      20696E74 
+ 2001      00
+ 2002              	.LASF43:
+ 2003 03a3 62736C6E 		.ascii	"bslnExt\000"
+ 2003      45787400 
+ 2004              	.LASF81:
+ 2005 03ab 455A4932 		.ascii	"EZI2C_EzI2CSetBuffer1\000"
+ 2005      435F457A 
+ 2005      49324353 
+ 2005      65744275 
+ 2005      66666572 
+ 2006              	.LASF47:
+ 2007 03c1 43617053 		.ascii	"CapSense_RAM_SNS_STRUCT\000"
+ 2007      656E7365 
+ 2007      5F52414D 
+ 2007      5F534E53 
+ 2007      5F535452 
+ 2008              	.LASF88:
+ 2009 03d9 43617053 		.ascii	"CapSense_ScanAllWidgets\000"
+ 2009      656E7365 
+ 2009      5F536361 
+ 2009      6E416C6C 
+ 2009      57696467 
+ 2010              	.LASF74:
+ 2011 03f1 4932435F 		.ascii	"I2C_REG\000"
+ 2011      52454700 
+ 2012              	.LASF20:
+ 2013 03f9 43617053 		.ascii	"CapSense_LOW_BSLN_RST_TYPE\000"
+ 2013      656E7365 
+ 2013      5F4C4F57 
+ 2013      5F42534C 
+ 2013      4E5F5253 
+ 2014              	.LASF54:
+ 2015 0414 73746174 		.ascii	"status\000"
+ 2015      757300
+ 2016              	.LASF51:
+ 2017 041b 6877436C 		.ascii	"hwClock\000"
+ 2017      6F636B00 
+ 2018              	.LASF64:
+ 2019 0423 736E7254 		.ascii	"snrTestScanCounter\000"
+ 2019      65737453 
+ 2019      63616E43 
+ 2019      6F756E74 
+ 2019      657200
+ 2020              	.LASF100:
+ 2021 0436 6D61696E 		.ascii	"main\000"
+ 2021      00
+ 2022              	.LASF84:
+ 2023 043b 55415254 		.ascii	"UART_Start\000"
+ 2023      5F537461 
+ 2023      727400
+ 2024              	.LASF21:
+ 2025 0446 7265736F 		.ascii	"resolution\000"
+ 2025      6C757469 
+ 2025      6F6E00
+ 2026              	.LASF3:
+ 2027 0451 73686F72 		.ascii	"short unsigned int\000"
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 43
+
+
+ 2027      7420756E 
+ 2027      7369676E 
+ 2027      65642069 
+ 2027      6E7400
+ 2028              	.LASF99:
+ 2029 0464 50726F63 		.ascii	"ProcessI2CCommand\000"
+ 2029      65737349 
+ 2029      3243436F 
+ 2029      6D6D616E 
+ 2029      6400
+ 2030              	.LASF61:
+ 2031 0476 736E734C 		.ascii	"snsList\000"
+ 2031      69737400 
+ 2032              	.LASF59:
+ 2033 047e 6D6F6443 		.ascii	"modCsdClk\000"
+ 2033      7364436C 
+ 2033      6B00
+ 2034              	.LASF53:
+ 2035 0488 7363616E 		.ascii	"scanCounter\000"
+ 2035      436F756E 
+ 2035      74657200 
+ 2036              	.LASF24:
+ 2037 0494 6E4E6F69 		.ascii	"nNoiseTh\000"
+ 2037      73655468 
+ 2037      00
+ 2038              	.LASF68:
+ 2039 049d 43617053 		.ascii	"CapSense_RAM_STRUCT\000"
+ 2039      656E7365 
+ 2039      5F52414D 
+ 2039      5F535452 
+ 2039      55435400 
+ 2040              	.LASF13:
+ 2041 04b1 75696E74 		.ascii	"uint32\000"
+ 2041      333200
+ 2042              	.LASF95:
+ 2043 04b8 6D61696E 		.ascii	"main.c\000"
+ 2043      2E6300
+ 2044              	.LASF66:
+ 2045 04bf 7363616E 		.ascii	"scanCsdISC\000"
+ 2045      43736449 
+ 2045      534300
+ 2046              	.LASF5:
+ 2047 04ca 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2047      20756E73 
+ 2047      69676E65 
+ 2047      6420696E 
+ 2047      7400
+ 2048              	.LASF79:
+ 2049 04dc 73656E64 		.ascii	"send_status\000"
+ 2049      5F737461 
+ 2049      74757300 
+ 2050              	.LASF70:
+ 2051 04e8 75706461 		.ascii	"updat_posc\000"
+ 2051      745F706F 
+ 2051      736300
+ 2052              	.LASF96:
+ 2053 04f3 443A5C71 		.ascii	"D:\\qcs40x\\Cypress\\project\\4025LQIS412_workspace"
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 44
+
+
+ 2053      63733430 
+ 2053      785C4379 
+ 2053      70726573 
+ 2053      735C7072 
+ 2054 0522 5C343032 		.ascii	"\\4025LQIS412-EZIIC\\EZIIC_wadge.cydsn\000"
+ 2054      354C5149 
+ 2054      53343132 
+ 2054      2D455A49 
+ 2054      49435C45 
+ 2055              	.LASF92:
+ 2056 0547 55415254 		.ascii	"UART_SpiUartPutArray\000"
+ 2056      5F537069 
+ 2056      55617274 
+ 2056      50757441 
+ 2056      72726179 
+ 2057              	.LASF45:
+ 2058 055c 6E656742 		.ascii	"negBslnRstCnt\000"
+ 2058      736C6E52 
+ 2058      7374436E 
+ 2058      7400
+ 2059              	.LASF34:
+ 2060 056a 43617053 		.ascii	"CapSense_RAM_WD_PROXIMITY_STRUCT\000"
+ 2060      656E7365 
+ 2060      5F52414D 
+ 2060      5F57445F 
+ 2060      50524F58 
+ 2061              	.LASF101:
+ 2062 058b 6D656D73 		.ascii	"memset\000"
+ 2062      657400
+ 2063              	.LASF89:
+ 2064 0592 43617053 		.ascii	"CapSense_IsBusy\000"
+ 2064      656E7365 
+ 2064      5F497342 
+ 2064      75737900 
+ 2065              	.LASF40:
+ 2066 05a2 70726F78 		.ascii	"prox\000"
+ 2066      00
+ 2067              	.LASF71:
+ 2068 05a7 7265675F 		.ascii	"reg_array\000"
+ 2068      61727261 
+ 2068      7900
+ 2069              	.LASF15:
+ 2070 05b1 646F7562 		.ascii	"double\000"
+ 2070      6C6500
+ 2071              	.LASF62:
+ 2072 05b8 736E7254 		.ascii	"snrTestWidgetId\000"
+ 2072      65737457 
+ 2072      69646765 
+ 2072      74496400 
+ 2073              	.LASF90:
+ 2074 05c8 43617053 		.ascii	"CapSense_ProcessAllWidgets\000"
+ 2074      656E7365 
+ 2074      5F50726F 
+ 2074      63657373 
+ 2074      416C6C57 
+ 2075              	.LASF93:
+ 2076 05e3 43794465 		.ascii	"CyDelay\000"
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\ccg9410U.s 			page 45
+
+
+ 2076      6C617900 
+ 2077              	.LASF57:
+ 2078 05eb 736E7353 		.ascii	"snsStatus\000"
+ 2078      74617475 
+ 2078      7300
+ 2079              	.LASF98:
+ 2080 05f5 50726F63 		.ascii	"ProcessCapsenseEvent\000"
+ 2080      65737343 
+ 2080      61707365 
+ 2080      6E736545 
+ 2080      76656E74 
+ 2081              	.LASF6:
+ 2082 060a 6C6F6E67 		.ascii	"long long int\000"
+ 2082      206C6F6E 
+ 2082      6720696E 
+ 2082      7400
+ 2083              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

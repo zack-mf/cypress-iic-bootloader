@@ -1,0 +1,2117 @@
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"EZI2C_EZI2C.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.EZI2C_EzI2CInit,"ax",%progbits
+  20              		.align	1
+  21              		.global	EZI2C_EzI2CInit
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	EZI2C_EzI2CInit, %function
+  25              	EZI2C_EzI2CInit:
+  26              	.LFB1:
+  27              		.file 1 "Generated_Source\\PSoC4\\EZI2C_EZI2C.c"
+   1:Generated_Source\PSoC4/EZI2C_EZI2C.c **** /***************************************************************************//**
+   2:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \file EZI2C_EZI2C.c
+   3:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \version 4.0
+   4:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+   5:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \brief
+   6:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  This file provides the source code to the API for the SCB Component in
+   7:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  EZI2C mode.
+   8:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+   9:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * Note:
+  10:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+  11:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *******************************************************************************
+  12:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \copyright
+  13:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * Copyright 2013-2017, Cypress Semiconductor Corporation.  All rights reserved.
+  14:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * You may use this file only in accordance with the license, terms, conditions,
+  15:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  16:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * the software package with which this file was provided.
+  17:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *******************************************************************************/
+  18:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  19:Generated_Source\PSoC4/EZI2C_EZI2C.c **** #include "EZI2C_PVT.h"
+  20:Generated_Source\PSoC4/EZI2C_EZI2C.c **** #include "EZI2C_EZI2C_PVT.h"
+  21:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  22:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  23:Generated_Source\PSoC4/EZI2C_EZI2C.c **** /***************************************
+  24:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *      EZI2C Private Vars
+  25:Generated_Source\PSoC4/EZI2C_EZI2C.c **** ***************************************/
+  26:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  27:Generated_Source\PSoC4/EZI2C_EZI2C.c **** volatile uint8 EZI2C_curStatus; /* Status byte */
+  28:Generated_Source\PSoC4/EZI2C_EZI2C.c **** uint8 EZI2C_fsmState;           /* FSM state   */
+  29:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  30:Generated_Source\PSoC4/EZI2C_EZI2C.c **** /* Variables intended to be used with Buffer 1: Primary slave address */
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 2
+
+
+  31:Generated_Source\PSoC4/EZI2C_EZI2C.c **** volatile uint8 * EZI2C_dataBuffer1; /* Pointer to data buffer 1 */
+  32:Generated_Source\PSoC4/EZI2C_EZI2C.c **** uint16 EZI2C_bufSizeBuf1;           /* Size of buffer 1 in bytes      */
+  33:Generated_Source\PSoC4/EZI2C_EZI2C.c **** uint16 EZI2C_protectBuf1;           /* Start index of write protected area buffer 1 */
+  34:Generated_Source\PSoC4/EZI2C_EZI2C.c **** uint8 EZI2C_offsetBuf1; /* Current offset within buffer 1 */
+  35:Generated_Source\PSoC4/EZI2C_EZI2C.c **** uint16 EZI2C_indexBuf1;             /* Current index within buffer 1  */
+  36:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  37:Generated_Source\PSoC4/EZI2C_EZI2C.c **** #if(EZI2C_SECONDARY_ADDRESS_ENABLE_CONST)
+  38:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     uint8 EZI2C_addrBuf1; /* Primary slave address. Used for software comparison   */
+  39:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     uint8 EZI2C_addrBuf2; /* Secondary slave address. Used for software comparison */
+  40:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  41:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     /* Variables intended to be used with Buffer 2: Primary slave address */
+  42:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     volatile uint8 * EZI2C_dataBuffer2; /* Pointer to data buffer 2 */
+  43:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     uint16 EZI2C_bufSizeBuf2;           /* Size of buffer 2 in bytes */
+  44:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     uint16 EZI2C_protectBuf2;           /* Start index of write protected area buffer 2 */
+  45:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     uint8 EZI2C_offsetBuf2; /* Current offset within buffer 2 */
+  46:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     uint16 EZI2C_indexBuf2;             /* Current index within buffer 2 */
+  47:Generated_Source\PSoC4/EZI2C_EZI2C.c **** #endif /* (EZI2C_SECONDARY_ADDRESS_ENABLE_CONST) */
+  48:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  49:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  50:Generated_Source\PSoC4/EZI2C_EZI2C.c **** /***************************************
+  51:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *      EZI2C Private Functions
+  52:Generated_Source\PSoC4/EZI2C_EZI2C.c **** ***************************************/
+  53:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  54:Generated_Source\PSoC4/EZI2C_EZI2C.c **** #if(EZI2C_SECONDARY_ADDRESS_ENABLE_CONST)
+  55:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     static uint32 EZI2C_EzI2CUpdateRxMatchReg(uint32 addr1, uint32 addr2);
+  56:Generated_Source\PSoC4/EZI2C_EZI2C.c **** #endif /* (EZI2C_SECONDARY_ADDRESS_ENABLE_CONST) */
+  57:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  58:Generated_Source\PSoC4/EZI2C_EZI2C.c **** #if(EZI2C_SCB_MODE_UNCONFIG_CONST_CFG)
+  59:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  60:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     /***************************************
+  61:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  Configuration Structure Initialization
+  62:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     ***************************************/
+  63:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  64:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     /* Constant configuration of EZI2C */
+  65:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     const EZI2C_EZI2C_INIT_STRUCT EZI2C_configEzI2C =
+  66:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     {
+  67:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_EZI2C_CLOCK_STRETCHING,
+  68:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_EZI2C_MEDIAN_FILTER_ENABLE,
+  69:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_EZI2C_NUMBER_OF_ADDRESSES,
+  70:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_EZI2C_PRIMARY_SLAVE_ADDRESS,
+  71:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_EZI2C_SECONDARY_SLAVE_ADDRESS,
+  72:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_EZI2C_SUB_ADDRESS_SIZE,
+  73:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_EZI2C_WAKE_ENABLE,
+  74:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_EZI2C_BYTE_MODE_ENABLE
+  75:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     };
+  76:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  77:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     /*******************************************************************************
+  78:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     * Function Name: EZI2C_EzI2CInit
+  79:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     ****************************************************************************//**
+  80:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *
+  81:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  Configures the EZI2C for EZI2C operation.
+  82:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *
+  83:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  This function is intended specifically to be used when the EZI2C 
+  84:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  configuration is set to “Unconfigured EZI2C” in the customizer. 
+  85:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  After initializing the EZI2C in EZI2C mode using this function, 
+  86:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  the component can be enabled using the EZI2C_Start() or 
+  87:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     * EZI2C_Enable() function.
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 3
+
+
+  88:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  This function uses a pointer to a structure that provides the configuration 
+  89:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  settings. This structure contains the same information that would otherwise 
+  90:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  be provided by the customizer settings.
+  91:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *
+  92:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     * \param config: pointer to a structure that contains the following list of 
+  93:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  fields. These fields match the selections available in the customizer. 
+  94:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  Refer to the customizer for further description of the settings.
+  95:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *
+  96:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *******************************************************************************/
+  97:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     void EZI2C_EzI2CInit(const EZI2C_EZI2C_INIT_STRUCT *config)
+  98:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     {
+  99:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         if(NULL == config)
+ 100:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         {
+ 101:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             CYASSERT(0u != 0u); /* Halt execution due to bad function parameter */
+ 102:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         }
+ 103:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         else
+ 104:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         {
+ 105:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             /* Configure pins */
+ 106:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_SetPins(EZI2C_SCB_MODE_EZI2C, EZI2C_DUMMY_PARAM,
+ 107:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                                                                       EZI2C_DUMMY_PARAM);
+ 108:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 109:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             /* Store internal configuration */
+ 110:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_scbMode       = (uint8) EZI2C_SCB_MODE_EZI2C;
+ 111:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_scbEnableWake = (uint8) config->enableWake;
+ 112:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_scbEnableIntr = (uint8) EZI2C_SCB_IRQ_INTERNAL;
+ 113:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 114:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_numberOfAddr  = (uint8) config->numberOfAddresses;
+ 115:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_subAddrSize   = (uint8) config->subAddrSize;
+ 116:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 117:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         #if (EZI2C_CY_SCBIP_V0)
+ 118:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             /* Adjust SDA filter settings. Ticket ID#150521 */
+ 119:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_SET_I2C_CFG_SDA_FILT_TRIM(EZI2C_EC_AM_I2C_CFG_SDA_FILT_TRIM);
+ 120:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         #endif /* (EZI2C_CY_SCBIP_V0) */
+ 121:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 122:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             /* Adjust AF and DF filter settings, AF = 1, DF = 0. Ticket ID#176179 */
+ 123:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_I2C_CFG_ANALOG_FITER_ENABLE;
+ 124:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 125:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             /* Configure I2C interface */
+ 126:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_CTRL_REG     = EZI2C_GET_CTRL_BYTE_MODE  (config->enableByteMode)    |
+ 127:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                                             EZI2C_GET_CTRL_ADDR_ACCEPT(config->numberOfAddresses) |
+ 128:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                                             EZI2C_GET_CTRL_EC_AM_MODE (config->enableWake);
+ 129:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 130:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_I2C_CTRL_REG = EZI2C_EZI2C_CTRL;
+ 131:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 132:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             /* Configure RX direction */
+ 133:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_RX_CTRL_REG = EZI2C_EZI2C_RX_CTRL |
+ 134:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                                         EZI2C_GET_RX_CTRL_MEDIAN(EZI2C_DIGITAL_FILTER_DISABLE);
+ 135:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                                                 ;
+ 136:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_RX_FIFO_CTRL_REG = EZI2C_CLEAR_REG;
+ 137:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 138:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             /* Set default address and mask */
+ 139:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             if(EZI2C_EZI2C_PRIMARY_ADDRESS == config->numberOfAddresses)
+ 140:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             {
+ 141:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                 EZI2C_RX_MATCH_REG = EZI2C_EzI2CUpdateRxMatchReg(config->primarySlaveAddr,
+ 142:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                                                                                        config->prim
+ 143:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             }
+ 144:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             else
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 4
+
+
+ 145:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             {
+ 146:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                 EZI2C_RX_MATCH_REG = EZI2C_EzI2CUpdateRxMatchReg(config->primarySlaveAddr,
+ 147:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                                                                                        config->seco
+ 148:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             }
+ 149:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 150:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             /* Configure TX direction */
+ 151:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_TX_CTRL_REG      = EZI2C_EZI2C_TX_CTRL;
+ 152:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_TX_FIFO_CTRL_REG = ((0u != (config->enableClockStretch)) ?
+ 153:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                                                  EZI2C_CLEAR_REG : EZI2C_EZI2C_TX_FIFO_CTRL);
+ 154:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 155:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             /* Configure interrupt sources */
+ 156:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         #if (!EZI2C_CY_SCBIP_V1)
+ 157:Generated_Source\PSoC4/EZI2C_EZI2C.c ****            EZI2C_INTR_SPI_EC_MASK_REG = EZI2C_NO_INTR_SOURCES;
+ 158:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         #endif /* (!EZI2C_CY_SCBIP_V1) */
+ 159:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 160:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_INTR_I2C_EC_MASK_REG = EZI2C_NO_INTR_SOURCES;
+ 161:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_INTR_MASTER_MASK_REG = EZI2C_NO_INTR_SOURCES;
+ 162:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_INTR_SLAVE_MASK_REG  = EZI2C_EZI2C_INTR_SLAVE_MASK;
+ 163:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_INTR_TX_MASK_REG     = EZI2C_NO_INTR_SOURCES;
+ 164:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 165:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             /* Configure interrupt with EZI2C handler but do not enable it */
+ 166:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             CyIntDisable    (EZI2C_ISR_NUMBER);
+ 167:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             CyIntSetPriority(EZI2C_ISR_NUMBER, EZI2C_ISR_PRIORITY);
+ 168:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             (void) CyIntSetVector(EZI2C_ISR_NUMBER, (0u != (config->enableClockStretch)) ?
+ 169:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                                                                       (&EZI2C_EZI2C_STRETCH_ISR) :
+ 170:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                                                                       (&EZI2C_EZI2C_NO_STRETCH_ISR)
+ 171:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 172:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             if(0u != (config->enableClockStretch))
+ 173:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             {
+ 174:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                 /* Configure interrupt sources */
+ 175:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                 EZI2C_INTR_SLAVE_MASK_REG |= EZI2C_INTR_SLAVE_I2C_ADDR_MATCH;
+ 176:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                 EZI2C_INTR_RX_MASK_REG     = EZI2C_NO_INTR_SOURCES;
+ 177:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             }
+ 178:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             else
+ 179:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             {
+ 180:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                 /* Enable Auto ACK/NACK features */
+ 181:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                 EZI2C_I2C_CTRL_REG |= EZI2C_EZI2C_CTRL_AUTO;
+ 182:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 183:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                 /* Configure RX interrupt source */
+ 184:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                 EZI2C_INTR_SLAVE_MASK_REG |= EZI2C_INTR_SLAVE_I2C_START;
+ 185:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                 EZI2C_INTR_RX_MASK_REG     = EZI2C_INTR_RX_NOT_EMPTY;
+ 186:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             }
+ 187:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 188:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             /* Configure global variables */
+ 189:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_fsmState = EZI2C_EZI2C_FSM_IDLE;
+ 190:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 191:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_curStatus  = 0u;
+ 192:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_indexBuf1  = 0u;
+ 193:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_offsetBuf1 = 0u;
+ 194:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_indexBuf2  = 0u;
+ 195:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_offsetBuf2 = 0u;
+ 196:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 197:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_addrBuf1 = (uint8) config->primarySlaveAddr;
+ 198:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             EZI2C_addrBuf2 = (uint8) config->secondarySlaveAddr;
+ 199:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         }
+ 200:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     }
+ 201:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 5
+
+
+ 202:Generated_Source\PSoC4/EZI2C_EZI2C.c **** #else
+ 203:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 204:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     /*******************************************************************************
+ 205:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     * Function Name: EZI2C_EzI2CInit
+ 206:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     ****************************************************************************//**
+ 207:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *
+ 208:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *  Configures the SCB for the EZI2C operation.
+ 209:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *
+ 210:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     *******************************************************************************/
+ 211:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     void EZI2C_EzI2CInit(void)
+ 212:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     {
+  28              		.loc 1 212 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 10B5     		push	{r4, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+ 213:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         /* Configure I2C interface */
+ 214:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_CTRL_REG     = EZI2C_EZI2C_DEFAULT_CTRL;
+  36              		.loc 1 214 0
+  37 0002 0024     		movs	r4, #0
+  38 0004 194B     		ldr	r3, .L2
+ 215:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_I2C_CTRL_REG = EZI2C_EZI2C_DEFAULT_I2C_CTRL;
+  39              		.loc 1 215 0
+  40 0006 1A4A     		ldr	r2, .L2+4
+ 214:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_I2C_CTRL_REG = EZI2C_EZI2C_DEFAULT_I2C_CTRL;
+  41              		.loc 1 214 0
+  42 0008 1C60     		str	r4, [r3]
+  43              		.loc 1 215 0
+  44 000a 1A4B     		ldr	r3, .L2+8
+ 216:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 217:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #if (EZI2C_CY_SCBIP_V0)
+ 218:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         /* Adjust SDA filter settings. Ticket ID#150521 */
+ 219:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_SET_I2C_CFG_SDA_FILT_TRIM(EZI2C_EC_AM_I2C_CFG_SDA_FILT_TRIM);
+ 220:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #endif /* (EZI2C_CY_SCBIP_V0) */
+ 221:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 222:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         /* Configure RX direction */
+ 223:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_RX_CTRL_REG      = EZI2C_EZI2C_DEFAULT_RX_CTRL;
+ 224:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_RX_FIFO_CTRL_REG = EZI2C_EZI2C_DEFAULT_RX_FIFO_CTRL;
+ 225:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 226:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         /* Set default address and mask */
+ 227:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_RX_MATCH_REG     = EZI2C_EZI2C_DEFAULT_RX_MATCH;
+  45              		.loc 1 227 0
+  46 000c 1A49     		ldr	r1, .L2+12
+ 215:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  47              		.loc 1 215 0
+  48 000e 1A60     		str	r2, [r3]
+ 223:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_RX_FIFO_CTRL_REG = EZI2C_EZI2C_DEFAULT_RX_FIFO_CTRL;
+  49              		.loc 1 223 0
+  50 0010 1A4B     		ldr	r3, .L2+16
+  51 0012 1B4A     		ldr	r2, .L2+20
+ 228:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 229:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         /* Configure TX direction */
+ 230:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_TX_CTRL_REG      = EZI2C_EZI2C_DEFAULT_TX_CTRL;
+ 231:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_TX_FIFO_CTRL_REG = EZI2C_EZI2C_DEFAULT_TX_FIFO_CTRL;
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 6
+
+
+ 232:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 233:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         /* Configure interrupt with EZI2C handler but do not enable it */
+ 234:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #if !defined (CY_EXTERNAL_INTERRUPT_CONFIG)
+ 235:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         CyIntDisable    (EZI2C_ISR_NUMBER);
+  52              		.loc 1 235 0
+  53 0014 0820     		movs	r0, #8
+ 223:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_RX_FIFO_CTRL_REG = EZI2C_EZI2C_DEFAULT_RX_FIFO_CTRL;
+  54              		.loc 1 223 0
+  55 0016 1360     		str	r3, [r2]
+ 224:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  56              		.loc 1 224 0
+  57 0018 1A4A     		ldr	r2, .L2+24
+ 236:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         CyIntSetPriority(EZI2C_ISR_NUMBER, EZI2C_ISR_PRIORITY);
+ 237:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 238:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #if (EZI2C_EZI2C_SCL_STRETCH_ENABLE_CONST)
+ 239:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         (void) CyIntSetVector(EZI2C_ISR_NUMBER, &EZI2C_EZI2C_STRETCH_ISR);
+ 240:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #else
+ 241:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         (void) CyIntSetVector(EZI2C_ISR_NUMBER, &EZI2C_EZI2C_NO_STRETCH_ISR);
+ 242:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #endif /* (EZI2C_EZI2C_SCL_STRETCH_ENABLE_CONST) */
+ 243:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 244:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #endif /* !defined (CY_EXTERNAL_INTERRUPT_CONFIG) */
+ 245:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 246:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         /* Configure interrupt sources */
+ 247:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #if (!EZI2C_CY_SCBIP_V1)
+ 248:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_SPI_EC_MASK_REG = EZI2C_EZI2C_DEFAULT_INTR_SPI_EC_MASK;
+ 249:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #endif /* (!EZI2C_CY_SCBIP_V1) */
+ 250:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 251:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_I2C_EC_MASK_REG = EZI2C_EZI2C_DEFAULT_INTR_I2C_EC_MASK;
+ 252:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_SLAVE_MASK_REG  = EZI2C_EZI2C_DEFAULT_INTR_SLAVE_MASK;
+ 253:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_MASTER_MASK_REG = EZI2C_EZI2C_DEFAULT_INTR_MASTER_MASK;
+ 254:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_RX_MASK_REG     = EZI2C_EZI2C_DEFAULT_INTR_RX_MASK;
+ 255:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_TX_MASK_REG     = EZI2C_EZI2C_DEFAULT_INTR_TX_MASK;
+ 256:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 257:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         /* Configure global variables */
+ 258:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_fsmState = EZI2C_EZI2C_FSM_IDLE;
+ 259:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 260:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_curStatus  = 0u;
+ 261:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_indexBuf1  = 0u;
+ 262:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_offsetBuf1 = 0u;
+ 263:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 264:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #if(EZI2C_SECONDARY_ADDRESS_ENABLE_CONST)
+ 265:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_indexBuf2  = 0u;
+ 266:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_offsetBuf2 = 0u;
+ 267:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 268:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_addrBuf1 = EZI2C_EZI2C_PRIMARY_SLAVE_ADDRESS;
+ 269:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_addrBuf2 = EZI2C_EZI2C_SECONDARY_SLAVE_ADDRESS;
+ 270:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #endif /* (EZI2C_SECONDARY_ADDRESS_ENABLE_CONST) */
+ 271:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     }
+  58              		.loc 1 271 0
+  59              		@ sp needed
+ 224:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  60              		.loc 1 224 0
+  61 001a 1460     		str	r4, [r2]
+ 227:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  62              		.loc 1 227 0
+  63 001c 1A4A     		ldr	r2, .L2+28
+  64 001e 1160     		str	r1, [r2]
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 7
+
+
+ 230:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_TX_FIFO_CTRL_REG = EZI2C_EZI2C_DEFAULT_TX_FIFO_CTRL;
+  65              		.loc 1 230 0
+  66 0020 1A4A     		ldr	r2, .L2+32
+  67 0022 1360     		str	r3, [r2]
+ 231:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  68              		.loc 1 231 0
+  69 0024 1A4B     		ldr	r3, .L2+36
+  70 0026 1C60     		str	r4, [r3]
+ 235:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         CyIntSetPriority(EZI2C_ISR_NUMBER, EZI2C_ISR_PRIORITY);
+  71              		.loc 1 235 0
+  72 0028 FFF7FEFF 		bl	CyIntDisable
+  73              	.LVL0:
+ 236:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+  74              		.loc 1 236 0
+  75 002c 0321     		movs	r1, #3
+  76 002e 0820     		movs	r0, #8
+  77 0030 FFF7FEFF 		bl	CyIntSetPriority
+  78              	.LVL1:
+ 239:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #else
+  79              		.loc 1 239 0
+  80 0034 1749     		ldr	r1, .L2+40
+  81 0036 0820     		movs	r0, #8
+  82 0038 FFF7FEFF 		bl	CyIntSetVector
+  83              	.LVL2:
+ 252:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_MASTER_MASK_REG = EZI2C_EZI2C_DEFAULT_INTR_MASTER_MASK;
+  84              		.loc 1 252 0
+  85 003c 5222     		movs	r2, #82
+ 248:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #endif /* (!EZI2C_CY_SCBIP_V1) */
+  86              		.loc 1 248 0
+  87 003e 164B     		ldr	r3, .L2+44
+ 252:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_MASTER_MASK_REG = EZI2C_EZI2C_DEFAULT_INTR_MASTER_MASK;
+  88              		.loc 1 252 0
+  89 0040 FF32     		adds	r2, r2, #255
+ 248:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #endif /* (!EZI2C_CY_SCBIP_V1) */
+  90              		.loc 1 248 0
+  91 0042 1C60     		str	r4, [r3]
+ 251:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_SLAVE_MASK_REG  = EZI2C_EZI2C_DEFAULT_INTR_SLAVE_MASK;
+  92              		.loc 1 251 0
+  93 0044 154B     		ldr	r3, .L2+48
+  94 0046 1C60     		str	r4, [r3]
+ 252:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_MASTER_MASK_REG = EZI2C_EZI2C_DEFAULT_INTR_MASTER_MASK;
+  95              		.loc 1 252 0
+  96 0048 154B     		ldr	r3, .L2+52
+  97 004a 1A60     		str	r2, [r3]
+ 253:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_RX_MASK_REG     = EZI2C_EZI2C_DEFAULT_INTR_RX_MASK;
+  98              		.loc 1 253 0
+  99 004c 154B     		ldr	r3, .L2+56
+ 100 004e 1C60     		str	r4, [r3]
+ 254:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_INTR_TX_MASK_REG     = EZI2C_EZI2C_DEFAULT_INTR_TX_MASK;
+ 101              		.loc 1 254 0
+ 102 0050 154B     		ldr	r3, .L2+60
+ 103 0052 1C60     		str	r4, [r3]
+ 255:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 104              		.loc 1 255 0
+ 105 0054 154B     		ldr	r3, .L2+64
+ 106 0056 1C60     		str	r4, [r3]
+ 258:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 8
+
+
+ 107              		.loc 1 258 0
+ 108 0058 154B     		ldr	r3, .L2+68
+ 109 005a 1C70     		strb	r4, [r3]
+ 260:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_indexBuf1  = 0u;
+ 110              		.loc 1 260 0
+ 111 005c 154B     		ldr	r3, .L2+72
+ 112 005e 1C70     		strb	r4, [r3]
+ 261:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_offsetBuf1 = 0u;
+ 113              		.loc 1 261 0
+ 114 0060 154B     		ldr	r3, .L2+76
+ 115 0062 1C80     		strh	r4, [r3]
+ 262:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 116              		.loc 1 262 0
+ 117 0064 154B     		ldr	r3, .L2+80
+ 118 0066 1C70     		strb	r4, [r3]
+ 119              		.loc 1 271 0
+ 120 0068 10BD     		pop	{r4, pc}
+ 121              	.L3:
+ 122 006a C046     		.align	2
+ 123              	.L2:
+ 124 006c 00002440 		.word	1076101120
+ 125 0070 00080040 		.word	1073743872
+ 126 0074 60002440 		.word	1076101216
+ 127 0078 1000FE00 		.word	16646160
+ 128 007c 07010080 		.word	-2147483385
+ 129 0080 00032440 		.word	1076101888
+ 130 0084 04032440 		.word	1076101892
+ 131 0088 10032440 		.word	1076101904
+ 132 008c 00022440 		.word	1076101632
+ 133 0090 04022440 		.word	1076101636
+ 134 0094 00000000 		.word	EZI2C_EZI2C_STRETCH_ISR
+ 135 0098 C80E2440 		.word	1076104904
+ 136 009c 880E2440 		.word	1076104840
+ 137 00a0 480F2440 		.word	1076105032
+ 138 00a4 080F2440 		.word	1076104968
+ 139 00a8 C80F2440 		.word	1076105160
+ 140 00ac 880F2440 		.word	1076105096
+ 141 00b0 00000000 		.word	EZI2C_fsmState
+ 142 00b4 00000000 		.word	EZI2C_curStatus
+ 143 00b8 00000000 		.word	EZI2C_indexBuf1
+ 144 00bc 00000000 		.word	EZI2C_offsetBuf1
+ 145              		.cfi_endproc
+ 146              	.LFE1:
+ 147              		.size	EZI2C_EzI2CInit, .-EZI2C_EzI2CInit
+ 148              		.section	.text.EZI2C_EzI2CStop,"ax",%progbits
+ 149              		.align	1
+ 150              		.global	EZI2C_EzI2CStop
+ 151              		.code	16
+ 152              		.thumb_func
+ 153              		.type	EZI2C_EzI2CStop, %function
+ 154              	EZI2C_EzI2CStop:
+ 155              	.LFB2:
+ 272:Generated_Source\PSoC4/EZI2C_EZI2C.c **** #endif /* (EZI2C_SCB_MODE_UNCONFIG_CONST_CFG) */
+ 273:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 274:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 275:Generated_Source\PSoC4/EZI2C_EZI2C.c **** /*******************************************************************************
+ 276:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * Function Name: EZI2C_EzI2CStop
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 9
+
+
+ 277:Generated_Source\PSoC4/EZI2C_EZI2C.c **** ****************************************************************************//**
+ 278:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 279:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  Resets the EZI2C FSM into the default state.
+ 280:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 281:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *******************************************************************************/
+ 282:Generated_Source\PSoC4/EZI2C_EZI2C.c **** void EZI2C_EzI2CStop(void)
+ 283:Generated_Source\PSoC4/EZI2C_EZI2C.c **** {
+ 156              		.loc 1 283 0
+ 157              		.cfi_startproc
+ 158              		@ args = 0, pretend = 0, frame = 0
+ 159              		@ frame_needed = 0, uses_anonymous_args = 0
+ 160              		@ link register save eliminated.
+ 284:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     EZI2C_fsmState = EZI2C_EZI2C_FSM_IDLE;
+ 161              		.loc 1 284 0
+ 162 0000 0022     		movs	r2, #0
+ 163 0002 014B     		ldr	r3, .L5
+ 285:Generated_Source\PSoC4/EZI2C_EZI2C.c **** }
+ 164              		.loc 1 285 0
+ 165              		@ sp needed
+ 284:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     EZI2C_fsmState = EZI2C_EZI2C_FSM_IDLE;
+ 166              		.loc 1 284 0
+ 167 0004 1A70     		strb	r2, [r3]
+ 168              		.loc 1 285 0
+ 169 0006 7047     		bx	lr
+ 170              	.L6:
+ 171              		.align	2
+ 172              	.L5:
+ 173 0008 00000000 		.word	EZI2C_fsmState
+ 174              		.cfi_endproc
+ 175              	.LFE2:
+ 176              		.size	EZI2C_EzI2CStop, .-EZI2C_EzI2CStop
+ 177              		.section	.text.EZI2C_EzI2CGetActivity,"ax",%progbits
+ 178              		.align	1
+ 179              		.global	EZI2C_EzI2CGetActivity
+ 180              		.code	16
+ 181              		.thumb_func
+ 182              		.type	EZI2C_EzI2CGetActivity, %function
+ 183              	EZI2C_EzI2CGetActivity:
+ 184              	.LFB3:
+ 286:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 287:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 288:Generated_Source\PSoC4/EZI2C_EZI2C.c **** /*******************************************************************************
+ 289:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * Function Name: EZI2C_EzI2CGetActivity
+ 290:Generated_Source\PSoC4/EZI2C_EZI2C.c **** ****************************************************************************//**
+ 291:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 292:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  Returns the EZI2C slave status.
+ 293:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  The read, write and error status flags reset to zero after this function
+ 294:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  call. The busy status flag is cleared when the transaction intended for
+ 295:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  the EZI2C slave completes.
+ 296:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 297:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \return
+ 298:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  Returns the status of the EZI2C Slave activity.
+ 299:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  - EZI2C_EZI2C_STATUS_READ1 - Read transfer complete. The transfer 
+ 300:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    used the primary slave address. The error condition status bit must be 
+ 301:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    checked to ensure that read transfer was completed successfully.
+ 302:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  - EZI2C_EZI2C_STATUS_WRITE1 - Write transfer complete. The buffer 
+ 303:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    content was modified. The transfer used the primary slave address. 
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 10
+
+
+ 304:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    The error condition status bit must be checked to ensure that write 
+ 305:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    transfer was completed successfully.
+ 306:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  - EZI2C_EZI2C_STATUS_READ2 - Read transfer complete. The transfer
+ 307:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    used the secondary slave address. The error condition status bit must be 
+ 308:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    checked to ensure that read transfer was completed successfully.
+ 309:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  - EZI2C_EZI2C_STATUS_WRITE2 - Write transfer complete. The buffer
+ 310:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    content was modified. The transfer used the secondary slave address. 
+ 311:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    The error condition status bit must be checked to ensure that write 
+ 312:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    transfer was completed successfully.
+ 313:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  - EZI2C_EZI2C_STATUS_BUSY - A transfer intended for the primary 
+ 314:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    or secondary address is in progress. The status bit is set after an 
+ 315:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    address match and cleared on a Stop or ReStart condition.
+ 316:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  - EZI2C_EZI2C_STATUS_ERR - An error occurred during a transfer 
+ 317:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    intended for the primary or secondary slave address. The sources of error
+ 318:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    are: misplaced Start or Stop condition or lost arbitration while slave 
+ 319:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    drives SDA.
+ 320:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    The write buffer may contain invalid byte or part of the transaction when 
+ 321:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    EZI2C_EZI2C_STATUS_ERR and EZI2C_EZI2C_STATUS_WRITE1/2 
+ 322:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *    is set. It is recommended to discard buffer content in this case.
+ 323:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 324:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \globalvars
+ 325:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  EZI2C_curStatus - used to store the current status of the EZI2C 
+ 326:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  slave.
+ 327:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 328:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *******************************************************************************/
+ 329:Generated_Source\PSoC4/EZI2C_EZI2C.c **** uint32 EZI2C_EzI2CGetActivity(void)
+ 330:Generated_Source\PSoC4/EZI2C_EZI2C.c **** {
+ 185              		.loc 1 330 0
+ 186              		.cfi_startproc
+ 187              		@ args = 0, pretend = 0, frame = 0
+ 188              		@ frame_needed = 0, uses_anonymous_args = 0
+ 189 0000 10B5     		push	{r4, lr}
+ 190              		.cfi_def_cfa_offset 8
+ 191              		.cfi_offset 4, -8
+ 192              		.cfi_offset 14, -4
+ 331:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     uint32 status;
+ 332:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 333:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     EZI2C_DisableInt();  /* Lock from interruption */
+ 193              		.loc 1 333 0
+ 194 0002 0820     		movs	r0, #8
+ 195 0004 FFF7FEFF 		bl	CyIntDisable
+ 196              	.LVL3:
+ 334:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 335:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     status = EZI2C_curStatus;
+ 336:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 337:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     /* Relay on address match event from HW as bus busy status */
+ 338:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #if(EZI2C_EZI2C_SCL_STRETCH_DISABLE)
+ 339:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     {
+ 340:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         /* For EZI2C_CY_SCBIP_V0 the wake is prohibited by customizer */
+ 341:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         #if(EZI2C_EZI2C_EC_AM_ENABLE)
+ 342:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         {
+ 343:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             status |= EZI2C_CHECK_INTR_I2C_EC(EZI2C_INTR_I2C_EC_WAKE_UP) ?
+ 344:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                         EZI2C_EZI2C_STATUS_BUSY : 0u;
+ 345:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         }
+ 346:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         #else
+ 347:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         {
+ 348:Generated_Source\PSoC4/EZI2C_EZI2C.c ****             status |= EZI2C_CHECK_INTR_SLAVE(EZI2C_INTR_SLAVE_I2C_ADDR_MATCH) ?
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 11
+
+
+ 349:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                         EZI2C_EZI2C_STATUS_BUSY : 0u;
+ 350:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         }
+ 351:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         #endif
+ 352:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     }
+ 353:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #endif
+ 354:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 355:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     EZI2C_curStatus &= ((uint8) ~EZI2C_EZI2C_CLEAR_STATUS);
+ 197              		.loc 1 355 0
+ 198 0008 1F21     		movs	r1, #31
+ 335:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 199              		.loc 1 335 0
+ 200 000a 054B     		ldr	r3, .L8
+ 356:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 357:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     EZI2C_EnableInt();   /* Release lock */
+ 201              		.loc 1 357 0
+ 202 000c 0820     		movs	r0, #8
+ 335:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 203              		.loc 1 335 0
+ 204 000e 1C78     		ldrb	r4, [r3]
+ 355:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 205              		.loc 1 355 0
+ 206 0010 1A78     		ldrb	r2, [r3]
+ 335:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 207              		.loc 1 335 0
+ 208 0012 E4B2     		uxtb	r4, r4
+ 209              	.LVL4:
+ 355:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 210              		.loc 1 355 0
+ 211 0014 8A43     		bics	r2, r1
+ 212 0016 1A70     		strb	r2, [r3]
+ 358:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 359:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     return(status);
+ 360:Generated_Source\PSoC4/EZI2C_EZI2C.c **** }
+ 213              		.loc 1 360 0
+ 214              		@ sp needed
+ 357:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 215              		.loc 1 357 0
+ 216 0018 FFF7FEFF 		bl	CyIntEnable
+ 217              	.LVL5:
+ 218              		.loc 1 360 0
+ 219 001c 2000     		movs	r0, r4
+ 220              	.LVL6:
+ 221 001e 10BD     		pop	{r4, pc}
+ 222              	.L9:
+ 223              		.align	2
+ 224              	.L8:
+ 225 0020 00000000 		.word	EZI2C_curStatus
+ 226              		.cfi_endproc
+ 227              	.LFE3:
+ 228              		.size	EZI2C_EzI2CGetActivity, .-EZI2C_EzI2CGetActivity
+ 229              		.section	.text.EZI2C_EzI2CSetAddress1,"ax",%progbits
+ 230              		.align	1
+ 231              		.global	EZI2C_EzI2CSetAddress1
+ 232              		.code	16
+ 233              		.thumb_func
+ 234              		.type	EZI2C_EzI2CSetAddress1, %function
+ 235              	EZI2C_EzI2CSetAddress1:
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 12
+
+
+ 236              	.LFB4:
+ 361:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 362:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 363:Generated_Source\PSoC4/EZI2C_EZI2C.c **** /*******************************************************************************
+ 364:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * Function Name: EZI2C_EzI2CSetAddress1
+ 365:Generated_Source\PSoC4/EZI2C_EZI2C.c **** ****************************************************************************//**
+ 366:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 367:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  Sets the primary EZI2C slave address.
+ 368:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 369:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \param address: I2C slave address for the secondary device.
+ 370:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  This address is the 7-bit right-justified slave address and does not 
+ 371:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *   include the R/W bit.
+ 372:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 373:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  The address value is not checked to see if it violates the I2C spec. 
+ 374:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  The preferred addresses are in the range between 8 and 120 (0x08 to 0x78).
+ 375:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 376:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \globalvars
+ 377:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  EZI2C_addrBuf1 - used to store the primary 7-bit slave address 
+ 378:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  value.
+ 379:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 380:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *******************************************************************************/
+ 381:Generated_Source\PSoC4/EZI2C_EZI2C.c **** void EZI2C_EzI2CSetAddress1(uint32 address)
+ 382:Generated_Source\PSoC4/EZI2C_EZI2C.c **** {
+ 237              		.loc 1 382 0
+ 238              		.cfi_startproc
+ 239              		@ args = 0, pretend = 0, frame = 0
+ 240              		@ frame_needed = 0, uses_anonymous_args = 0
+ 241              		@ link register save eliminated.
+ 242              	.LVL7:
+ 243              	.LBB2:
+ 383:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #if(EZI2C_SECONDARY_ADDRESS_ENABLE)
+ 384:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     {
+ 385:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_addrBuf1 = (uint8) address;
+ 386:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 387:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_RX_MATCH_REG = 
+ 388:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                         EZI2C_EzI2CUpdateRxMatchReg(address, (uint32) EZI2C_addrBuf2);
+ 389:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     }
+ 390:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #else
+ 391:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     {
+ 392:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         uint32 matchReg;
+ 393:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 394:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         matchReg = EZI2C_RX_MATCH_REG;
+ 395:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 396:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         /* Set address. */
+ 397:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         matchReg &= (uint32) ~EZI2C_RX_MATCH_ADDR_MASK;
+ 244              		.loc 1 397 0
+ 245 0000 FF22     		movs	r2, #255
+ 394:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 246              		.loc 1 394 0
+ 247 0002 0449     		ldr	r1, .L11
+ 398:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         matchReg |= (uint32)  EZI2C_GET_I2C_8BIT_ADDRESS(address);
+ 248              		.loc 1 398 0
+ 249 0004 4000     		lsls	r0, r0, #1
+ 250              	.LVL8:
+ 394:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 251              		.loc 1 394 0
+ 252 0006 0B68     		ldr	r3, [r1]
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 13
+
+
+ 253              	.LVL9:
+ 254              		.loc 1 398 0
+ 255 0008 1040     		ands	r0, r2
+ 397:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         matchReg |= (uint32)  EZI2C_GET_I2C_8BIT_ADDRESS(address);
+ 256              		.loc 1 397 0
+ 257 000a 9343     		bics	r3, r2
+ 258              	.LVL10:
+ 259              		.loc 1 398 0
+ 260 000c 1843     		orrs	r0, r3
+ 261              	.LVL11:
+ 399:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 400:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_RX_MATCH_REG = matchReg;
+ 262              		.loc 1 400 0
+ 263 000e 0860     		str	r0, [r1]
+ 264              	.LBE2:
+ 401:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     }
+ 402:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #endif
+ 403:Generated_Source\PSoC4/EZI2C_EZI2C.c **** }
+ 265              		.loc 1 403 0
+ 266              		@ sp needed
+ 267 0010 7047     		bx	lr
+ 268              	.L12:
+ 269 0012 C046     		.align	2
+ 270              	.L11:
+ 271 0014 10032440 		.word	1076101904
+ 272              		.cfi_endproc
+ 273              	.LFE4:
+ 274              		.size	EZI2C_EzI2CSetAddress1, .-EZI2C_EzI2CSetAddress1
+ 275              		.section	.text.EZI2C_EzI2CGetAddress1,"ax",%progbits
+ 276              		.align	1
+ 277              		.global	EZI2C_EzI2CGetAddress1
+ 278              		.code	16
+ 279              		.thumb_func
+ 280              		.type	EZI2C_EzI2CGetAddress1, %function
+ 281              	EZI2C_EzI2CGetAddress1:
+ 282              	.LFB5:
+ 404:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 405:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 406:Generated_Source\PSoC4/EZI2C_EZI2C.c **** /*******************************************************************************
+ 407:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * Function Name: EZI2C_EzI2CGetAddress1
+ 408:Generated_Source\PSoC4/EZI2C_EZI2C.c **** ****************************************************************************//**
+ 409:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 410:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  Returns primary the EZ I2C slave address.
+ 411:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  This address is the 7-bit right-justified slave address and does not include 
+ 412:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  the R/W bit.
+ 413:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 414:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \return
+ 415:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  Primary EZI2C slave address.
+ 416:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 417:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \globalvars
+ 418:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  EZI2C_addrBuf1 - used to store the primary 7-bit slave address 
+ 419:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  value.
+ 420:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 421:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *******************************************************************************/
+ 422:Generated_Source\PSoC4/EZI2C_EZI2C.c **** uint32 EZI2C_EzI2CGetAddress1(void)
+ 423:Generated_Source\PSoC4/EZI2C_EZI2C.c **** {
+ 283              		.loc 1 423 0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 14
+
+
+ 284              		.cfi_startproc
+ 285              		@ args = 0, pretend = 0, frame = 0
+ 286              		@ frame_needed = 0, uses_anonymous_args = 0
+ 287              		@ link register save eliminated.
+ 424:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     uint32 address;
+ 425:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 426:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #if(EZI2C_SECONDARY_ADDRESS_ENABLE)
+ 427:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     {
+ 428:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         address = (uint32) EZI2C_addrBuf1;
+ 429:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     }
+ 430:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #else
+ 431:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     {
+ 432:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         address = (EZI2C_GET_RX_MATCH_ADDR(EZI2C_RX_MATCH_REG) >>
+ 288              		.loc 1 432 0
+ 289 0000 024B     		ldr	r3, .L14
+ 433:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                    EZI2C_I2C_SLAVE_ADDR_POS);
+ 434:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     }
+ 435:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     #endif
+ 436:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 437:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     return(address);
+ 438:Generated_Source\PSoC4/EZI2C_EZI2C.c **** }
+ 290              		.loc 1 438 0
+ 291              		@ sp needed
+ 432:Generated_Source\PSoC4/EZI2C_EZI2C.c ****                    EZI2C_I2C_SLAVE_ADDR_POS);
+ 292              		.loc 1 432 0
+ 293 0002 1868     		ldr	r0, [r3]
+ 294              	.LVL12:
+ 437:Generated_Source\PSoC4/EZI2C_EZI2C.c **** }
+ 295              		.loc 1 437 0
+ 296 0004 0006     		lsls	r0, r0, #24
+ 297              	.LVL13:
+ 298 0006 400E     		lsrs	r0, r0, #25
+ 299              		.loc 1 438 0
+ 300 0008 7047     		bx	lr
+ 301              	.L15:
+ 302 000a C046     		.align	2
+ 303              	.L14:
+ 304 000c 10032440 		.word	1076101904
+ 305              		.cfi_endproc
+ 306              	.LFE5:
+ 307              		.size	EZI2C_EzI2CGetAddress1, .-EZI2C_EzI2CGetAddress1
+ 308              		.section	.text.EZI2C_EzI2CSetBuffer1,"ax",%progbits
+ 309              		.align	1
+ 310              		.global	EZI2C_EzI2CSetBuffer1
+ 311              		.code	16
+ 312              		.thumb_func
+ 313              		.type	EZI2C_EzI2CSetBuffer1, %function
+ 314              	EZI2C_EzI2CSetBuffer1:
+ 315              	.LFB6:
+ 439:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 440:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 441:Generated_Source\PSoC4/EZI2C_EZI2C.c **** /*******************************************************************************
+ 442:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * Function Name: EZI2C_EzI2CSetBuffer1
+ 443:Generated_Source\PSoC4/EZI2C_EZI2C.c **** ****************************************************************************//**
+ 444:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 445:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  Sets up the data buffer to be exposed to the I2C master on a primary slave
+ 446:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  address request.
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 15
+
+
+ 447:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 448:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \param bufSize: Size of the buffer in bytes.
+ 449:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \param rwBoundary: Number of data bytes starting from the beginning of the 
+ 450:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  buffer with read and write access. Data bytes located at offset rwBoundary 
+ 451:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  or greater are read only.
+ 452:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  This value must be less than or equal to the buffer size.
+ 453:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \param buffer: Pointer to the data buffer.
+ 454:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 455:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \sideeffect
+ 456:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  Calling this function in the middle of a transaction intended for the 
+ 457:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  primary slave address leads to unexpected behavior.
+ 458:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 459:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \globalvars
+ 460:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  EZI2C_dataBuffer1 – the pointer to the buffer to be exposed to the
+ 461:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  master on a primary address.
+ 462:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  EZI2C_bufSizeBuf1 - the size of the buffer to be exposed to the 
+ 463:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  master on a primary address.
+ 464:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  EZI2C_protectBuf1 - the start index of the read-only region in the
+ 465:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  buffer to be exposed to the master on a primary address. The read-only region
+ 466:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  continues up to the end the buffer.
+ 467:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 468:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *******************************************************************************/
+ 469:Generated_Source\PSoC4/EZI2C_EZI2C.c **** void EZI2C_EzI2CSetBuffer1(uint32 bufSize, uint32 rwBoundary, volatile uint8 * buffer)
+ 470:Generated_Source\PSoC4/EZI2C_EZI2C.c **** {
+ 316              		.loc 1 470 0
+ 317              		.cfi_startproc
+ 318              		@ args = 0, pretend = 0, frame = 0
+ 319              		@ frame_needed = 0, uses_anonymous_args = 0
+ 320              	.LVL14:
+ 321 0000 70B5     		push	{r4, r5, r6, lr}
+ 322              		.cfi_def_cfa_offset 16
+ 323              		.cfi_offset 4, -16
+ 324              		.cfi_offset 5, -12
+ 325              		.cfi_offset 6, -8
+ 326              		.cfi_offset 14, -4
+ 327              		.loc 1 470 0
+ 328 0002 0600     		movs	r6, r0
+ 329 0004 0D00     		movs	r5, r1
+ 330 0006 141E     		subs	r4, r2, #0
+ 471:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     if (NULL != buffer)
+ 331              		.loc 1 471 0
+ 332 0008 0BD0     		beq	.L16
+ 472:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     {
+ 473:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_DisableInt();  /* Lock from interruption */
+ 333              		.loc 1 473 0
+ 334 000a 0820     		movs	r0, #8
+ 335              	.LVL15:
+ 336 000c FFF7FEFF 		bl	CyIntDisable
+ 337              	.LVL16:
+ 474:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 475:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_dataBuffer1 =  buffer;
+ 338              		.loc 1 475 0
+ 339 0010 044B     		ldr	r3, .L22
+ 476:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_bufSizeBuf1 = (uint16) bufSize;
+ 477:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_protectBuf1 = (uint16) rwBoundary;
+ 478:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 479:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_EnableInt();   /* Release lock */
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 16
+
+
+ 340              		.loc 1 479 0
+ 341 0012 0820     		movs	r0, #8
+ 475:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_bufSizeBuf1 = (uint16) bufSize;
+ 342              		.loc 1 475 0
+ 343 0014 1C60     		str	r4, [r3]
+ 476:Generated_Source\PSoC4/EZI2C_EZI2C.c ****         EZI2C_bufSizeBuf1 = (uint16) bufSize;
+ 344              		.loc 1 476 0
+ 345 0016 044B     		ldr	r3, .L22+4
+ 346 0018 1E80     		strh	r6, [r3]
+ 477:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 347              		.loc 1 477 0
+ 348 001a 044B     		ldr	r3, .L22+8
+ 349 001c 1D80     		strh	r5, [r3]
+ 350              		.loc 1 479 0
+ 351 001e FFF7FEFF 		bl	CyIntEnable
+ 352              	.LVL17:
+ 353              	.L16:
+ 480:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     }
+ 481:Generated_Source\PSoC4/EZI2C_EZI2C.c **** }
+ 354              		.loc 1 481 0
+ 355              		@ sp needed
+ 356              	.LVL18:
+ 357              	.LVL19:
+ 358              	.LVL20:
+ 359 0022 70BD     		pop	{r4, r5, r6, pc}
+ 360              	.L23:
+ 361              		.align	2
+ 362              	.L22:
+ 363 0024 00000000 		.word	EZI2C_dataBuffer1
+ 364 0028 00000000 		.word	EZI2C_bufSizeBuf1
+ 365 002c 00000000 		.word	EZI2C_protectBuf1
+ 366              		.cfi_endproc
+ 367              	.LFE6:
+ 368              		.size	EZI2C_EzI2CSetBuffer1, .-EZI2C_EzI2CSetBuffer1
+ 369              		.section	.text.EZI2C_EzI2CSetReadBoundaryBuffer1,"ax",%progbits
+ 370              		.align	1
+ 371              		.global	EZI2C_EzI2CSetReadBoundaryBuffer1
+ 372              		.code	16
+ 373              		.thumb_func
+ 374              		.type	EZI2C_EzI2CSetReadBoundaryBuffer1, %function
+ 375              	EZI2C_EzI2CSetReadBoundaryBuffer1:
+ 376              	.LFB7:
+ 482:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 483:Generated_Source\PSoC4/EZI2C_EZI2C.c **** 
+ 484:Generated_Source\PSoC4/EZI2C_EZI2C.c **** /*******************************************************************************
+ 485:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * Function Name: EZI2C_EzI2CSetReadBoundaryBuffer1
+ 486:Generated_Source\PSoC4/EZI2C_EZI2C.c **** ****************************************************************************//**
+ 487:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 488:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  Sets the read only boundary in the data buffer to be exposed to the I2C
+ 489:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  master on a primary slave address request.
+ 490:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 491:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \param rwBoundry: Number of data bytes starting from the beginning of the 
+ 492:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  buffer with read and write access. Data bytes located at offset rwBoundary 
+ 493:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  or greater are read only.
+ 494:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  This value must be less than or equal to the buffer size.
+ 495:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 496:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \sideeffect
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 17
+
+
+ 497:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  Calling this function in the middle of a transaction intended for the 
+ 498:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  primary slave address leads to unexpected behavior.
+ 499:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 500:Generated_Source\PSoC4/EZI2C_EZI2C.c **** * \globalvars
+ 501:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  EZI2C_protectBuf1 - the start index of the read-only region in the
+ 502:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  buffer to be exposed to the master on a primary address. The read-only region
+ 503:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *  continues up to the end the buffer.
+ 504:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *
+ 505:Generated_Source\PSoC4/EZI2C_EZI2C.c **** *******************************************************************************/
+ 506:Generated_Source\PSoC4/EZI2C_EZI2C.c **** void EZI2C_EzI2CSetReadBoundaryBuffer1(uint32 rwBoundary)
+ 507:Generated_Source\PSoC4/EZI2C_EZI2C.c **** {
+ 377              		.loc 1 507 0
+ 378              		.cfi_startproc
+ 379              		@ args = 0, pretend = 0, frame = 0
+ 380              		@ frame_needed = 0, uses_anonymous_args = 0
+ 381              		@ link register save eliminated.
+ 382              	.LVL21:
+ 508:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     EZI2C_protectBuf1 = (uint16) rwBoundary;
+ 383              		.loc 1 508 0
+ 384 0000 014B     		ldr	r3, .L25
+ 509:Generated_Source\PSoC4/EZI2C_EZI2C.c **** }
+ 385              		.loc 1 509 0
+ 386              		@ sp needed
+ 508:Generated_Source\PSoC4/EZI2C_EZI2C.c ****     EZI2C_protectBuf1 = (uint16) rwBoundary;
+ 387              		.loc 1 508 0
+ 388 0002 1880     		strh	r0, [r3]
+ 389              		.loc 1 509 0
+ 390 0004 7047     		bx	lr
+ 391              	.L26:
+ 392 0006 C046     		.align	2
+ 393              	.L25:
+ 394 0008 00000000 		.word	EZI2C_protectBuf1
+ 395              		.cfi_endproc
+ 396              	.LFE7:
+ 397              		.size	EZI2C_EzI2CSetReadBoundaryBuffer1, .-EZI2C_EzI2CSetReadBoundaryBuffer1
+ 398              		.comm	EZI2C_indexBuf1,2,2
+ 399              		.comm	EZI2C_offsetBuf1,1,1
+ 400              		.comm	EZI2C_protectBuf1,2,2
+ 401              		.comm	EZI2C_bufSizeBuf1,2,2
+ 402              		.comm	EZI2C_dataBuffer1,4,4
+ 403              		.comm	EZI2C_fsmState,1,1
+ 404              		.comm	EZI2C_curStatus,1,1
+ 405              		.text
+ 406              	.Letext0:
+ 407              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 408              		.file 3 "Generated_Source\\PSoC4/CyLib.h"
+ 409              		.section	.debug_info,"",%progbits
+ 410              	.Ldebug_info0:
+ 411 0000 17030000 		.4byte	0x317
+ 412 0004 0400     		.2byte	0x4
+ 413 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 414 000a 04       		.byte	0x4
+ 415 000b 01       		.uleb128 0x1
+ 416 000c 9A020000 		.4byte	.LASF41
+ 417 0010 0C       		.byte	0xc
+ 418 0011 B4000000 		.4byte	.LASF42
+ 419 0015 68020000 		.4byte	.LASF43
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 18
+
+
+ 420 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 421 001d 00000000 		.4byte	0
+ 422 0021 00000000 		.4byte	.Ldebug_line0
+ 423 0025 02       		.uleb128 0x2
+ 424 0026 01       		.byte	0x1
+ 425 0027 06       		.byte	0x6
+ 426 0028 5C020000 		.4byte	.LASF0
+ 427 002c 02       		.uleb128 0x2
+ 428 002d 01       		.byte	0x1
+ 429 002e 08       		.byte	0x8
+ 430 002f DF000000 		.4byte	.LASF1
+ 431 0033 02       		.uleb128 0x2
+ 432 0034 02       		.byte	0x2
+ 433 0035 05       		.byte	0x5
+ 434 0036 04020000 		.4byte	.LASF2
+ 435 003a 02       		.uleb128 0x2
+ 436 003b 02       		.byte	0x2
+ 437 003c 07       		.byte	0x7
+ 438 003d 56000000 		.4byte	.LASF3
+ 439 0041 02       		.uleb128 0x2
+ 440 0042 04       		.byte	0x4
+ 441 0043 05       		.byte	0x5
+ 442 0044 27020000 		.4byte	.LASF4
+ 443 0048 02       		.uleb128 0x2
+ 444 0049 04       		.byte	0x4
+ 445 004a 07       		.byte	0x7
+ 446 004b FD000000 		.4byte	.LASF5
+ 447 004f 02       		.uleb128 0x2
+ 448 0050 08       		.byte	0x8
+ 449 0051 05       		.byte	0x5
+ 450 0052 D2010000 		.4byte	.LASF6
+ 451 0056 02       		.uleb128 0x2
+ 452 0057 08       		.byte	0x8
+ 453 0058 07       		.byte	0x7
+ 454 0059 84010000 		.4byte	.LASF7
+ 455 005d 03       		.uleb128 0x3
+ 456 005e 04       		.byte	0x4
+ 457 005f 05       		.byte	0x5
+ 458 0060 696E7400 		.ascii	"int\000"
+ 459 0064 02       		.uleb128 0x2
+ 460 0065 04       		.byte	0x4
+ 461 0066 07       		.byte	0x7
+ 462 0067 6F010000 		.4byte	.LASF8
+ 463 006b 04       		.uleb128 0x4
+ 464 006c 0F010000 		.4byte	.LASF9
+ 465 0070 02       		.byte	0x2
+ 466 0071 E401     		.2byte	0x1e4
+ 467 0073 2C000000 		.4byte	0x2c
+ 468 0077 04       		.uleb128 0x4
+ 469 0078 4F010000 		.4byte	.LASF10
+ 470 007c 02       		.byte	0x2
+ 471 007d E501     		.2byte	0x1e5
+ 472 007f 3A000000 		.4byte	0x3a
+ 473 0083 04       		.uleb128 0x4
+ 474 0084 56010000 		.4byte	.LASF11
+ 475 0088 02       		.byte	0x2
+ 476 0089 E601     		.2byte	0x1e6
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 19
+
+
+ 477 008b 48000000 		.4byte	0x48
+ 478 008f 02       		.uleb128 0x2
+ 479 0090 04       		.byte	0x4
+ 480 0091 04       		.byte	0x4
+ 481 0092 D9000000 		.4byte	.LASF12
+ 482 0096 02       		.uleb128 0x2
+ 483 0097 08       		.byte	0x8
+ 484 0098 04       		.byte	0x4
+ 485 0099 25010000 		.4byte	.LASF13
+ 486 009d 02       		.uleb128 0x2
+ 487 009e 01       		.byte	0x1
+ 488 009f 08       		.byte	0x8
+ 489 00a0 E0010000 		.4byte	.LASF14
+ 490 00a4 05       		.uleb128 0x5
+ 491 00a5 6B000000 		.4byte	0x6b
+ 492 00a9 04       		.uleb128 0x4
+ 493 00aa 00000000 		.4byte	.LASF15
+ 494 00ae 02       		.byte	0x2
+ 495 00af 9002     		.2byte	0x290
+ 496 00b1 B5000000 		.4byte	0xb5
+ 497 00b5 05       		.uleb128 0x5
+ 498 00b6 83000000 		.4byte	0x83
+ 499 00ba 02       		.uleb128 0x2
+ 500 00bb 08       		.byte	0x8
+ 501 00bc 04       		.byte	0x4
+ 502 00bd 39020000 		.4byte	.LASF16
+ 503 00c1 02       		.uleb128 0x2
+ 504 00c2 04       		.byte	0x4
+ 505 00c3 07       		.byte	0x7
+ 506 00c4 B3010000 		.4byte	.LASF17
+ 507 00c8 06       		.uleb128 0x6
+ 508 00c9 37000000 		.4byte	.LASF18
+ 509 00cd 01       		.byte	0x1
+ 510 00ce D3       		.byte	0xd3
+ 511 00cf 00000000 		.4byte	.LFB1
+ 512 00d3 C0000000 		.4byte	.LFE1-.LFB1
+ 513 00d7 01       		.uleb128 0x1
+ 514 00d8 9C       		.byte	0x9c
+ 515 00d9 18010000 		.4byte	0x118
+ 516 00dd 07       		.uleb128 0x7
+ 517 00de 2C000000 		.4byte	.LVL0
+ 518 00e2 EE020000 		.4byte	0x2ee
+ 519 00e6 F0000000 		.4byte	0xf0
+ 520 00ea 08       		.uleb128 0x8
+ 521 00eb 01       		.uleb128 0x1
+ 522 00ec 50       		.byte	0x50
+ 523 00ed 01       		.uleb128 0x1
+ 524 00ee 38       		.byte	0x38
+ 525 00ef 00       		.byte	0
+ 526 00f0 07       		.uleb128 0x7
+ 527 00f1 34000000 		.4byte	.LVL1
+ 528 00f5 F9020000 		.4byte	0x2f9
+ 529 00f9 08010000 		.4byte	0x108
+ 530 00fd 08       		.uleb128 0x8
+ 531 00fe 01       		.uleb128 0x1
+ 532 00ff 50       		.byte	0x50
+ 533 0100 01       		.uleb128 0x1
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 20
+
+
+ 534 0101 38       		.byte	0x38
+ 535 0102 08       		.uleb128 0x8
+ 536 0103 01       		.uleb128 0x1
+ 537 0104 51       		.byte	0x51
+ 538 0105 01       		.uleb128 0x1
+ 539 0106 33       		.byte	0x33
+ 540 0107 00       		.byte	0
+ 541 0108 09       		.uleb128 0x9
+ 542 0109 3C000000 		.4byte	.LVL2
+ 543 010d 04030000 		.4byte	0x304
+ 544 0111 08       		.uleb128 0x8
+ 545 0112 01       		.uleb128 0x1
+ 546 0113 50       		.byte	0x50
+ 547 0114 01       		.uleb128 0x1
+ 548 0115 38       		.byte	0x38
+ 549 0116 00       		.byte	0
+ 550 0117 00       		.byte	0
+ 551 0118 0A       		.uleb128 0xa
+ 552 0119 15010000 		.4byte	.LASF44
+ 553 011d 01       		.byte	0x1
+ 554 011e 1A01     		.2byte	0x11a
+ 555 0120 00000000 		.4byte	.LFB2
+ 556 0124 0C000000 		.4byte	.LFE2-.LFB2
+ 557 0128 01       		.uleb128 0x1
+ 558 0129 9C       		.byte	0x9c
+ 559 012a 0B       		.uleb128 0xb
+ 560 012b 2C010000 		.4byte	.LASF22
+ 561 012f 01       		.byte	0x1
+ 562 0130 4901     		.2byte	0x149
+ 563 0132 83000000 		.4byte	0x83
+ 564 0136 00000000 		.4byte	.LFB3
+ 565 013a 24000000 		.4byte	.LFE3-.LFB3
+ 566 013e 01       		.uleb128 0x1
+ 567 013f 9C       		.byte	0x9c
+ 568 0140 77010000 		.4byte	0x177
+ 569 0144 0C       		.uleb128 0xc
+ 570 0145 AD000000 		.4byte	.LASF20
+ 571 0149 01       		.byte	0x1
+ 572 014a 4B01     		.2byte	0x14b
+ 573 014c 83000000 		.4byte	0x83
+ 574 0150 00000000 		.4byte	.LLST0
+ 575 0154 07       		.uleb128 0x7
+ 576 0155 08000000 		.4byte	.LVL3
+ 577 0159 EE020000 		.4byte	0x2ee
+ 578 015d 67010000 		.4byte	0x167
+ 579 0161 08       		.uleb128 0x8
+ 580 0162 01       		.uleb128 0x1
+ 581 0163 50       		.byte	0x50
+ 582 0164 01       		.uleb128 0x1
+ 583 0165 38       		.byte	0x38
+ 584 0166 00       		.byte	0
+ 585 0167 09       		.uleb128 0x9
+ 586 0168 1C000000 		.4byte	.LVL5
+ 587 016c 0F030000 		.4byte	0x30f
+ 588 0170 08       		.uleb128 0x8
+ 589 0171 01       		.uleb128 0x1
+ 590 0172 50       		.byte	0x50
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 21
+
+
+ 591 0173 01       		.uleb128 0x1
+ 592 0174 38       		.byte	0x38
+ 593 0175 00       		.byte	0
+ 594 0176 00       		.byte	0
+ 595 0177 0D       		.uleb128 0xd
+ 596 0178 96000000 		.4byte	.LASF19
+ 597 017c 01       		.byte	0x1
+ 598 017d 7D01     		.2byte	0x17d
+ 599 017f 00000000 		.4byte	.LFB4
+ 600 0183 18000000 		.4byte	.LFE4-.LFB4
+ 601 0187 01       		.uleb128 0x1
+ 602 0188 9C       		.byte	0x9c
+ 603 0189 B8010000 		.4byte	0x1b8
+ 604 018d 0E       		.uleb128 0xe
+ 605 018e 7C010000 		.4byte	.LASF24
+ 606 0192 01       		.byte	0x1
+ 607 0193 7D01     		.2byte	0x17d
+ 608 0195 83000000 		.4byte	0x83
+ 609 0199 28000000 		.4byte	.LLST1
+ 610 019d 0F       		.uleb128 0xf
+ 611 019e 00000000 		.4byte	.LBB2
+ 612 01a2 10000000 		.4byte	.LBE2-.LBB2
+ 613 01a6 0C       		.uleb128 0xc
+ 614 01a7 30020000 		.4byte	.LASF21
+ 615 01ab 01       		.byte	0x1
+ 616 01ac 8801     		.2byte	0x188
+ 617 01ae 83000000 		.4byte	0x83
+ 618 01b2 49000000 		.4byte	.LLST2
+ 619 01b6 00       		.byte	0
+ 620 01b7 00       		.byte	0
+ 621 01b8 0B       		.uleb128 0xb
+ 622 01b9 45020000 		.4byte	.LASF23
+ 623 01bd 01       		.byte	0x1
+ 624 01be A601     		.2byte	0x1a6
+ 625 01c0 83000000 		.4byte	0x83
+ 626 01c4 00000000 		.4byte	.LFB5
+ 627 01c8 10000000 		.4byte	.LFE5-.LFB5
+ 628 01cc 01       		.uleb128 0x1
+ 629 01cd 9C       		.byte	0x9c
+ 630 01ce E3010000 		.4byte	0x1e3
+ 631 01d2 0C       		.uleb128 0xc
+ 632 01d3 7C010000 		.4byte	.LASF24
+ 633 01d7 01       		.byte	0x1
+ 634 01d8 A801     		.2byte	0x1a8
+ 635 01da 83000000 		.4byte	0x83
+ 636 01de 67000000 		.4byte	.LLST3
+ 637 01e2 00       		.byte	0
+ 638 01e3 0D       		.uleb128 0xd
+ 639 01e4 BC010000 		.4byte	.LASF25
+ 640 01e8 01       		.byte	0x1
+ 641 01e9 D501     		.2byte	0x1d5
+ 642 01eb 00000000 		.4byte	.LFB6
+ 643 01ef 30000000 		.4byte	.LFE6-.LFB6
+ 644 01f3 01       		.uleb128 0x1
+ 645 01f4 9C       		.byte	0x9c
+ 646 01f5 4C020000 		.4byte	0x24c
+ 647 01f9 0E       		.uleb128 0xe
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 22
+
+
+ 648 01fa 1F020000 		.4byte	.LASF26
+ 649 01fe 01       		.byte	0x1
+ 650 01ff D501     		.2byte	0x1d5
+ 651 0201 83000000 		.4byte	0x83
+ 652 0205 81000000 		.4byte	.LLST4
+ 653 0209 0E       		.uleb128 0xe
+ 654 020a 69000000 		.4byte	.LASF27
+ 655 020e 01       		.byte	0x1
+ 656 020f D501     		.2byte	0x1d5
+ 657 0211 83000000 		.4byte	0x83
+ 658 0215 AD000000 		.4byte	.LLST5
+ 659 0219 0E       		.uleb128 0xe
+ 660 021a AC010000 		.4byte	.LASF28
+ 661 021e 01       		.byte	0x1
+ 662 021f D501     		.2byte	0x1d5
+ 663 0221 4C020000 		.4byte	0x24c
+ 664 0225 D9000000 		.4byte	.LLST6
+ 665 0229 07       		.uleb128 0x7
+ 666 022a 10000000 		.4byte	.LVL16
+ 667 022e EE020000 		.4byte	0x2ee
+ 668 0232 3C020000 		.4byte	0x23c
+ 669 0236 08       		.uleb128 0x8
+ 670 0237 01       		.uleb128 0x1
+ 671 0238 50       		.byte	0x50
+ 672 0239 01       		.uleb128 0x1
+ 673 023a 38       		.byte	0x38
+ 674 023b 00       		.byte	0
+ 675 023c 09       		.uleb128 0x9
+ 676 023d 22000000 		.4byte	.LVL17
+ 677 0241 0F030000 		.4byte	0x30f
+ 678 0245 08       		.uleb128 0x8
+ 679 0246 01       		.uleb128 0x1
+ 680 0247 50       		.byte	0x50
+ 681 0248 01       		.uleb128 0x1
+ 682 0249 38       		.byte	0x38
+ 683 024a 00       		.byte	0
+ 684 024b 00       		.byte	0
+ 685 024c 10       		.uleb128 0x10
+ 686 024d 04       		.byte	0x4
+ 687 024e A4000000 		.4byte	0xa4
+ 688 0252 0D       		.uleb128 0xd
+ 689 0253 74000000 		.4byte	.LASF29
+ 690 0257 01       		.byte	0x1
+ 691 0258 FA01     		.2byte	0x1fa
+ 692 025a 00000000 		.4byte	.LFB7
+ 693 025e 0C000000 		.4byte	.LFE7-.LFB7
+ 694 0262 01       		.uleb128 0x1
+ 695 0263 9C       		.byte	0x9c
+ 696 0264 77020000 		.4byte	0x277
+ 697 0268 11       		.uleb128 0x11
+ 698 0269 69000000 		.4byte	.LASF27
+ 699 026d 01       		.byte	0x1
+ 700 026e FA01     		.2byte	0x1fa
+ 701 0270 83000000 		.4byte	0x83
+ 702 0274 01       		.uleb128 0x1
+ 703 0275 50       		.byte	0x50
+ 704 0276 00       		.byte	0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 23
+
+
+ 705 0277 12       		.uleb128 0x12
+ 706 0278 06000000 		.4byte	.LASF30
+ 707 027c 01       		.byte	0x1
+ 708 027d 1B       		.byte	0x1b
+ 709 027e A4000000 		.4byte	0xa4
+ 710 0282 05       		.uleb128 0x5
+ 711 0283 03       		.byte	0x3
+ 712 0284 00000000 		.4byte	EZI2C_curStatus
+ 713 0288 12       		.uleb128 0x12
+ 714 0289 47000000 		.4byte	.LASF31
+ 715 028d 01       		.byte	0x1
+ 716 028e 1C       		.byte	0x1c
+ 717 028f 6B000000 		.4byte	0x6b
+ 718 0293 05       		.uleb128 0x5
+ 719 0294 03       		.byte	0x3
+ 720 0295 00000000 		.4byte	EZI2C_fsmState
+ 721 0299 12       		.uleb128 0x12
+ 722 029a E5010000 		.4byte	.LASF32
+ 723 029e 01       		.byte	0x1
+ 724 029f 1F       		.byte	0x1f
+ 725 02a0 4C020000 		.4byte	0x24c
+ 726 02a4 05       		.uleb128 0x5
+ 727 02a5 03       		.byte	0x3
+ 728 02a6 00000000 		.4byte	EZI2C_dataBuffer1
+ 729 02aa 12       		.uleb128 0x12
+ 730 02ab 25000000 		.4byte	.LASF33
+ 731 02af 01       		.byte	0x1
+ 732 02b0 20       		.byte	0x20
+ 733 02b1 77000000 		.4byte	0x77
+ 734 02b5 05       		.uleb128 0x5
+ 735 02b6 03       		.byte	0x3
+ 736 02b7 00000000 		.4byte	EZI2C_bufSizeBuf1
+ 737 02bb 12       		.uleb128 0x12
+ 738 02bc 5D010000 		.4byte	.LASF34
+ 739 02c0 01       		.byte	0x1
+ 740 02c1 21       		.byte	0x21
+ 741 02c2 77000000 		.4byte	0x77
+ 742 02c6 05       		.uleb128 0x5
+ 743 02c7 03       		.byte	0x3
+ 744 02c8 00000000 		.4byte	EZI2C_protectBuf1
+ 745 02cc 12       		.uleb128 0x12
+ 746 02cd 0E020000 		.4byte	.LASF35
+ 747 02d1 01       		.byte	0x1
+ 748 02d2 22       		.byte	0x22
+ 749 02d3 6B000000 		.4byte	0x6b
+ 750 02d7 05       		.uleb128 0x5
+ 751 02d8 03       		.byte	0x3
+ 752 02d9 00000000 		.4byte	EZI2C_offsetBuf1
+ 753 02dd 12       		.uleb128 0x12
+ 754 02de ED000000 		.4byte	.LASF36
+ 755 02e2 01       		.byte	0x1
+ 756 02e3 23       		.byte	0x23
+ 757 02e4 77000000 		.4byte	0x77
+ 758 02e8 05       		.uleb128 0x5
+ 759 02e9 03       		.byte	0x3
+ 760 02ea 00000000 		.4byte	EZI2C_indexBuf1
+ 761 02ee 13       		.uleb128 0x13
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 24
+
+
+ 762 02ef F7010000 		.4byte	.LASF37
+ 763 02f3 F7010000 		.4byte	.LASF37
+ 764 02f7 03       		.byte	0x3
+ 765 02f8 C5       		.byte	0xc5
+ 766 02f9 13       		.uleb128 0x13
+ 767 02fa 9B010000 		.4byte	.LASF38
+ 768 02fe 9B010000 		.4byte	.LASF38
+ 769 0302 03       		.byte	0x3
+ 770 0303 C0       		.byte	0xc0
+ 771 0304 13       		.uleb128 0x13
+ 772 0305 16000000 		.4byte	.LASF39
+ 773 0309 16000000 		.4byte	.LASF39
+ 774 030d 03       		.byte	0x3
+ 775 030e BD       		.byte	0xbd
+ 776 030f 13       		.uleb128 0x13
+ 777 0310 43010000 		.4byte	.LASF40
+ 778 0314 43010000 		.4byte	.LASF40
+ 779 0318 03       		.byte	0x3
+ 780 0319 C3       		.byte	0xc3
+ 781 031a 00       		.byte	0
+ 782              		.section	.debug_abbrev,"",%progbits
+ 783              	.Ldebug_abbrev0:
+ 784 0000 01       		.uleb128 0x1
+ 785 0001 11       		.uleb128 0x11
+ 786 0002 01       		.byte	0x1
+ 787 0003 25       		.uleb128 0x25
+ 788 0004 0E       		.uleb128 0xe
+ 789 0005 13       		.uleb128 0x13
+ 790 0006 0B       		.uleb128 0xb
+ 791 0007 03       		.uleb128 0x3
+ 792 0008 0E       		.uleb128 0xe
+ 793 0009 1B       		.uleb128 0x1b
+ 794 000a 0E       		.uleb128 0xe
+ 795 000b 55       		.uleb128 0x55
+ 796 000c 17       		.uleb128 0x17
+ 797 000d 11       		.uleb128 0x11
+ 798 000e 01       		.uleb128 0x1
+ 799 000f 10       		.uleb128 0x10
+ 800 0010 17       		.uleb128 0x17
+ 801 0011 00       		.byte	0
+ 802 0012 00       		.byte	0
+ 803 0013 02       		.uleb128 0x2
+ 804 0014 24       		.uleb128 0x24
+ 805 0015 00       		.byte	0
+ 806 0016 0B       		.uleb128 0xb
+ 807 0017 0B       		.uleb128 0xb
+ 808 0018 3E       		.uleb128 0x3e
+ 809 0019 0B       		.uleb128 0xb
+ 810 001a 03       		.uleb128 0x3
+ 811 001b 0E       		.uleb128 0xe
+ 812 001c 00       		.byte	0
+ 813 001d 00       		.byte	0
+ 814 001e 03       		.uleb128 0x3
+ 815 001f 24       		.uleb128 0x24
+ 816 0020 00       		.byte	0
+ 817 0021 0B       		.uleb128 0xb
+ 818 0022 0B       		.uleb128 0xb
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 25
+
+
+ 819 0023 3E       		.uleb128 0x3e
+ 820 0024 0B       		.uleb128 0xb
+ 821 0025 03       		.uleb128 0x3
+ 822 0026 08       		.uleb128 0x8
+ 823 0027 00       		.byte	0
+ 824 0028 00       		.byte	0
+ 825 0029 04       		.uleb128 0x4
+ 826 002a 16       		.uleb128 0x16
+ 827 002b 00       		.byte	0
+ 828 002c 03       		.uleb128 0x3
+ 829 002d 0E       		.uleb128 0xe
+ 830 002e 3A       		.uleb128 0x3a
+ 831 002f 0B       		.uleb128 0xb
+ 832 0030 3B       		.uleb128 0x3b
+ 833 0031 05       		.uleb128 0x5
+ 834 0032 49       		.uleb128 0x49
+ 835 0033 13       		.uleb128 0x13
+ 836 0034 00       		.byte	0
+ 837 0035 00       		.byte	0
+ 838 0036 05       		.uleb128 0x5
+ 839 0037 35       		.uleb128 0x35
+ 840 0038 00       		.byte	0
+ 841 0039 49       		.uleb128 0x49
+ 842 003a 13       		.uleb128 0x13
+ 843 003b 00       		.byte	0
+ 844 003c 00       		.byte	0
+ 845 003d 06       		.uleb128 0x6
+ 846 003e 2E       		.uleb128 0x2e
+ 847 003f 01       		.byte	0x1
+ 848 0040 3F       		.uleb128 0x3f
+ 849 0041 19       		.uleb128 0x19
+ 850 0042 03       		.uleb128 0x3
+ 851 0043 0E       		.uleb128 0xe
+ 852 0044 3A       		.uleb128 0x3a
+ 853 0045 0B       		.uleb128 0xb
+ 854 0046 3B       		.uleb128 0x3b
+ 855 0047 0B       		.uleb128 0xb
+ 856 0048 27       		.uleb128 0x27
+ 857 0049 19       		.uleb128 0x19
+ 858 004a 11       		.uleb128 0x11
+ 859 004b 01       		.uleb128 0x1
+ 860 004c 12       		.uleb128 0x12
+ 861 004d 06       		.uleb128 0x6
+ 862 004e 40       		.uleb128 0x40
+ 863 004f 18       		.uleb128 0x18
+ 864 0050 9742     		.uleb128 0x2117
+ 865 0052 19       		.uleb128 0x19
+ 866 0053 01       		.uleb128 0x1
+ 867 0054 13       		.uleb128 0x13
+ 868 0055 00       		.byte	0
+ 869 0056 00       		.byte	0
+ 870 0057 07       		.uleb128 0x7
+ 871 0058 898201   		.uleb128 0x4109
+ 872 005b 01       		.byte	0x1
+ 873 005c 11       		.uleb128 0x11
+ 874 005d 01       		.uleb128 0x1
+ 875 005e 31       		.uleb128 0x31
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 26
+
+
+ 876 005f 13       		.uleb128 0x13
+ 877 0060 01       		.uleb128 0x1
+ 878 0061 13       		.uleb128 0x13
+ 879 0062 00       		.byte	0
+ 880 0063 00       		.byte	0
+ 881 0064 08       		.uleb128 0x8
+ 882 0065 8A8201   		.uleb128 0x410a
+ 883 0068 00       		.byte	0
+ 884 0069 02       		.uleb128 0x2
+ 885 006a 18       		.uleb128 0x18
+ 886 006b 9142     		.uleb128 0x2111
+ 887 006d 18       		.uleb128 0x18
+ 888 006e 00       		.byte	0
+ 889 006f 00       		.byte	0
+ 890 0070 09       		.uleb128 0x9
+ 891 0071 898201   		.uleb128 0x4109
+ 892 0074 01       		.byte	0x1
+ 893 0075 11       		.uleb128 0x11
+ 894 0076 01       		.uleb128 0x1
+ 895 0077 31       		.uleb128 0x31
+ 896 0078 13       		.uleb128 0x13
+ 897 0079 00       		.byte	0
+ 898 007a 00       		.byte	0
+ 899 007b 0A       		.uleb128 0xa
+ 900 007c 2E       		.uleb128 0x2e
+ 901 007d 00       		.byte	0
+ 902 007e 3F       		.uleb128 0x3f
+ 903 007f 19       		.uleb128 0x19
+ 904 0080 03       		.uleb128 0x3
+ 905 0081 0E       		.uleb128 0xe
+ 906 0082 3A       		.uleb128 0x3a
+ 907 0083 0B       		.uleb128 0xb
+ 908 0084 3B       		.uleb128 0x3b
+ 909 0085 05       		.uleb128 0x5
+ 910 0086 27       		.uleb128 0x27
+ 911 0087 19       		.uleb128 0x19
+ 912 0088 11       		.uleb128 0x11
+ 913 0089 01       		.uleb128 0x1
+ 914 008a 12       		.uleb128 0x12
+ 915 008b 06       		.uleb128 0x6
+ 916 008c 40       		.uleb128 0x40
+ 917 008d 18       		.uleb128 0x18
+ 918 008e 9742     		.uleb128 0x2117
+ 919 0090 19       		.uleb128 0x19
+ 920 0091 00       		.byte	0
+ 921 0092 00       		.byte	0
+ 922 0093 0B       		.uleb128 0xb
+ 923 0094 2E       		.uleb128 0x2e
+ 924 0095 01       		.byte	0x1
+ 925 0096 3F       		.uleb128 0x3f
+ 926 0097 19       		.uleb128 0x19
+ 927 0098 03       		.uleb128 0x3
+ 928 0099 0E       		.uleb128 0xe
+ 929 009a 3A       		.uleb128 0x3a
+ 930 009b 0B       		.uleb128 0xb
+ 931 009c 3B       		.uleb128 0x3b
+ 932 009d 05       		.uleb128 0x5
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 27
+
+
+ 933 009e 27       		.uleb128 0x27
+ 934 009f 19       		.uleb128 0x19
+ 935 00a0 49       		.uleb128 0x49
+ 936 00a1 13       		.uleb128 0x13
+ 937 00a2 11       		.uleb128 0x11
+ 938 00a3 01       		.uleb128 0x1
+ 939 00a4 12       		.uleb128 0x12
+ 940 00a5 06       		.uleb128 0x6
+ 941 00a6 40       		.uleb128 0x40
+ 942 00a7 18       		.uleb128 0x18
+ 943 00a8 9742     		.uleb128 0x2117
+ 944 00aa 19       		.uleb128 0x19
+ 945 00ab 01       		.uleb128 0x1
+ 946 00ac 13       		.uleb128 0x13
+ 947 00ad 00       		.byte	0
+ 948 00ae 00       		.byte	0
+ 949 00af 0C       		.uleb128 0xc
+ 950 00b0 34       		.uleb128 0x34
+ 951 00b1 00       		.byte	0
+ 952 00b2 03       		.uleb128 0x3
+ 953 00b3 0E       		.uleb128 0xe
+ 954 00b4 3A       		.uleb128 0x3a
+ 955 00b5 0B       		.uleb128 0xb
+ 956 00b6 3B       		.uleb128 0x3b
+ 957 00b7 05       		.uleb128 0x5
+ 958 00b8 49       		.uleb128 0x49
+ 959 00b9 13       		.uleb128 0x13
+ 960 00ba 02       		.uleb128 0x2
+ 961 00bb 17       		.uleb128 0x17
+ 962 00bc 00       		.byte	0
+ 963 00bd 00       		.byte	0
+ 964 00be 0D       		.uleb128 0xd
+ 965 00bf 2E       		.uleb128 0x2e
+ 966 00c0 01       		.byte	0x1
+ 967 00c1 3F       		.uleb128 0x3f
+ 968 00c2 19       		.uleb128 0x19
+ 969 00c3 03       		.uleb128 0x3
+ 970 00c4 0E       		.uleb128 0xe
+ 971 00c5 3A       		.uleb128 0x3a
+ 972 00c6 0B       		.uleb128 0xb
+ 973 00c7 3B       		.uleb128 0x3b
+ 974 00c8 05       		.uleb128 0x5
+ 975 00c9 27       		.uleb128 0x27
+ 976 00ca 19       		.uleb128 0x19
+ 977 00cb 11       		.uleb128 0x11
+ 978 00cc 01       		.uleb128 0x1
+ 979 00cd 12       		.uleb128 0x12
+ 980 00ce 06       		.uleb128 0x6
+ 981 00cf 40       		.uleb128 0x40
+ 982 00d0 18       		.uleb128 0x18
+ 983 00d1 9742     		.uleb128 0x2117
+ 984 00d3 19       		.uleb128 0x19
+ 985 00d4 01       		.uleb128 0x1
+ 986 00d5 13       		.uleb128 0x13
+ 987 00d6 00       		.byte	0
+ 988 00d7 00       		.byte	0
+ 989 00d8 0E       		.uleb128 0xe
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 28
+
+
+ 990 00d9 05       		.uleb128 0x5
+ 991 00da 00       		.byte	0
+ 992 00db 03       		.uleb128 0x3
+ 993 00dc 0E       		.uleb128 0xe
+ 994 00dd 3A       		.uleb128 0x3a
+ 995 00de 0B       		.uleb128 0xb
+ 996 00df 3B       		.uleb128 0x3b
+ 997 00e0 05       		.uleb128 0x5
+ 998 00e1 49       		.uleb128 0x49
+ 999 00e2 13       		.uleb128 0x13
+ 1000 00e3 02       		.uleb128 0x2
+ 1001 00e4 17       		.uleb128 0x17
+ 1002 00e5 00       		.byte	0
+ 1003 00e6 00       		.byte	0
+ 1004 00e7 0F       		.uleb128 0xf
+ 1005 00e8 0B       		.uleb128 0xb
+ 1006 00e9 01       		.byte	0x1
+ 1007 00ea 11       		.uleb128 0x11
+ 1008 00eb 01       		.uleb128 0x1
+ 1009 00ec 12       		.uleb128 0x12
+ 1010 00ed 06       		.uleb128 0x6
+ 1011 00ee 00       		.byte	0
+ 1012 00ef 00       		.byte	0
+ 1013 00f0 10       		.uleb128 0x10
+ 1014 00f1 0F       		.uleb128 0xf
+ 1015 00f2 00       		.byte	0
+ 1016 00f3 0B       		.uleb128 0xb
+ 1017 00f4 0B       		.uleb128 0xb
+ 1018 00f5 49       		.uleb128 0x49
+ 1019 00f6 13       		.uleb128 0x13
+ 1020 00f7 00       		.byte	0
+ 1021 00f8 00       		.byte	0
+ 1022 00f9 11       		.uleb128 0x11
+ 1023 00fa 05       		.uleb128 0x5
+ 1024 00fb 00       		.byte	0
+ 1025 00fc 03       		.uleb128 0x3
+ 1026 00fd 0E       		.uleb128 0xe
+ 1027 00fe 3A       		.uleb128 0x3a
+ 1028 00ff 0B       		.uleb128 0xb
+ 1029 0100 3B       		.uleb128 0x3b
+ 1030 0101 05       		.uleb128 0x5
+ 1031 0102 49       		.uleb128 0x49
+ 1032 0103 13       		.uleb128 0x13
+ 1033 0104 02       		.uleb128 0x2
+ 1034 0105 18       		.uleb128 0x18
+ 1035 0106 00       		.byte	0
+ 1036 0107 00       		.byte	0
+ 1037 0108 12       		.uleb128 0x12
+ 1038 0109 34       		.uleb128 0x34
+ 1039 010a 00       		.byte	0
+ 1040 010b 03       		.uleb128 0x3
+ 1041 010c 0E       		.uleb128 0xe
+ 1042 010d 3A       		.uleb128 0x3a
+ 1043 010e 0B       		.uleb128 0xb
+ 1044 010f 3B       		.uleb128 0x3b
+ 1045 0110 0B       		.uleb128 0xb
+ 1046 0111 49       		.uleb128 0x49
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 29
+
+
+ 1047 0112 13       		.uleb128 0x13
+ 1048 0113 3F       		.uleb128 0x3f
+ 1049 0114 19       		.uleb128 0x19
+ 1050 0115 02       		.uleb128 0x2
+ 1051 0116 18       		.uleb128 0x18
+ 1052 0117 00       		.byte	0
+ 1053 0118 00       		.byte	0
+ 1054 0119 13       		.uleb128 0x13
+ 1055 011a 2E       		.uleb128 0x2e
+ 1056 011b 00       		.byte	0
+ 1057 011c 3F       		.uleb128 0x3f
+ 1058 011d 19       		.uleb128 0x19
+ 1059 011e 3C       		.uleb128 0x3c
+ 1060 011f 19       		.uleb128 0x19
+ 1061 0120 6E       		.uleb128 0x6e
+ 1062 0121 0E       		.uleb128 0xe
+ 1063 0122 03       		.uleb128 0x3
+ 1064 0123 0E       		.uleb128 0xe
+ 1065 0124 3A       		.uleb128 0x3a
+ 1066 0125 0B       		.uleb128 0xb
+ 1067 0126 3B       		.uleb128 0x3b
+ 1068 0127 0B       		.uleb128 0xb
+ 1069 0128 00       		.byte	0
+ 1070 0129 00       		.byte	0
+ 1071 012a 00       		.byte	0
+ 1072              		.section	.debug_loc,"",%progbits
+ 1073              	.Ldebug_loc0:
+ 1074              	.LLST0:
+ 1075 0000 14000000 		.4byte	.LVL4
+ 1076 0004 1E000000 		.4byte	.LVL6
+ 1077 0008 0600     		.2byte	0x6
+ 1078 000a 74       		.byte	0x74
+ 1079 000b 00       		.sleb128 0
+ 1080 000c 08       		.byte	0x8
+ 1081 000d FF       		.byte	0xff
+ 1082 000e 1A       		.byte	0x1a
+ 1083 000f 9F       		.byte	0x9f
+ 1084 0010 1E000000 		.4byte	.LVL6
+ 1085 0014 24000000 		.4byte	.LFE3
+ 1086 0018 0600     		.2byte	0x6
+ 1087 001a 70       		.byte	0x70
+ 1088 001b 00       		.sleb128 0
+ 1089 001c 08       		.byte	0x8
+ 1090 001d FF       		.byte	0xff
+ 1091 001e 1A       		.byte	0x1a
+ 1092 001f 9F       		.byte	0x9f
+ 1093 0020 00000000 		.4byte	0
+ 1094 0024 00000000 		.4byte	0
+ 1095              	.LLST1:
+ 1096 0028 00000000 		.4byte	.LVL7
+ 1097 002c 06000000 		.4byte	.LVL8
+ 1098 0030 0100     		.2byte	0x1
+ 1099 0032 50       		.byte	0x50
+ 1100 0033 06000000 		.4byte	.LVL8
+ 1101 0037 18000000 		.4byte	.LFE4
+ 1102 003b 0400     		.2byte	0x4
+ 1103 003d F3       		.byte	0xf3
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 30
+
+
+ 1104 003e 01       		.uleb128 0x1
+ 1105 003f 50       		.byte	0x50
+ 1106 0040 9F       		.byte	0x9f
+ 1107 0041 00000000 		.4byte	0
+ 1108 0045 00000000 		.4byte	0
+ 1109              	.LLST2:
+ 1110 0049 08000000 		.4byte	.LVL9
+ 1111 004d 0E000000 		.4byte	.LVL11
+ 1112 0051 0100     		.2byte	0x1
+ 1113 0053 53       		.byte	0x53
+ 1114 0054 0E000000 		.4byte	.LVL11
+ 1115 0058 18000000 		.4byte	.LFE4
+ 1116 005c 0100     		.2byte	0x1
+ 1117 005e 50       		.byte	0x50
+ 1118 005f 00000000 		.4byte	0
+ 1119 0063 00000000 		.4byte	0
+ 1120              	.LLST3:
+ 1121 0067 04000000 		.4byte	.LVL12
+ 1122 006b 06000000 		.4byte	.LVL13
+ 1123 006f 0800     		.2byte	0x8
+ 1124 0071 70       		.byte	0x70
+ 1125 0072 00       		.sleb128 0
+ 1126 0073 31       		.byte	0x31
+ 1127 0074 25       		.byte	0x25
+ 1128 0075 08       		.byte	0x8
+ 1129 0076 7F       		.byte	0x7f
+ 1130 0077 1A       		.byte	0x1a
+ 1131 0078 9F       		.byte	0x9f
+ 1132 0079 00000000 		.4byte	0
+ 1133 007d 00000000 		.4byte	0
+ 1134              	.LLST4:
+ 1135 0081 00000000 		.4byte	.LVL14
+ 1136 0085 0C000000 		.4byte	.LVL15
+ 1137 0089 0100     		.2byte	0x1
+ 1138 008b 50       		.byte	0x50
+ 1139 008c 0C000000 		.4byte	.LVL15
+ 1140 0090 22000000 		.4byte	.LVL20
+ 1141 0094 0100     		.2byte	0x1
+ 1142 0096 56       		.byte	0x56
+ 1143 0097 22000000 		.4byte	.LVL20
+ 1144 009b 30000000 		.4byte	.LFE6
+ 1145 009f 0400     		.2byte	0x4
+ 1146 00a1 F3       		.byte	0xf3
+ 1147 00a2 01       		.uleb128 0x1
+ 1148 00a3 50       		.byte	0x50
+ 1149 00a4 9F       		.byte	0x9f
+ 1150 00a5 00000000 		.4byte	0
+ 1151 00a9 00000000 		.4byte	0
+ 1152              	.LLST5:
+ 1153 00ad 00000000 		.4byte	.LVL14
+ 1154 00b1 0F000000 		.4byte	.LVL16-1
+ 1155 00b5 0100     		.2byte	0x1
+ 1156 00b7 51       		.byte	0x51
+ 1157 00b8 0F000000 		.4byte	.LVL16-1
+ 1158 00bc 22000000 		.4byte	.LVL19
+ 1159 00c0 0100     		.2byte	0x1
+ 1160 00c2 55       		.byte	0x55
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 31
+
+
+ 1161 00c3 22000000 		.4byte	.LVL19
+ 1162 00c7 30000000 		.4byte	.LFE6
+ 1163 00cb 0400     		.2byte	0x4
+ 1164 00cd F3       		.byte	0xf3
+ 1165 00ce 01       		.uleb128 0x1
+ 1166 00cf 51       		.byte	0x51
+ 1167 00d0 9F       		.byte	0x9f
+ 1168 00d1 00000000 		.4byte	0
+ 1169 00d5 00000000 		.4byte	0
+ 1170              	.LLST6:
+ 1171 00d9 00000000 		.4byte	.LVL14
+ 1172 00dd 0F000000 		.4byte	.LVL16-1
+ 1173 00e1 0100     		.2byte	0x1
+ 1174 00e3 52       		.byte	0x52
+ 1175 00e4 0F000000 		.4byte	.LVL16-1
+ 1176 00e8 22000000 		.4byte	.LVL18
+ 1177 00ec 0100     		.2byte	0x1
+ 1178 00ee 54       		.byte	0x54
+ 1179 00ef 22000000 		.4byte	.LVL18
+ 1180 00f3 30000000 		.4byte	.LFE6
+ 1181 00f7 0400     		.2byte	0x4
+ 1182 00f9 F3       		.byte	0xf3
+ 1183 00fa 01       		.uleb128 0x1
+ 1184 00fb 52       		.byte	0x52
+ 1185 00fc 9F       		.byte	0x9f
+ 1186 00fd 00000000 		.4byte	0
+ 1187 0101 00000000 		.4byte	0
+ 1188              		.section	.debug_aranges,"",%progbits
+ 1189 0000 4C000000 		.4byte	0x4c
+ 1190 0004 0200     		.2byte	0x2
+ 1191 0006 00000000 		.4byte	.Ldebug_info0
+ 1192 000a 04       		.byte	0x4
+ 1193 000b 00       		.byte	0
+ 1194 000c 0000     		.2byte	0
+ 1195 000e 0000     		.2byte	0
+ 1196 0010 00000000 		.4byte	.LFB1
+ 1197 0014 C0000000 		.4byte	.LFE1-.LFB1
+ 1198 0018 00000000 		.4byte	.LFB2
+ 1199 001c 0C000000 		.4byte	.LFE2-.LFB2
+ 1200 0020 00000000 		.4byte	.LFB3
+ 1201 0024 24000000 		.4byte	.LFE3-.LFB3
+ 1202 0028 00000000 		.4byte	.LFB4
+ 1203 002c 18000000 		.4byte	.LFE4-.LFB4
+ 1204 0030 00000000 		.4byte	.LFB5
+ 1205 0034 10000000 		.4byte	.LFE5-.LFB5
+ 1206 0038 00000000 		.4byte	.LFB6
+ 1207 003c 30000000 		.4byte	.LFE6-.LFB6
+ 1208 0040 00000000 		.4byte	.LFB7
+ 1209 0044 0C000000 		.4byte	.LFE7-.LFB7
+ 1210 0048 00000000 		.4byte	0
+ 1211 004c 00000000 		.4byte	0
+ 1212              		.section	.debug_ranges,"",%progbits
+ 1213              	.Ldebug_ranges0:
+ 1214 0000 00000000 		.4byte	.LFB1
+ 1215 0004 C0000000 		.4byte	.LFE1
+ 1216 0008 00000000 		.4byte	.LFB2
+ 1217 000c 0C000000 		.4byte	.LFE2
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 32
+
+
+ 1218 0010 00000000 		.4byte	.LFB3
+ 1219 0014 24000000 		.4byte	.LFE3
+ 1220 0018 00000000 		.4byte	.LFB4
+ 1221 001c 18000000 		.4byte	.LFE4
+ 1222 0020 00000000 		.4byte	.LFB5
+ 1223 0024 10000000 		.4byte	.LFE5
+ 1224 0028 00000000 		.4byte	.LFB6
+ 1225 002c 30000000 		.4byte	.LFE6
+ 1226 0030 00000000 		.4byte	.LFB7
+ 1227 0034 0C000000 		.4byte	.LFE7
+ 1228 0038 00000000 		.4byte	0
+ 1229 003c 00000000 		.4byte	0
+ 1230              		.section	.debug_line,"",%progbits
+ 1231              	.Ldebug_line0:
+ 1232 0000 38010000 		.section	.debug_str,"MS",%progbits,1
+ 1232      02005300 
+ 1232      00000201 
+ 1232      FB0E0D00 
+ 1232      01010101 
+ 1233              	.LASF15:
+ 1234 0000 72656733 		.ascii	"reg32\000"
+ 1234      3200
+ 1235              	.LASF30:
+ 1236 0006 455A4932 		.ascii	"EZI2C_curStatus\000"
+ 1236      435F6375 
+ 1236      72537461 
+ 1236      74757300 
+ 1237              	.LASF39:
+ 1238 0016 4379496E 		.ascii	"CyIntSetVector\000"
+ 1238      74536574 
+ 1238      56656374 
+ 1238      6F7200
+ 1239              	.LASF33:
+ 1240 0025 455A4932 		.ascii	"EZI2C_bufSizeBuf1\000"
+ 1240      435F6275 
+ 1240      6653697A 
+ 1240      65427566 
+ 1240      3100
+ 1241              	.LASF18:
+ 1242 0037 455A4932 		.ascii	"EZI2C_EzI2CInit\000"
+ 1242      435F457A 
+ 1242      49324349 
+ 1242      6E697400 
+ 1243              	.LASF31:
+ 1244 0047 455A4932 		.ascii	"EZI2C_fsmState\000"
+ 1244      435F6673 
+ 1244      6D537461 
+ 1244      746500
+ 1245              	.LASF3:
+ 1246 0056 73686F72 		.ascii	"short unsigned int\000"
+ 1246      7420756E 
+ 1246      7369676E 
+ 1246      65642069 
+ 1246      6E7400
+ 1247              	.LASF27:
+ 1248 0069 7277426F 		.ascii	"rwBoundary\000"
+ 1248      756E6461 
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 33
+
+
+ 1248      727900
+ 1249              	.LASF29:
+ 1250 0074 455A4932 		.ascii	"EZI2C_EzI2CSetReadBoundaryBuffer1\000"
+ 1250      435F457A 
+ 1250      49324353 
+ 1250      65745265 
+ 1250      6164426F 
+ 1251              	.LASF19:
+ 1252 0096 455A4932 		.ascii	"EZI2C_EzI2CSetAddress1\000"
+ 1252      435F457A 
+ 1252      49324353 
+ 1252      65744164 
+ 1252      64726573 
+ 1253              	.LASF20:
+ 1254 00ad 73746174 		.ascii	"status\000"
+ 1254      757300
+ 1255              	.LASF42:
+ 1256 00b4 47656E65 		.ascii	"Generated_Source\\PSoC4\\EZI2C_EZI2C.c\000"
+ 1256      72617465 
+ 1256      645F536F 
+ 1256      75726365 
+ 1256      5C50536F 
+ 1257              	.LASF12:
+ 1258 00d9 666C6F61 		.ascii	"float\000"
+ 1258      7400
+ 1259              	.LASF1:
+ 1260 00df 756E7369 		.ascii	"unsigned char\000"
+ 1260      676E6564 
+ 1260      20636861 
+ 1260      7200
+ 1261              	.LASF36:
+ 1262 00ed 455A4932 		.ascii	"EZI2C_indexBuf1\000"
+ 1262      435F696E 
+ 1262      64657842 
+ 1262      75663100 
+ 1263              	.LASF5:
+ 1264 00fd 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1264      20756E73 
+ 1264      69676E65 
+ 1264      6420696E 
+ 1264      7400
+ 1265              	.LASF9:
+ 1266 010f 75696E74 		.ascii	"uint8\000"
+ 1266      3800
+ 1267              	.LASF44:
+ 1268 0115 455A4932 		.ascii	"EZI2C_EzI2CStop\000"
+ 1268      435F457A 
+ 1268      49324353 
+ 1268      746F7000 
+ 1269              	.LASF13:
+ 1270 0125 646F7562 		.ascii	"double\000"
+ 1270      6C6500
+ 1271              	.LASF22:
+ 1272 012c 455A4932 		.ascii	"EZI2C_EzI2CGetActivity\000"
+ 1272      435F457A 
+ 1272      49324347 
+ 1272      65744163 
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 34
+
+
+ 1272      74697669 
+ 1273              	.LASF40:
+ 1274 0143 4379496E 		.ascii	"CyIntEnable\000"
+ 1274      74456E61 
+ 1274      626C6500 
+ 1275              	.LASF10:
+ 1276 014f 75696E74 		.ascii	"uint16\000"
+ 1276      313600
+ 1277              	.LASF11:
+ 1278 0156 75696E74 		.ascii	"uint32\000"
+ 1278      333200
+ 1279              	.LASF34:
+ 1280 015d 455A4932 		.ascii	"EZI2C_protectBuf1\000"
+ 1280      435F7072 
+ 1280      6F746563 
+ 1280      74427566 
+ 1280      3100
+ 1281              	.LASF8:
+ 1282 016f 756E7369 		.ascii	"unsigned int\000"
+ 1282      676E6564 
+ 1282      20696E74 
+ 1282      00
+ 1283              	.LASF24:
+ 1284 017c 61646472 		.ascii	"address\000"
+ 1284      65737300 
+ 1285              	.LASF7:
+ 1286 0184 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1286      206C6F6E 
+ 1286      6720756E 
+ 1286      7369676E 
+ 1286      65642069 
+ 1287              	.LASF38:
+ 1288 019b 4379496E 		.ascii	"CyIntSetPriority\000"
+ 1288      74536574 
+ 1288      5072696F 
+ 1288      72697479 
+ 1288      00
+ 1289              	.LASF28:
+ 1290 01ac 62756666 		.ascii	"buffer\000"
+ 1290      657200
+ 1291              	.LASF17:
+ 1292 01b3 73697A65 		.ascii	"sizetype\000"
+ 1292      74797065 
+ 1292      00
+ 1293              	.LASF25:
+ 1294 01bc 455A4932 		.ascii	"EZI2C_EzI2CSetBuffer1\000"
+ 1294      435F457A 
+ 1294      49324353 
+ 1294      65744275 
+ 1294      66666572 
+ 1295              	.LASF6:
+ 1296 01d2 6C6F6E67 		.ascii	"long long int\000"
+ 1296      206C6F6E 
+ 1296      6720696E 
+ 1296      7400
+ 1297              	.LASF14:
+ 1298 01e0 63686172 		.ascii	"char\000"
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 35
+
+
+ 1298      00
+ 1299              	.LASF32:
+ 1300 01e5 455A4932 		.ascii	"EZI2C_dataBuffer1\000"
+ 1300      435F6461 
+ 1300      74614275 
+ 1300      66666572 
+ 1300      3100
+ 1301              	.LASF37:
+ 1302 01f7 4379496E 		.ascii	"CyIntDisable\000"
+ 1302      74446973 
+ 1302      61626C65 
+ 1302      00
+ 1303              	.LASF2:
+ 1304 0204 73686F72 		.ascii	"short int\000"
+ 1304      7420696E 
+ 1304      7400
+ 1305              	.LASF35:
+ 1306 020e 455A4932 		.ascii	"EZI2C_offsetBuf1\000"
+ 1306      435F6F66 
+ 1306      66736574 
+ 1306      42756631 
+ 1306      00
+ 1307              	.LASF26:
+ 1308 021f 62756653 		.ascii	"bufSize\000"
+ 1308      697A6500 
+ 1309              	.LASF4:
+ 1310 0227 6C6F6E67 		.ascii	"long int\000"
+ 1310      20696E74 
+ 1310      00
+ 1311              	.LASF21:
+ 1312 0230 6D617463 		.ascii	"matchReg\000"
+ 1312      68526567 
+ 1312      00
+ 1313              	.LASF16:
+ 1314 0239 6C6F6E67 		.ascii	"long double\000"
+ 1314      20646F75 
+ 1314      626C6500 
+ 1315              	.LASF23:
+ 1316 0245 455A4932 		.ascii	"EZI2C_EzI2CGetAddress1\000"
+ 1316      435F457A 
+ 1316      49324347 
+ 1316      65744164 
+ 1316      64726573 
+ 1317              	.LASF0:
+ 1318 025c 7369676E 		.ascii	"signed char\000"
+ 1318      65642063 
+ 1318      68617200 
+ 1319              	.LASF43:
+ 1320 0268 443A5C5F 		.ascii	"D:\\_Project\\_MD\\cypress_button\\EZIIC_button.cyd"
+ 1320      50726F6A 
+ 1320      6563745C 
+ 1320      5F4D445C 
+ 1320      63797072 
+ 1321 0297 736E00   		.ascii	"sn\000"
+ 1322              	.LASF41:
+ 1323 029a 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1323      43313120 
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cc9wF9si.s 			page 36
+
+
+ 1323      352E342E 
+ 1323      31203230 
+ 1323      31363036 
+ 1324 02cd 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 1324      20726576 
+ 1324      6973696F 
+ 1324      6E203233 
+ 1324      37373135 
+ 1325 0300 73202D66 		.ascii	"s -ffunction-sections -ffat-lto-objects\000"
+ 1325      66756E63 
+ 1325      74696F6E 
+ 1325      2D736563 
+ 1325      74696F6E 
+ 1326              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

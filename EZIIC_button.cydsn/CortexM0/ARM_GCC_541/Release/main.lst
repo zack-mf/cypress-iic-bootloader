@@ -1,0 +1,2915 @@
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.TC_InterruptHandler,"ax",%progbits
+  20              		.align	1
+  21              		.global	TC_InterruptHandler
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	TC_InterruptHandler, %function
+  25              	TC_InterruptHandler:
+  26              	.LFB38:
+  27              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * Copyright YOUR COMPANY, THE YEAR
+   4:main.c        ****  * All Rights Reserved
+   5:main.c        ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:main.c        ****  *
+   7:main.c        ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:main.c        ****  * WHICH IS THE PROPERTY OF your company.
+   9:main.c        ****  *
+  10:main.c        ****  * ========================================
+  11:main.c        **** */
+  12:main.c        **** #include "project.h"
+  13:main.c        **** #include "string.h"
+  14:main.c        **** #include "stdio.h"
+  15:main.c        **** 
+  16:main.c        **** 
+  17:main.c        **** 
+  18:main.c        **** /* button event */
+  19:main.c        **** #define NOT_TOUCH		 0
+  20:main.c        **** #define VOL_UP        	 1
+  21:main.c        **** #define VOL_DOWN         2
+  22:main.c        **** #define FORMATION     	 4
+  23:main.c        **** #define PLAY_PAUSE    	 8
+  24:main.c        **** 
+  25:main.c        **** 
+  26:main.c        **** #define SW_FRONT_PROXIMITY		 0x0b
+  27:main.c        **** #define KEY_VOLUMEUP      	   	 115
+  28:main.c        **** #define KEY_VOLUMEDOWN        	 114
+  29:main.c        **** #define KEY_PLAYPAUSE            164
+  30:main.c        **** #define KEY_HOME     	         102
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 2
+
+
+  31:main.c        **** 
+  32:main.c        **** 
+  33:main.c        **** /* rel */
+  34:main.c        **** /*
+  35:main.c        **** #define SW_FRONT_PROXIMITY		 0x0b
+  36:main.c        **** #define KEY_VOLUMEUP      	   	 1
+  37:main.c        **** #define KEY_VOLUMEDOWN        	 2
+  38:main.c        **** #define KEY_PLAYPAUSE            3
+  39:main.c        **** #define KEY_HOME     	         4
+  40:main.c        **** */
+  41:main.c        **** 
+  42:main.c        **** 
+  43:main.c        **** #define SCAN_TIME_MS  10
+  44:main.c        **** 
+  45:main.c        **** #define RUN_UART_TUNER  1
+  46:main.c        **** 
+  47:main.c        **** #if RUN_UART_TUNER
+  48:main.c        ****     /* Packet header and tail information */
+  49:main.c        ****     static const uint8 header[]  = {0x0Du, 0x0Au};
+  50:main.c        ****     static const uint8 tail[]    = {0x00u, 0xFFu, 0xFFu};
+  51:main.c        **** #endif
+  52:main.c        **** 
+  53:main.c        **** // I2C COMMAND
+  54:main.c        **** #define REG15_UPDATE_MCU_CMD  0x36
+  55:main.c        **** 
+  56:main.c        **** typedef union
+  57:main.c        **** {
+  58:main.c        ****     struct{
+  59:main.c        ****         uint8_t reserve_reg[15]; // 0~14
+  60:main.c        ****         uint8_t updat_posc;      // register 15
+  61:main.c        ****     }reg;
+  62:main.c        ****     uint8_t reg_array[16];
+  63:main.c        **** } RW_I2C_REG;
+  64:main.c        **** 
+  65:main.c        **** // I2C registers
+  66:main.c        **** // R : Read only, R/W : Read and Write
+  67:main.c        **** typedef struct 
+  68:main.c        **** {                               
+  69:main.c        ****                              // reg number    | access right |      comment
+  70:main.c        ****     RW_I2C_REG  rw;          //    0 ~ 15     |    R/W       |   reserved R/W
+  71:main.c        ****     uint8  button_stat;      //    16         |    R         |   status of button 0 ~ 7 
+  72:main.c        ****     uint8  button_value;
+  73:main.c        ****   
+  74:main.c        **** }__attribute__ ((packed)) I2C_REG;
+  75:main.c        **** 
+  76:main.c        **** /* EZI2C buffer */
+  77:main.c        **** I2C_REG i2c;
+  78:main.c        **** #define EZI2C_RW_SIZE     (sizeof(i2c.rw))
+  79:main.c        **** #define EZI2C_SIZE        (sizeof(i2c))
+  80:main.c        **** 
+  81:main.c        **** uint8 capsense_status = 0;
+  82:main.c        **** uint8 send_status = 0;
+  83:main.c        **** uint8 time_counts = 0;
+  84:main.c        **** uint8 last_capsense = 0;
+  85:main.c        **** uint temp = 0;
+  86:main.c        **** 
+  87:main.c        **** uint8 key_buf[CapSense_TOTAL_WIDGETS] = {KEY_VOLUMEUP, KEY_VOLUMEDOWN, KEY_PLAYPAUSE, KEY_HOME};
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 3
+
+
+  88:main.c        **** 
+  89:main.c        **** 
+  90:main.c        **** #define UART_DEBUG 0
+  91:main.c        **** 
+  92:main.c        **** #if UART_DEBUG
+  93:main.c        **** char uartString[1024u] = {' '};
+  94:main.c        **** #endif
+  95:main.c        **** 
+  96:main.c        **** static void Init_I2C_Communication()
+  97:main.c        **** {
+  98:main.c        ****     // Zero ezi2cBuffer buffer
+  99:main.c        ****     memset((void*)&i2c,0x00,EZI2C_SIZE);
+ 100:main.c        ****     EZI2C_Start(); // Start I2C (Address : 0x08 , Data Rate : 100k ) 
+ 101:main.c        ****     /* EZI2C buffer parameters: 
+ 102:main.c        ****     *  EZI2C_SIZE - is thesize of the memory exposed to the I2C interface.
+ 103:main.c        ****     *  EZI2C_RW_SIZE - sets the boundary between the read/write and read only areas.
+ 104:main.c        ****     *                  The read/write area is first, followed by the read only area.
+ 105:main.c        ****     *  (void *)ezi2cBuffer - is the pointer to the memory exposed to the I2C interface. */
+ 106:main.c        ****     EZI2C_EzI2CSetBuffer1(EZI2C_SIZE, EZI2C_RW_SIZE , (void *)&i2c);
+ 107:main.c        **** }
+ 108:main.c        **** 
+ 109:main.c        **** void key_event(void){
+ 110:main.c        ****     
+ 111:main.c        ****     capsense_status = (uint8_t)  CapSense_IsAnyWidgetActive();
+ 112:main.c        ****     if(last_capsense != capsense_status){    
+ 113:main.c        ****         switch(capsense_status ^ last_capsense){
+ 114:main.c        ****             case VOL_UP:
+ 115:main.c        ****                 i2c.button_stat = KEY_VOLUMEUP;
+ 116:main.c        ****                 i2c.button_value = CapSense_dsRam.snsStatus[0];         
+ 117:main.c        ****                 time_counts = 0;
+ 118:main.c        ****                 CAP_INT_Write(!CAP_INT_Read());
+ 119:main.c        ****                 break;
+ 120:main.c        ****             case VOL_DOWN:
+ 121:main.c        ****                 i2c.button_stat = KEY_VOLUMEDOWN;
+ 122:main.c        ****                 i2c.button_value = CapSense_dsRam.snsStatus[1];
+ 123:main.c        ****                 time_counts = 0; 
+ 124:main.c        ****                 CAP_INT_Write(!CAP_INT_Read());
+ 125:main.c        ****                 break;
+ 126:main.c        ****             case FORMATION:
+ 127:main.c        ****                 i2c.button_stat = KEY_HOME;
+ 128:main.c        ****                 time_counts = 0;
+ 129:main.c        ****                 i2c.button_value = CapSense_dsRam.snsStatus[2];
+ 130:main.c        ****                 CAP_INT_Write(!CAP_INT_Read());
+ 131:main.c        ****                 break;
+ 132:main.c        ****             case PLAY_PAUSE:
+ 133:main.c        ****                 i2c.button_stat = KEY_PLAYPAUSE;
+ 134:main.c        ****                 i2c.button_value = CapSense_dsRam.snsStatus[3];
+ 135:main.c        ****                 time_counts = 0;
+ 136:main.c        ****                 CAP_INT_Write(!CAP_INT_Read());
+ 137:main.c        ****                 break;
+ 138:main.c        ****             default:
+ 139:main.c        ****                 temp = capsense_status;
+ 140:main.c        ****                 for(int i = 0; i < 4; i++){
+ 141:main.c        ****                     if(temp & 0x01){
+ 142:main.c        ****                         i2c.button_stat = key_buf[i];
+ 143:main.c        ****                         i2c.button_value = 0;
+ 144:main.c        ****                         CAP_INT_Write(!CAP_INT_Read());
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 4
+
+
+ 145:main.c        **** #if UART_DEBUG                          
+ 146:main.c        ****                         sprintf(uartString,".---- %d %d \r\n\n",
+ 147:main.c        ****                         i2c.button_stat, i2c.button_value);
+ 148:main.c        ****                         UART_UartPutString(uartString);
+ 149:main.c        **** #endif                         
+ 150:main.c        ****                     }
+ 151:main.c        ****                     temp = temp >> 1;
+ 152:main.c        ****                 }
+ 153:main.c        ****                 break;
+ 154:main.c        ****         }
+ 155:main.c        **** #if UART_DEBUG           
+ 156:main.c        ****             sprintf(uartString,".%d %d %d\r\n\n",
+ 157:main.c        ****                         capsense_status ^ last_capsense, i2c.button_stat, i2c.button_value);
+ 158:main.c        ****             UART_UartPutString(uartString);
+ 159:main.c        **** #endif     
+ 160:main.c        ****     }
+ 161:main.c        ****     last_capsense = capsense_status;
+ 162:main.c        **** }
+ 163:main.c        **** 
+ 164:main.c        **** 
+ 165:main.c        **** void ProcessI2CCommand()
+ 166:main.c        **** {
+ 167:main.c        ****     if (REG15_UPDATE_MCU_CMD == i2c.rw.reg.updat_posc)
+ 168:main.c        ****     {
+ 169:main.c        ****         /*
+ 170:main.c        ****         Schedules the Bootloader/Launcher to be launched and then performs a software reset to 
+ 171:main.c        ****         launch it.
+ 172:main.c        ****         Returns:
+ 173:main.c        ****         This method will never return. It will load a new application and reset the device.
+ 174:main.c        ****         */
+ 175:main.c        ****         // Bootloadable_Load();
+ 176:main.c        ****     }
+ 177:main.c        **** }
+ 178:main.c        **** 
+ 179:main.c        **** /***************************************************************************//**
+ 180:main.c        **** * Function Name: ISR_Timer
+ 181:main.c        **** ********************************************************************************
+ 182:main.c        **** *
+ 183:main.c        **** * Summary:
+ 184:main.c        **** * This function handles the Interrupt Service Routine for TCPWM Timer.
+ 185:main.c        **** * This ISR
+ 186:main.c        **** *   1. Clears the terminal count interrupt on Timer.
+ 187:main.c        **** *   2. Changes the LED state. Toggling ON and OFF.
+ 188:main.c        **** *
+ 189:main.c        **** * Parameters:
+ 190:main.c        **** *  None
+ 191:main.c        **** *
+ 192:main.c        **** * Return:
+ 193:main.c        **** *  None
+ 194:main.c        **** *
+ 195:main.c        **** *******************************************************************************/
+ 196:main.c        **** CY_ISR(TC_InterruptHandler)
+ 197:main.c        **** {
+  28              		.loc 1 197 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 5
+
+
+  32 0000 10B5     		push	{r4, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+ 198:main.c        ****     /* Clears the Timer terminal count interrupt */
+ 199:main.c        ****     Timer_ClearInterrupt(Timer_INTR_MASK_TC);
+  36              		.loc 1 199 0
+  37 0002 0120     		movs	r0, #1
+  38 0004 FFF7FEFF 		bl	Timer_ClearInterrupt
+  39              	.LVL0:
+ 200:main.c        ****     
+ 201:main.c        ****     /* Toggles the LED state */
+ 202:main.c        ****     time_counts ++;
+  40              		.loc 1 202 0
+  41 0008 024A     		ldr	r2, .L2
+ 203:main.c        **** }
+  42              		.loc 1 203 0
+  43              		@ sp needed
+ 202:main.c        **** }
+  44              		.loc 1 202 0
+  45 000a 1378     		ldrb	r3, [r2]
+  46 000c 0133     		adds	r3, r3, #1
+  47 000e 1370     		strb	r3, [r2]
+  48              		.loc 1 203 0
+  49 0010 10BD     		pop	{r4, pc}
+  50              	.L3:
+  51 0012 C046     		.align	2
+  52              	.L2:
+  53 0014 00000000 		.word	.LANCHOR0
+  54              		.cfi_endproc
+  55              	.LFE38:
+  56              		.size	TC_InterruptHandler, .-TC_InterruptHandler
+  57              		.section	.text.key_event,"ax",%progbits
+  58              		.align	1
+  59              		.global	key_event
+  60              		.code	16
+  61              		.thumb_func
+  62              		.type	key_event, %function
+  63              	key_event:
+  64              	.LFB36:
+ 109:main.c        ****     
+  65              		.loc 1 109 0
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 0
+  68              		@ frame_needed = 0, uses_anonymous_args = 0
+  69 0000 70B5     		push	{r4, r5, r6, lr}
+  70              		.cfi_def_cfa_offset 16
+  71              		.cfi_offset 4, -16
+  72              		.cfi_offset 5, -12
+  73              		.cfi_offset 6, -8
+  74              		.cfi_offset 14, -4
+ 111:main.c        ****     if(last_capsense != capsense_status){    
+  75              		.loc 1 111 0
+  76 0002 FFF7FEFF 		bl	CapSense_IsAnyWidgetActive
+  77              	.LVL1:
+  78 0006 2A4C     		ldr	r4, .L23
+  79 0008 0200     		movs	r2, r0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 6
+
+
+ 112:main.c        ****         switch(capsense_status ^ last_capsense){
+  80              		.loc 1 112 0
+  81 000a A378     		ldrb	r3, [r4, #2]
+ 111:main.c        ****     if(last_capsense != capsense_status){    
+  82              		.loc 1 111 0
+  83 000c C0B2     		uxtb	r0, r0
+  84 000e 6070     		strb	r0, [r4, #1]
+ 112:main.c        ****         switch(capsense_status ^ last_capsense){
+  85              		.loc 1 112 0
+  86 0010 9842     		cmp	r0, r3
+  87 0012 4AD0     		beq	.L6
+ 113:main.c        ****             case VOL_UP:
+  88              		.loc 1 113 0
+  89 0014 5840     		eors	r0, r3
+  90 0016 0138     		subs	r0, r0, #1
+  91 0018 0728     		cmp	r0, #7
+  92 001a 2BD8     		bhi	.L7
+  93 001c FFF7FEFF 		bl	__gnu_thumb1_case_uqi
+  94              	.L9:
+  95 0020 04       		.byte	(.L8-.L9)/2
+  96 0021 0A       		.byte	(.L10-.L9)/2
+  97 0022 2A       		.byte	(.L7-.L9)/2
+  98 0023 1B       		.byte	(.L11-.L9)/2
+  99 0024 2A       		.byte	(.L7-.L9)/2
+ 100 0025 2A       		.byte	(.L7-.L9)/2
+ 101 0026 2A       		.byte	(.L7-.L9)/2
+ 102 0027 24       		.byte	(.L12-.L9)/2
+ 103              		.p2align 1
+ 104              	.L8:
+ 115:main.c        ****                 i2c.button_value = CapSense_dsRam.snsStatus[0];         
+ 105              		.loc 1 115 0
+ 106 0028 7322     		movs	r2, #115
+ 107 002a 224B     		ldr	r3, .L23+4
+ 108 002c 1A74     		strb	r2, [r3, #16]
+ 116:main.c        ****                 time_counts = 0;
+ 109              		.loc 1 116 0
+ 110 002e 224A     		ldr	r2, .L23+8
+ 111 0030 127E     		ldrb	r2, [r2, #24]
+ 112 0032 04E0     		b	.L20
+ 113              	.L10:
+ 121:main.c        ****                 i2c.button_value = CapSense_dsRam.snsStatus[1];
+ 114              		.loc 1 121 0
+ 115 0034 7222     		movs	r2, #114
+ 116 0036 1F4B     		ldr	r3, .L23+4
+ 117 0038 1A74     		strb	r2, [r3, #16]
+ 122:main.c        ****                 time_counts = 0; 
+ 118              		.loc 1 122 0
+ 119 003a 1F4A     		ldr	r2, .L23+8
+ 120 003c 527E     		ldrb	r2, [r2, #25]
+ 121              	.L20:
+ 122 003e 5A74     		strb	r2, [r3, #17]
+ 123:main.c        ****                 CAP_INT_Write(!CAP_INT_Read());
+ 123              		.loc 1 123 0
+ 124 0040 0023     		movs	r3, #0
+ 125 0042 2370     		strb	r3, [r4]
+ 126              	.L21:
+ 124:main.c        ****                 break;
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 7
+
+
+ 127              		.loc 1 124 0
+ 128 0044 FFF7FEFF 		bl	CAP_INT_Read
+ 129              	.LVL2:
+ 130 0048 0300     		movs	r3, r0
+ 131 004a 5842     		rsbs	r0, r3, #0
+ 132 004c 5841     		adcs	r0, r0, r3
+ 133 004e C0B2     		uxtb	r0, r0
+ 134 0050 FFF7FEFF 		bl	CAP_INT_Write
+ 135              	.LVL3:
+ 125:main.c        ****             case FORMATION:
+ 136              		.loc 1 125 0
+ 137 0054 29E0     		b	.L6
+ 138              	.L11:
+ 127:main.c        ****                 time_counts = 0;
+ 139              		.loc 1 127 0
+ 140 0056 6622     		movs	r2, #102
+ 141 0058 164B     		ldr	r3, .L23+4
+ 142 005a 1A74     		strb	r2, [r3, #16]
+ 128:main.c        ****                 i2c.button_value = CapSense_dsRam.snsStatus[2];
+ 143              		.loc 1 128 0
+ 144 005c 0022     		movs	r2, #0
+ 145 005e 2270     		strb	r2, [r4]
+ 129:main.c        ****                 CAP_INT_Write(!CAP_INT_Read());
+ 146              		.loc 1 129 0
+ 147 0060 154A     		ldr	r2, .L23+8
+ 148 0062 927E     		ldrb	r2, [r2, #26]
+ 149 0064 5A74     		strb	r2, [r3, #17]
+ 150 0066 EDE7     		b	.L21
+ 151              	.L12:
+ 133:main.c        ****                 i2c.button_value = CapSense_dsRam.snsStatus[3];
+ 152              		.loc 1 133 0
+ 153 0068 A422     		movs	r2, #164
+ 154 006a 124B     		ldr	r3, .L23+4
+ 155 006c 1A74     		strb	r2, [r3, #16]
+ 134:main.c        ****                 time_counts = 0;
+ 156              		.loc 1 134 0
+ 157 006e 124A     		ldr	r2, .L23+8
+ 158 0070 D27E     		ldrb	r2, [r2, #27]
+ 159 0072 E4E7     		b	.L20
+ 160              	.L7:
+ 161              	.LBB4:
+ 140:main.c        ****                     if(temp & 0x01){
+ 162              		.loc 1 140 0
+ 163 0074 0025     		movs	r5, #0
+ 141:main.c        ****                         i2c.button_stat = key_buf[i];
+ 164              		.loc 1 141 0
+ 165 0076 0126     		movs	r6, #1
+ 166              	.LBE4:
+ 139:main.c        ****                 for(int i = 0; i < 4; i++){
+ 167              		.loc 1 139 0
+ 168 0078 D2B2     		uxtb	r2, r2
+ 169 007a 6260     		str	r2, [r4, #4]
+ 170              	.LVL4:
+ 171              	.L14:
+ 172              	.LBB5:
+ 141:main.c        ****                         i2c.button_stat = key_buf[i];
+ 173              		.loc 1 141 0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 8
+
+
+ 174 007c 6368     		ldr	r3, [r4, #4]
+ 175 007e 3342     		tst	r3, r6
+ 176 0080 0DD0     		beq	.L13
+ 142:main.c        ****                         i2c.button_value = 0;
+ 177              		.loc 1 142 0
+ 178 0082 0E4A     		ldr	r2, .L23+12
+ 179 0084 0B4B     		ldr	r3, .L23+4
+ 180 0086 AA5C     		ldrb	r2, [r5, r2]
+ 181 0088 1A74     		strb	r2, [r3, #16]
+ 143:main.c        ****                         CAP_INT_Write(!CAP_INT_Read());
+ 182              		.loc 1 143 0
+ 183 008a 0022     		movs	r2, #0
+ 184 008c 5A74     		strb	r2, [r3, #17]
+ 144:main.c        **** #if UART_DEBUG                          
+ 185              		.loc 1 144 0
+ 186 008e FFF7FEFF 		bl	CAP_INT_Read
+ 187              	.LVL5:
+ 188 0092 0300     		movs	r3, r0
+ 189 0094 5842     		rsbs	r0, r3, #0
+ 190 0096 5841     		adcs	r0, r0, r3
+ 191 0098 C0B2     		uxtb	r0, r0
+ 192 009a FFF7FEFF 		bl	CAP_INT_Write
+ 193              	.LVL6:
+ 194              	.L13:
+ 151:main.c        ****                 }
+ 195              		.loc 1 151 0 discriminator 2
+ 196 009e 6368     		ldr	r3, [r4, #4]
+ 140:main.c        ****                     if(temp & 0x01){
+ 197              		.loc 1 140 0 discriminator 2
+ 198 00a0 0135     		adds	r5, r5, #1
+ 199              	.LVL7:
+ 151:main.c        ****                 }
+ 200              		.loc 1 151 0 discriminator 2
+ 201 00a2 5B08     		lsrs	r3, r3, #1
+ 202 00a4 6360     		str	r3, [r4, #4]
+ 140:main.c        ****                     if(temp & 0x01){
+ 203              		.loc 1 140 0 discriminator 2
+ 204 00a6 042D     		cmp	r5, #4
+ 205 00a8 E8D1     		bne	.L14
+ 206              	.LVL8:
+ 207              	.L6:
+ 208              	.LBE5:
+ 161:main.c        **** }
+ 209              		.loc 1 161 0
+ 210 00aa 6378     		ldrb	r3, [r4, #1]
+ 162:main.c        **** 
+ 211              		.loc 1 162 0
+ 212              		@ sp needed
+ 161:main.c        **** }
+ 213              		.loc 1 161 0
+ 214 00ac A370     		strb	r3, [r4, #2]
+ 162:main.c        **** 
+ 215              		.loc 1 162 0
+ 216 00ae 70BD     		pop	{r4, r5, r6, pc}
+ 217              	.L24:
+ 218              		.align	2
+ 219              	.L23:
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 9
+
+
+ 220 00b0 00000000 		.word	.LANCHOR0
+ 221 00b4 00000000 		.word	i2c
+ 222 00b8 00000000 		.word	CapSense_dsRam
+ 223 00bc 00000000 		.word	.LANCHOR1
+ 224              		.cfi_endproc
+ 225              	.LFE36:
+ 226              		.size	key_event, .-key_event
+ 227              		.section	.text.ProcessI2CCommand,"ax",%progbits
+ 228              		.align	1
+ 229              		.global	ProcessI2CCommand
+ 230              		.code	16
+ 231              		.thumb_func
+ 232              		.type	ProcessI2CCommand, %function
+ 233              	ProcessI2CCommand:
+ 234              	.LFB37:
+ 166:main.c        ****     if (REG15_UPDATE_MCU_CMD == i2c.rw.reg.updat_posc)
+ 235              		.loc 1 166 0
+ 236              		.cfi_startproc
+ 237              		@ args = 0, pretend = 0, frame = 0
+ 238              		@ frame_needed = 0, uses_anonymous_args = 0
+ 239              		@ link register save eliminated.
+ 177:main.c        **** 
+ 240              		.loc 1 177 0
+ 241              		@ sp needed
+ 242 0000 7047     		bx	lr
+ 243              		.cfi_endproc
+ 244              	.LFE37:
+ 245              		.size	ProcessI2CCommand, .-ProcessI2CCommand
+ 246              		.section	.text.startup.main,"ax",%progbits
+ 247              		.align	1
+ 248              		.global	main
+ 249              		.code	16
+ 250              		.thumb_func
+ 251              		.type	main, %function
+ 252              	main:
+ 253              	.LFB39:
+ 204:main.c        **** 
+ 205:main.c        **** 
+ 206:main.c        **** int main(void)
+ 207:main.c        **** {
+ 254              		.loc 1 207 0
+ 255              		.cfi_startproc
+ 256              		@ Volatile: function does not return.
+ 257              		@ args = 0, pretend = 0, frame = 0
+ 258              		@ frame_needed = 0, uses_anonymous_args = 0
+ 259 0000 10B5     		push	{r4, lr}
+ 260              		.cfi_def_cfa_offset 8
+ 261              		.cfi_offset 4, -8
+ 262              		.cfi_offset 14, -4
+ 208:main.c        ****     CyGlobalIntEnable; /* Enable global interrupts. */
+ 263              		.loc 1 208 0
+ 264              		.syntax divided
+ 265              	@ 208 "main.c" 1
+ 266 0002 62B6     		CPSIE   i
+ 267              	@ 0 "" 2
+ 209:main.c        ****     
+ 210:main.c        ****     /* Starts the timer */
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 10
+
+
+ 211:main.c        ****     Timer_Start();
+ 268              		.loc 1 211 0
+ 269              		.thumb
+ 270              		.syntax unified
+ 271 0004 FFF7FEFF 		bl	Timer_Start
+ 272              	.LVL9:
+ 212:main.c        ****     
+ 213:main.c        ****     UART_Start();
+ 273              		.loc 1 213 0
+ 274 0008 FFF7FEFF 		bl	UART_Start
+ 275              	.LVL10:
+ 276              	.LBB8:
+ 277              	.LBB9:
+  99:main.c        ****     EZI2C_Start(); // Start I2C (Address : 0x08 , Data Rate : 100k ) 
+ 278              		.loc 1 99 0
+ 279 000c 1A4C     		ldr	r4, .L29
+ 280 000e 1222     		movs	r2, #18
+ 281 0010 0021     		movs	r1, #0
+ 282 0012 2000     		movs	r0, r4
+ 283 0014 FFF7FEFF 		bl	memset
+ 284              	.LVL11:
+ 100:main.c        ****     /* EZI2C buffer parameters: 
+ 285              		.loc 1 100 0
+ 286 0018 FFF7FEFF 		bl	EZI2C_Start
+ 287              	.LVL12:
+ 106:main.c        **** }
+ 288              		.loc 1 106 0
+ 289 001c 2200     		movs	r2, r4
+ 290 001e 1021     		movs	r1, #16
+ 291 0020 1220     		movs	r0, #18
+ 292 0022 FFF7FEFF 		bl	EZI2C_EzI2CSetBuffer1
+ 293              	.LVL13:
+ 294              	.LBE9:
+ 295              	.LBE8:
+ 214:main.c        ****     Init_I2C_Communication();
+ 215:main.c        ****     
+ 216:main.c        ****     /* Start CapSense Component */
+ 217:main.c        ****     CapSense_Start();
+ 296              		.loc 1 217 0
+ 297 0026 FFF7FEFF 		bl	CapSense_Start
+ 298              	.LVL14:
+ 218:main.c        **** #if RUN_UART_TUNER    
+ 219:main.c        ****     CapSense_TuInitialize();
+ 299              		.loc 1 219 0
+ 300 002a FFF7FEFF 		bl	CapSense_TuInitialize
+ 301              	.LVL15:
+ 220:main.c        **** #endif    
+ 221:main.c        **** 
+ 222:main.c        ****     CapSense_InitializeAllBaselines();
+ 302              		.loc 1 222 0
+ 303 002e FFF7FEFF 		bl	CapSense_InitializeAllBaselines
+ 304              	.LVL16:
+ 223:main.c        ****     /* Start initial scan */
+ 224:main.c        ****     CapSense_ScanAllWidgets();
+ 305              		.loc 1 224 0
+ 306 0032 FFF7FEFF 		bl	CapSense_ScanAllWidgets
+ 307              	.LVL17:
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 11
+
+
+ 225:main.c        ****     
+ 226:main.c        ****     /* Enable interrupt component and set up handler */
+ 227:main.c        ****     TC_Interrupt_StartEx(TC_InterruptHandler);
+ 308              		.loc 1 227 0
+ 309 0036 1148     		ldr	r0, .L29+4
+ 310 0038 FFF7FEFF 		bl	TC_Interrupt_StartEx
+ 311              	.LVL18:
+ 312              	.L28:
+ 228:main.c        ****     
+ 229:main.c        ****     for(;;)
+ 230:main.c        ****     {
+ 231:main.c        **** 
+ 232:main.c        ****         /* Do this only when a scan is done */
+ 233:main.c        ****         if(CapSense_NOT_BUSY == CapSense_IsBusy())
+ 313              		.loc 1 233 0
+ 314 003c FFF7FEFF 		bl	CapSense_IsBusy
+ 315              	.LVL19:
+ 316 0040 0028     		cmp	r0, #0
+ 317 0042 14D1     		bne	.L27
+ 234:main.c        ****         {
+ 235:main.c        ****             /* Process all widgets */
+ 236:main.c        ****             CapSense_ProcessAllWidgets();
+ 318              		.loc 1 236 0
+ 319 0044 FFF7FEFF 		bl	CapSense_ProcessAllWidgets
+ 320              	.LVL20:
+ 237:main.c        ****             
+ 238:main.c        **** #if  RUN_UART_TUNER           
+ 239:main.c        ****             /* To sync with Tuner application */
+ 240:main.c        ****             CapSense_RunTuner();
+ 321              		.loc 1 240 0
+ 322 0048 FFF7FEFF 		bl	CapSense_RunTuner
+ 323              	.LVL21:
+ 241:main.c        ****             
+ 242:main.c        ****              /* Send packet header */
+ 243:main.c        ****             UART_SpiUartPutArray((uint8 *)(&header), sizeof(header));
+ 324              		.loc 1 243 0
+ 325 004c 0C4C     		ldr	r4, .L29+8
+ 326 004e 0221     		movs	r1, #2
+ 327 0050 2000     		movs	r0, r4
+ 328 0052 FFF7FEFF 		bl	UART_SpiUartPutArray
+ 329              	.LVL22:
+ 244:main.c        ****             /* Send packet with CapSense data */
+ 245:main.c        ****             UART_SpiUartPutArray((uint8 *)(&CapSense_dsRam), sizeof(CapSense_dsRam));
+ 330              		.loc 1 245 0
+ 331 0056 9021     		movs	r1, #144
+ 332 0058 0A48     		ldr	r0, .L29+12
+ 333 005a FFF7FEFF 		bl	UART_SpiUartPutArray
+ 334              	.LVL23:
+ 246:main.c        ****             /* Send packet tail */
+ 247:main.c        ****             UART_SpiUartPutArray((uint8 *)(&tail), sizeof(tail));
+ 335              		.loc 1 247 0
+ 336 005e A01C     		adds	r0, r4, #2
+ 337 0060 0321     		movs	r1, #3
+ 338 0062 FFF7FEFF 		bl	UART_SpiUartPutArray
+ 339              	.LVL24:
+ 248:main.c        **** #endif            
+ 249:main.c        ****             /* process capsnese event and host interrupt */
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 12
+
+
+ 250:main.c        ****             //ProcessCapsenseEvent();
+ 251:main.c        ****             
+ 252:main.c        ****             //ProcessCapsenseEvent_1_1();            
+ 253:main.c        ****             
+ 254:main.c        ****             key_event();
+ 340              		.loc 1 254 0
+ 341 0066 FFF7FEFF 		bl	key_event
+ 342              	.LVL25:
+ 255:main.c        ****             
+ 256:main.c        ****             /* Start next scan */
+ 257:main.c        ****             CapSense_ScanAllWidgets();
+ 343              		.loc 1 257 0
+ 344 006a FFF7FEFF 		bl	CapSense_ScanAllWidgets
+ 345              	.LVL26:
+ 346              	.L27:
+ 258:main.c        ****         }
+ 259:main.c        ****         ProcessI2CCommand();
+ 260:main.c        ****         
+ 261:main.c        ****         CyDelay(SCAN_TIME_MS);
+ 347              		.loc 1 261 0
+ 348 006e 0A20     		movs	r0, #10
+ 349 0070 FFF7FEFF 		bl	CyDelay
+ 350              	.LVL27:
+ 262:main.c        ****     }
+ 351              		.loc 1 262 0
+ 352 0074 E2E7     		b	.L28
+ 353              	.L30:
+ 354 0076 C046     		.align	2
+ 355              	.L29:
+ 356 0078 00000000 		.word	i2c
+ 357 007c 00000000 		.word	TC_InterruptHandler
+ 358 0080 00000000 		.word	.LANCHOR2
+ 359 0084 00000000 		.word	CapSense_dsRam
+ 360              		.cfi_endproc
+ 361              	.LFE39:
+ 362              		.size	main, .-main
+ 363              		.global	key_buf
+ 364              		.global	temp
+ 365              		.global	last_capsense
+ 366              		.global	time_counts
+ 367              		.global	send_status
+ 368              		.global	capsense_status
+ 369              		.comm	i2c,18,1
+ 370              		.section	.rodata
+ 371              		.set	.LANCHOR2,. + 0
+ 372              		.type	header, %object
+ 373              		.size	header, 2
+ 374              	header:
+ 375 0000 0D       		.byte	13
+ 376 0001 0A       		.byte	10
+ 377              		.type	tail, %object
+ 378              		.size	tail, 3
+ 379              	tail:
+ 380 0002 00       		.byte	0
+ 381 0003 FF       		.byte	-1
+ 382 0004 FF       		.byte	-1
+ 383              		.data
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 13
+
+
+ 384              		.set	.LANCHOR1,. + 0
+ 385              		.type	key_buf, %object
+ 386              		.size	key_buf, 4
+ 387              	key_buf:
+ 388 0000 73       		.byte	115
+ 389 0001 72       		.byte	114
+ 390 0002 A4       		.byte	-92
+ 391 0003 66       		.byte	102
+ 392              		.bss
+ 393              		.align	2
+ 394              		.set	.LANCHOR0,. + 0
+ 395              		.type	time_counts, %object
+ 396              		.size	time_counts, 1
+ 397              	time_counts:
+ 398 0000 00       		.space	1
+ 399              		.type	capsense_status, %object
+ 400              		.size	capsense_status, 1
+ 401              	capsense_status:
+ 402 0001 00       		.space	1
+ 403              		.type	last_capsense, %object
+ 404              		.size	last_capsense, 1
+ 405              	last_capsense:
+ 406 0002 00       		.space	1
+ 407 0003 00       		.space	1
+ 408              		.type	temp, %object
+ 409              		.size	temp, 4
+ 410              	temp:
+ 411 0004 00000000 		.space	4
+ 412              		.type	send_status, %object
+ 413              		.size	send_status, 1
+ 414              	send_status:
+ 415 0008 00       		.space	1
+ 416              		.text
+ 417              	.Letext0:
+ 418              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 419              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 420              		.file 4 "Generated_Source\\PSoC4/cytypes.h"
+ 421              		.file 5 "Generated_Source\\PSoC4/CapSense_Configuration.h"
+ 422              		.file 6 "Generated_Source\\PSoC4/CapSense_Structure.h"
+ 423              		.file 7 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 424              		.file 8 "Generated_Source\\PSoC4/Timer.h"
+ 425              		.file 9 "Generated_Source\\PSoC4/CAP_INT.h"
+ 426              		.file 10 "Generated_Source\\PSoC4/EZI2C.h"
+ 427              		.file 11 "Generated_Source\\PSoC4/EZI2C_EZI2C.h"
+ 428              		.file 12 "Generated_Source\\PSoC4/UART.h"
+ 429              		.file 13 "Generated_Source\\PSoC4/CapSense_Control.h"
+ 430              		.file 14 "Generated_Source\\PSoC4/CapSense_Tuner.h"
+ 431              		.file 15 "Generated_Source\\PSoC4/CapSense_Filter.h"
+ 432              		.file 16 "Generated_Source\\PSoC4/CapSense_Sensing.h"
+ 433              		.file 17 "Generated_Source\\PSoC4/TC_Interrupt.h"
+ 434              		.file 18 "Generated_Source\\PSoC4/UART_SPI_UART.h"
+ 435              		.file 19 "Generated_Source\\PSoC4/CyLib.h"
+ 436              		.section	.debug_info,"",%progbits
+ 437              	.Ldebug_info0:
+ 438 0000 17080000 		.4byte	0x817
+ 439 0004 0400     		.2byte	0x4
+ 440 0006 00000000 		.4byte	.Ldebug_abbrev0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 14
+
+
+ 441 000a 04       		.byte	0x4
+ 442 000b 01       		.uleb128 0x1
+ 443 000c 4F050000 		.4byte	.LASF101
+ 444 0010 0C       		.byte	0xc
+ 445 0011 AA040000 		.4byte	.LASF102
+ 446 0015 8C010000 		.4byte	.LASF103
+ 447 0019 18000000 		.4byte	.Ldebug_ranges0+0x18
+ 448 001d 00000000 		.4byte	0
+ 449 0021 00000000 		.4byte	.Ldebug_line0
+ 450 0025 02       		.uleb128 0x2
+ 451 0026 01       		.byte	0x1
+ 452 0027 06       		.byte	0x6
+ 453 0028 C5010000 		.4byte	.LASF0
+ 454 002c 03       		.uleb128 0x3
+ 455 002d 5F020000 		.4byte	.LASF9
+ 456 0031 02       		.byte	0x2
+ 457 0032 1D       		.byte	0x1d
+ 458 0033 37000000 		.4byte	0x37
+ 459 0037 02       		.uleb128 0x2
+ 460 0038 01       		.byte	0x1
+ 461 0039 08       		.byte	0x8
+ 462 003a 78020000 		.4byte	.LASF1
+ 463 003e 02       		.uleb128 0x2
+ 464 003f 02       		.byte	0x2
+ 465 0040 05       		.byte	0x5
+ 466 0041 95000000 		.4byte	.LASF2
+ 467 0045 02       		.uleb128 0x2
+ 468 0046 02       		.byte	0x2
+ 469 0047 07       		.byte	0x7
+ 470 0048 43040000 		.4byte	.LASF3
+ 471 004c 02       		.uleb128 0x2
+ 472 004d 04       		.byte	0x4
+ 473 004e 05       		.byte	0x5
+ 474 004f 2B020000 		.4byte	.LASF4
+ 475 0053 02       		.uleb128 0x2
+ 476 0054 04       		.byte	0x4
+ 477 0055 07       		.byte	0x7
+ 478 0056 BC040000 		.4byte	.LASF5
+ 479 005a 02       		.uleb128 0x2
+ 480 005b 08       		.byte	0x8
+ 481 005c 05       		.byte	0x5
+ 482 005d EE000000 		.4byte	.LASF6
+ 483 0061 02       		.uleb128 0x2
+ 484 0062 08       		.byte	0x8
+ 485 0063 07       		.byte	0x7
+ 486 0064 3A030000 		.4byte	.LASF7
+ 487 0068 04       		.uleb128 0x4
+ 488 0069 04       		.byte	0x4
+ 489 006a 05       		.byte	0x5
+ 490 006b 696E7400 		.ascii	"int\000"
+ 491 006f 02       		.uleb128 0x2
+ 492 0070 04       		.byte	0x4
+ 493 0071 07       		.byte	0x7
+ 494 0072 82030000 		.4byte	.LASF8
+ 495 0076 03       		.uleb128 0x3
+ 496 0077 7E010000 		.4byte	.LASF10
+ 497 007b 03       		.byte	0x3
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 15
+
+
+ 498 007c 18       		.byte	0x18
+ 499 007d 2C000000 		.4byte	0x2c
+ 500 0081 05       		.uleb128 0x5
+ 501 0082 86010000 		.4byte	.LASF11
+ 502 0086 04       		.byte	0x4
+ 503 0087 E401     		.2byte	0x1e4
+ 504 0089 37000000 		.4byte	0x37
+ 505 008d 05       		.uleb128 0x5
+ 506 008e 50010000 		.4byte	.LASF12
+ 507 0092 04       		.byte	0x4
+ 508 0093 E501     		.2byte	0x1e5
+ 509 0095 45000000 		.4byte	0x45
+ 510 0099 05       		.uleb128 0x5
+ 511 009a A3040000 		.4byte	.LASF13
+ 512 009e 04       		.byte	0x4
+ 513 009f E601     		.2byte	0x1e6
+ 514 00a1 53000000 		.4byte	0x53
+ 515 00a5 02       		.uleb128 0x2
+ 516 00a6 04       		.byte	0x4
+ 517 00a7 04       		.byte	0x4
+ 518 00a8 E7010000 		.4byte	.LASF14
+ 519 00ac 02       		.uleb128 0x2
+ 520 00ad 08       		.byte	0x8
+ 521 00ae 04       		.byte	0x4
+ 522 00af E7050000 		.4byte	.LASF15
+ 523 00b3 02       		.uleb128 0x2
+ 524 00b4 01       		.byte	0x1
+ 525 00b5 08       		.byte	0x8
+ 526 00b6 19020000 		.4byte	.LASF16
+ 527 00ba 06       		.uleb128 0x6
+ 528 00bb 99000000 		.4byte	0x99
+ 529 00bf 02       		.uleb128 0x2
+ 530 00c0 08       		.byte	0x8
+ 531 00c1 04       		.byte	0x4
+ 532 00c2 9C020000 		.4byte	.LASF17
+ 533 00c6 02       		.uleb128 0x2
+ 534 00c7 04       		.byte	0x4
+ 535 00c8 07       		.byte	0x7
+ 536 00c9 C8000000 		.4byte	.LASF18
+ 537 00cd 05       		.uleb128 0x5
+ 538 00ce EA020000 		.4byte	.LASF19
+ 539 00d2 05       		.byte	0x5
+ 540 00d3 2A01     		.2byte	0x12a
+ 541 00d5 8D000000 		.4byte	0x8d
+ 542 00d9 05       		.uleb128 0x5
+ 543 00da DD030000 		.4byte	.LASF20
+ 544 00de 05       		.byte	0x5
+ 545 00df 2E01     		.2byte	0x12e
+ 546 00e1 81000000 		.4byte	0x81
+ 547 00e5 07       		.uleb128 0x7
+ 548 00e6 81000000 		.4byte	0x81
+ 549 00ea F5000000 		.4byte	0xf5
+ 550 00ee 08       		.uleb128 0x8
+ 551 00ef C6000000 		.4byte	0xc6
+ 552 00f3 00       		.byte	0
+ 553 00f4 00       		.byte	0
+ 554 00f5 09       		.uleb128 0x9
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 16
+
+
+ 555 00f6 10       		.byte	0x10
+ 556 00f7 06       		.byte	0x6
+ 557 00f8 F3       		.byte	0xf3
+ 558 00f9 8B010000 		.4byte	0x18b
+ 559 00fd 0A       		.uleb128 0xa
+ 560 00fe 2F040000 		.4byte	.LASF21
+ 561 0102 06       		.byte	0x6
+ 562 0103 F8       		.byte	0xf8
+ 563 0104 8D000000 		.4byte	0x8d
+ 564 0108 00       		.byte	0
+ 565 0109 0A       		.uleb128 0xa
+ 566 010a 49020000 		.4byte	.LASF22
+ 567 010e 06       		.byte	0x6
+ 568 010f FD       		.byte	0xfd
+ 569 0110 CD000000 		.4byte	0xcd
+ 570 0114 02       		.byte	0x2
+ 571 0115 0B       		.uleb128 0xb
+ 572 0116 3F010000 		.4byte	.LASF23
+ 573 011a 06       		.byte	0x6
+ 574 011b 0201     		.2byte	0x102
+ 575 011d 81000000 		.4byte	0x81
+ 576 0121 04       		.byte	0x4
+ 577 0122 0B       		.uleb128 0xb
+ 578 0123 86040000 		.4byte	.LASF24
+ 579 0127 06       		.byte	0x6
+ 580 0128 0701     		.2byte	0x107
+ 581 012a 81000000 		.4byte	0x81
+ 582 012e 05       		.byte	0x5
+ 583 012f 0B       		.uleb128 0xb
+ 584 0130 86020000 		.4byte	.LASF25
+ 585 0134 06       		.byte	0x6
+ 586 0135 0D01     		.2byte	0x10d
+ 587 0137 81000000 		.4byte	0x81
+ 588 013b 06       		.byte	0x6
+ 589 013c 0B       		.uleb128 0xb
+ 590 013d BD000000 		.4byte	.LASF26
+ 591 0141 06       		.byte	0x6
+ 592 0142 1301     		.2byte	0x113
+ 593 0144 81000000 		.4byte	0x81
+ 594 0148 07       		.byte	0x7
+ 595 0149 0B       		.uleb128 0xb
+ 596 014a C5020000 		.4byte	.LASF27
+ 597 014e 06       		.byte	0x6
+ 598 014f 1A01     		.2byte	0x11a
+ 599 0151 D9000000 		.4byte	0xd9
+ 600 0155 08       		.byte	0x8
+ 601 0156 0B       		.uleb128 0xb
+ 602 0157 88000000 		.4byte	.LASF28
+ 603 015b 06       		.byte	0x6
+ 604 015c 2101     		.2byte	0x121
+ 605 015e E5000000 		.4byte	0xe5
+ 606 0162 09       		.byte	0x9
+ 607 0163 0B       		.uleb128 0xb
+ 608 0164 55000000 		.4byte	.LASF29
+ 609 0168 06       		.byte	0x6
+ 610 0169 2601     		.2byte	0x126
+ 611 016b 81000000 		.4byte	0x81
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 17
+
+
+ 612 016f 0A       		.byte	0xa
+ 613 0170 0B       		.uleb128 0xb
+ 614 0171 BE010000 		.4byte	.LASF30
+ 615 0175 06       		.byte	0x6
+ 616 0176 2E01     		.2byte	0x12e
+ 617 0178 8D000000 		.4byte	0x8d
+ 618 017c 0C       		.byte	0xc
+ 619 017d 0B       		.uleb128 0xb
+ 620 017e 09010000 		.4byte	.LASF31
+ 621 0182 06       		.byte	0x6
+ 622 0183 3301     		.2byte	0x133
+ 623 0185 81000000 		.4byte	0x81
+ 624 0189 0E       		.byte	0xe
+ 625 018a 00       		.byte	0
+ 626 018b 05       		.uleb128 0x5
+ 627 018c 9F000000 		.4byte	.LASF32
+ 628 0190 06       		.byte	0x6
+ 629 0191 3401     		.2byte	0x134
+ 630 0193 F5000000 		.4byte	0xf5
+ 631 0197 0C       		.uleb128 0xc
+ 632 0198 40       		.byte	0x40
+ 633 0199 06       		.byte	0x6
+ 634 019a 3A01     		.2byte	0x13a
+ 635 019c D4010000 		.4byte	0x1d4
+ 636 01a0 0D       		.uleb128 0xd
+ 637 01a1 757000   		.ascii	"up\000"
+ 638 01a4 06       		.byte	0x6
+ 639 01a5 3F01     		.2byte	0x13f
+ 640 01a7 8B010000 		.4byte	0x18b
+ 641 01ab 00       		.byte	0
+ 642 01ac 0B       		.uleb128 0xb
+ 643 01ad 14060000 		.4byte	.LASF33
+ 644 01b1 06       		.byte	0x6
+ 645 01b2 4401     		.2byte	0x144
+ 646 01b4 8B010000 		.4byte	0x18b
+ 647 01b8 10       		.byte	0x10
+ 648 01b9 0B       		.uleb128 0xb
+ 649 01ba 2A040000 		.4byte	.LASF34
+ 650 01be 06       		.byte	0x6
+ 651 01bf 4901     		.2byte	0x149
+ 652 01c1 8B010000 		.4byte	0x18b
+ 653 01c5 20       		.byte	0x20
+ 654 01c6 0B       		.uleb128 0xb
+ 655 01c7 BF020000 		.4byte	.LASF35
+ 656 01cb 06       		.byte	0x6
+ 657 01cc 4E01     		.2byte	0x14e
+ 658 01ce 8B010000 		.4byte	0x18b
+ 659 01d2 30       		.byte	0x30
+ 660 01d3 00       		.byte	0
+ 661 01d4 05       		.uleb128 0x5
+ 662 01d5 ED010000 		.4byte	.LASF36
+ 663 01d9 06       		.byte	0x6
+ 664 01da 4F01     		.2byte	0x14f
+ 665 01dc 97010000 		.4byte	0x197
+ 666 01e0 0C       		.uleb128 0xc
+ 667 01e1 0A       		.byte	0xa
+ 668 01e2 06       		.byte	0x6
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 18
+
+
+ 669 01e3 5501     		.2byte	0x155
+ 670 01e5 38020000 		.4byte	0x238
+ 671 01e9 0D       		.uleb128 0xd
+ 672 01ea 72617700 		.ascii	"raw\000"
+ 673 01ee 06       		.byte	0x6
+ 674 01ef 5A01     		.2byte	0x15a
+ 675 01f1 38020000 		.4byte	0x238
+ 676 01f5 00       		.byte	0
+ 677 01f6 0B       		.uleb128 0xb
+ 678 01f7 50000000 		.4byte	.LASF37
+ 679 01fb 06       		.byte	0x6
+ 680 01fc 5F01     		.2byte	0x15f
+ 681 01fe 38020000 		.4byte	0x238
+ 682 0202 02       		.byte	0x2
+ 683 0203 0B       		.uleb128 0xb
+ 684 0204 E5040000 		.4byte	.LASF38
+ 685 0208 06       		.byte	0x6
+ 686 0209 6501     		.2byte	0x165
+ 687 020b E5000000 		.4byte	0xe5
+ 688 020f 04       		.byte	0x4
+ 689 0210 0B       		.uleb128 0xb
+ 690 0211 63000000 		.4byte	.LASF39
+ 691 0215 06       		.byte	0x6
+ 692 0216 6A01     		.2byte	0x16a
+ 693 0218 CD000000 		.4byte	0xcd
+ 694 021c 06       		.byte	0x6
+ 695 021d 0B       		.uleb128 0xb
+ 696 021e 2A050000 		.4byte	.LASF40
+ 697 0222 06       		.byte	0x6
+ 698 0223 6F01     		.2byte	0x16f
+ 699 0225 48020000 		.4byte	0x248
+ 700 0229 08       		.byte	0x8
+ 701 022a 0B       		.uleb128 0xb
+ 702 022b DA000000 		.4byte	.LASF41
+ 703 022f 06       		.byte	0x6
+ 704 0230 7401     		.2byte	0x174
+ 705 0232 E5000000 		.4byte	0xe5
+ 706 0236 09       		.byte	0x9
+ 707 0237 00       		.byte	0
+ 708 0238 07       		.uleb128 0x7
+ 709 0239 8D000000 		.4byte	0x8d
+ 710 023d 48020000 		.4byte	0x248
+ 711 0241 08       		.uleb128 0x8
+ 712 0242 C6000000 		.4byte	0xc6
+ 713 0246 00       		.byte	0
+ 714 0247 00       		.byte	0
+ 715 0248 07       		.uleb128 0x7
+ 716 0249 D9000000 		.4byte	0xd9
+ 717 024d 58020000 		.4byte	0x258
+ 718 0251 08       		.uleb128 0x8
+ 719 0252 C6000000 		.4byte	0xc6
+ 720 0256 00       		.byte	0
+ 721 0257 00       		.byte	0
+ 722 0258 05       		.uleb128 0x5
+ 723 0259 A5030000 		.4byte	.LASF42
+ 724 025d 06       		.byte	0x6
+ 725 025e 7501     		.2byte	0x175
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 19
+
+
+ 726 0260 E0010000 		.4byte	0x1e0
+ 727 0264 0C       		.uleb128 0xc
+ 728 0265 28       		.byte	0x28
+ 729 0266 06       		.byte	0x6
+ 730 0267 7B01     		.2byte	0x17b
+ 731 0269 A1020000 		.4byte	0x2a1
+ 732 026d 0D       		.uleb128 0xd
+ 733 026e 757000   		.ascii	"up\000"
+ 734 0271 06       		.byte	0x6
+ 735 0272 8001     		.2byte	0x180
+ 736 0274 A1020000 		.4byte	0x2a1
+ 737 0278 00       		.byte	0
+ 738 0279 0B       		.uleb128 0xb
+ 739 027a 14060000 		.4byte	.LASF33
+ 740 027e 06       		.byte	0x6
+ 741 027f 8501     		.2byte	0x185
+ 742 0281 A1020000 		.4byte	0x2a1
+ 743 0285 0A       		.byte	0xa
+ 744 0286 0B       		.uleb128 0xb
+ 745 0287 2A040000 		.4byte	.LASF34
+ 746 028b 06       		.byte	0x6
+ 747 028c 8A01     		.2byte	0x18a
+ 748 028e A1020000 		.4byte	0x2a1
+ 749 0292 14       		.byte	0x14
+ 750 0293 0B       		.uleb128 0xb
+ 751 0294 BF020000 		.4byte	.LASF35
+ 752 0298 06       		.byte	0x6
+ 753 0299 8F01     		.2byte	0x18f
+ 754 029b A1020000 		.4byte	0x2a1
+ 755 029f 1E       		.byte	0x1e
+ 756 02a0 00       		.byte	0
+ 757 02a1 07       		.uleb128 0x7
+ 758 02a2 58020000 		.4byte	0x258
+ 759 02a6 B1020000 		.4byte	0x2b1
+ 760 02aa 08       		.uleb128 0x8
+ 761 02ab C6000000 		.4byte	0xc6
+ 762 02af 00       		.byte	0
+ 763 02b0 00       		.byte	0
+ 764 02b1 05       		.uleb128 0x5
+ 765 02b2 1D030000 		.4byte	.LASF43
+ 766 02b6 06       		.byte	0x6
+ 767 02b7 9001     		.2byte	0x190
+ 768 02b9 64020000 		.4byte	0x264
+ 769 02bd 0C       		.uleb128 0xc
+ 770 02be 90       		.byte	0x90
+ 771 02bf 06       		.byte	0x6
+ 772 02c0 9601     		.2byte	0x196
+ 773 02c2 BE030000 		.4byte	0x3be
+ 774 02c6 0B       		.uleb128 0xb
+ 775 02c7 D1000000 		.4byte	.LASF44
+ 776 02cb 06       		.byte	0x6
+ 777 02cc 9D01     		.2byte	0x19d
+ 778 02ce 8D000000 		.4byte	0x8d
+ 779 02d2 00       		.byte	0
+ 780 02d3 0B       		.uleb128 0xb
+ 781 02d4 47010000 		.4byte	.LASF45
+ 782 02d8 06       		.byte	0x6
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 20
+
+
+ 783 02d9 A201     		.2byte	0x1a2
+ 784 02db 8D000000 		.4byte	0x8d
+ 785 02df 02       		.byte	0x2
+ 786 02e0 0B       		.uleb128 0xb
+ 787 02e1 FF030000 		.4byte	.LASF46
+ 788 02e5 06       		.byte	0x6
+ 789 02e6 A701     		.2byte	0x1a7
+ 790 02e8 8D000000 		.4byte	0x8d
+ 791 02ec 04       		.byte	0x4
+ 792 02ed 0B       		.uleb128 0xb
+ 793 02ee 3A040000 		.4byte	.LASF47
+ 794 02f2 06       		.byte	0x6
+ 795 02f3 AD01     		.2byte	0x1ad
+ 796 02f5 8D000000 		.4byte	0x8d
+ 797 02f9 06       		.byte	0x6
+ 798 02fa 0B       		.uleb128 0xb
+ 799 02fb 7A040000 		.4byte	.LASF48
+ 800 02ff 06       		.byte	0x6
+ 801 0300 B201     		.2byte	0x1b2
+ 802 0302 8D000000 		.4byte	0x8d
+ 803 0306 08       		.byte	0x8
+ 804 0307 0B       		.uleb128 0xb
+ 805 0308 F8030000 		.4byte	.LASF49
+ 806 030c 06       		.byte	0x6
+ 807 030d B701     		.2byte	0x1b7
+ 808 030f BA000000 		.4byte	0xba
+ 809 0313 0C       		.byte	0xc
+ 810 0314 0B       		.uleb128 0xb
+ 811 0315 91020000 		.4byte	.LASF50
+ 812 0319 06       		.byte	0x6
+ 813 031a BD01     		.2byte	0x1bd
+ 814 031c BE030000 		.4byte	0x3be
+ 815 0320 10       		.byte	0x10
+ 816 0321 0B       		.uleb128 0xb
+ 817 0322 B4020000 		.4byte	.LASF51
+ 818 0326 06       		.byte	0x6
+ 819 0327 C401     		.2byte	0x1c4
+ 820 0329 BE030000 		.4byte	0x3be
+ 821 032d 14       		.byte	0x14
+ 822 032e 0B       		.uleb128 0xb
+ 823 032f 19060000 		.4byte	.LASF52
+ 824 0333 06       		.byte	0x6
+ 825 0334 D401     		.2byte	0x1d4
+ 826 0336 CE030000 		.4byte	0x3ce
+ 827 033a 18       		.byte	0x18
+ 828 033b 0B       		.uleb128 0xb
+ 829 033c E3000000 		.4byte	.LASF53
+ 830 0340 06       		.byte	0x6
+ 831 0341 DA01     		.2byte	0x1da
+ 832 0343 8D000000 		.4byte	0x8d
+ 833 0347 1C       		.byte	0x1c
+ 834 0348 0B       		.uleb128 0xb
+ 835 0349 70040000 		.4byte	.LASF54
+ 836 034d 06       		.byte	0x6
+ 837 034e DF01     		.2byte	0x1df
+ 838 0350 81000000 		.4byte	0x81
+ 839 0354 1E       		.byte	0x1e
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 21
+
+
+ 840 0355 0B       		.uleb128 0xb
+ 841 0356 12000000 		.4byte	.LASF55
+ 842 035a 06       		.byte	0x6
+ 843 035b E401     		.2byte	0x1e4
+ 844 035d D4010000 		.4byte	0x1d4
+ 845 0361 20       		.byte	0x20
+ 846 0362 0B       		.uleb128 0xb
+ 847 0363 68040000 		.4byte	.LASF56
+ 848 0367 06       		.byte	0x6
+ 849 0368 E901     		.2byte	0x1e9
+ 850 036a B1020000 		.4byte	0x2b1
+ 851 036e 60       		.byte	0x60
+ 852 036f 0B       		.uleb128 0xb
+ 853 0370 EE050000 		.4byte	.LASF57
+ 854 0374 06       		.byte	0x6
+ 855 0375 EE01     		.2byte	0x1ee
+ 856 0377 81000000 		.4byte	0x81
+ 857 037b 88       		.byte	0x88
+ 858 037c 0B       		.uleb128 0xb
+ 859 037d 09020000 		.4byte	.LASF58
+ 860 0381 06       		.byte	0x6
+ 861 0382 F301     		.2byte	0x1f3
+ 862 0384 81000000 		.4byte	0x81
+ 863 0388 89       		.byte	0x89
+ 864 0389 0B       		.uleb128 0xb
+ 865 038a 07040000 		.4byte	.LASF59
+ 866 038e 06       		.byte	0x6
+ 867 038f F801     		.2byte	0x1f8
+ 868 0391 8D000000 		.4byte	0x8d
+ 869 0395 8A       		.byte	0x8a
+ 870 0396 0B       		.uleb128 0xb
+ 871 0397 1B000000 		.4byte	.LASF60
+ 872 039b 06       		.byte	0x6
+ 873 039c FD01     		.2byte	0x1fd
+ 874 039e 38020000 		.4byte	0x238
+ 875 03a2 8C       		.byte	0x8c
+ 876 03a3 0B       		.uleb128 0xb
+ 877 03a4 B1040000 		.4byte	.LASF61
+ 878 03a8 06       		.byte	0x6
+ 879 03a9 0202     		.2byte	0x202
+ 880 03ab 81000000 		.4byte	0x81
+ 881 03af 8E       		.byte	0x8e
+ 882 03b0 0B       		.uleb128 0xb
+ 883 03b1 2B000000 		.4byte	.LASF62
+ 884 03b5 06       		.byte	0x6
+ 885 03b6 0702     		.2byte	0x207
+ 886 03b8 81000000 		.4byte	0x81
+ 887 03bc 8F       		.byte	0x8f
+ 888 03bd 00       		.byte	0
+ 889 03be 07       		.uleb128 0x7
+ 890 03bf 99000000 		.4byte	0x99
+ 891 03c3 CE030000 		.4byte	0x3ce
+ 892 03c7 08       		.uleb128 0x8
+ 893 03c8 C6000000 		.4byte	0xc6
+ 894 03cc 00       		.byte	0
+ 895 03cd 00       		.byte	0
+ 896 03ce 07       		.uleb128 0x7
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 22
+
+
+ 897 03cf 81000000 		.4byte	0x81
+ 898 03d3 DE030000 		.4byte	0x3de
+ 899 03d7 08       		.uleb128 0x8
+ 900 03d8 C6000000 		.4byte	0xc6
+ 901 03dc 03       		.byte	0x3
+ 902 03dd 00       		.byte	0
+ 903 03de 05       		.uleb128 0x5
+ 904 03df 8F040000 		.4byte	.LASF63
+ 905 03e3 06       		.byte	0x6
+ 906 03e4 0802     		.2byte	0x208
+ 907 03e6 BD020000 		.4byte	0x2bd
+ 908 03ea 03       		.uleb128 0x3
+ 909 03eb 04010000 		.4byte	.LASF64
+ 910 03ef 07       		.byte	0x7
+ 911 03f0 6C       		.byte	0x6c
+ 912 03f1 6F000000 		.4byte	0x6f
+ 913 03f5 09       		.uleb128 0x9
+ 914 03f6 10       		.byte	0x10
+ 915 03f7 01       		.byte	0x1
+ 916 03f8 3A       		.byte	0x3a
+ 917 03f9 16040000 		.4byte	0x416
+ 918 03fd 0A       		.uleb128 0xa
+ 919 03fe DB010000 		.4byte	.LASF65
+ 920 0402 01       		.byte	0x1
+ 921 0403 3B       		.byte	0x3b
+ 922 0404 16040000 		.4byte	0x416
+ 923 0408 00       		.byte	0
+ 924 0409 0A       		.uleb128 0xa
+ 925 040a DA040000 		.4byte	.LASF66
+ 926 040e 01       		.byte	0x1
+ 927 040f 3C       		.byte	0x3c
+ 928 0410 76000000 		.4byte	0x76
+ 929 0414 0F       		.byte	0xf
+ 930 0415 00       		.byte	0
+ 931 0416 07       		.uleb128 0x7
+ 932 0417 76000000 		.4byte	0x76
+ 933 041b 26040000 		.4byte	0x426
+ 934 041f 08       		.uleb128 0x8
+ 935 0420 C6000000 		.4byte	0xc6
+ 936 0424 0E       		.byte	0xe
+ 937 0425 00       		.byte	0
+ 938 0426 0E       		.uleb128 0xe
+ 939 0427 10       		.byte	0x10
+ 940 0428 01       		.byte	0x1
+ 941 0429 38       		.byte	0x38
+ 942 042a 45040000 		.4byte	0x445
+ 943 042e 0F       		.uleb128 0xf
+ 944 042f 72656700 		.ascii	"reg\000"
+ 945 0433 01       		.byte	0x1
+ 946 0434 3D       		.byte	0x3d
+ 947 0435 F5030000 		.4byte	0x3f5
+ 948 0439 10       		.uleb128 0x10
+ 949 043a DD050000 		.4byte	.LASF67
+ 950 043e 01       		.byte	0x1
+ 951 043f 3E       		.byte	0x3e
+ 952 0440 45040000 		.4byte	0x445
+ 953 0444 00       		.byte	0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 23
+
+
+ 954 0445 07       		.uleb128 0x7
+ 955 0446 76000000 		.4byte	0x76
+ 956 044a 55040000 		.4byte	0x455
+ 957 044e 08       		.uleb128 0x8
+ 958 044f C6000000 		.4byte	0xc6
+ 959 0453 0F       		.byte	0xf
+ 960 0454 00       		.byte	0
+ 961 0455 03       		.uleb128 0x3
+ 962 0456 68030000 		.4byte	.LASF68
+ 963 045a 01       		.byte	0x1
+ 964 045b 3F       		.byte	0x3f
+ 965 045c 26040000 		.4byte	0x426
+ 966 0460 09       		.uleb128 0x9
+ 967 0461 12       		.byte	0x12
+ 968 0462 01       		.byte	0x1
+ 969 0463 43       		.byte	0x43
+ 970 0464 8C040000 		.4byte	0x48c
+ 971 0468 11       		.uleb128 0x11
+ 972 0469 727700   		.ascii	"rw\000"
+ 973 046c 01       		.byte	0x1
+ 974 046d 46       		.byte	0x46
+ 975 046e 55040000 		.4byte	0x455
+ 976 0472 00       		.byte	0
+ 977 0473 0A       		.uleb128 0xa
+ 978 0474 72010000 		.4byte	.LASF69
+ 979 0478 01       		.byte	0x1
+ 980 0479 47       		.byte	0x47
+ 981 047a 81000000 		.4byte	0x81
+ 982 047e 10       		.byte	0x10
+ 983 047f 0A       		.uleb128 0xa
+ 984 0480 52020000 		.4byte	.LASF70
+ 985 0484 01       		.byte	0x1
+ 986 0485 48       		.byte	0x48
+ 987 0486 81000000 		.4byte	0x81
+ 988 048a 11       		.byte	0x11
+ 989 048b 00       		.byte	0
+ 990 048c 03       		.uleb128 0x3
+ 991 048d D5030000 		.4byte	.LASF71
+ 992 0491 01       		.byte	0x1
+ 993 0492 4A       		.byte	0x4a
+ 994 0493 60040000 		.4byte	0x460
+ 995 0497 12       		.uleb128 0x12
+ 996 0498 56040000 		.4byte	.LASF104
+ 997 049c 01       		.byte	0x1
+ 998 049d A5       		.byte	0xa5
+ 999 049e 01       		.byte	0x1
+ 1000 049f 13       		.uleb128 0x13
+ 1001 04a0 16010000 		.4byte	.LASF72
+ 1002 04a4 01       		.byte	0x1
+ 1003 04a5 C4       		.byte	0xc4
+ 1004 04a6 00000000 		.4byte	.LFB38
+ 1005 04aa 18000000 		.4byte	.LFE38-.LFB38
+ 1006 04ae 01       		.uleb128 0x1
+ 1007 04af 9C       		.byte	0x9c
+ 1008 04b0 C4040000 		.4byte	0x4c4
+ 1009 04b4 14       		.uleb128 0x14
+ 1010 04b5 08000000 		.4byte	.LVL0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 24
+
+
+ 1011 04b9 47070000 		.4byte	0x747
+ 1012 04bd 15       		.uleb128 0x15
+ 1013 04be 01       		.uleb128 0x1
+ 1014 04bf 50       		.byte	0x50
+ 1015 04c0 01       		.uleb128 0x1
+ 1016 04c1 31       		.byte	0x31
+ 1017 04c2 00       		.byte	0
+ 1018 04c3 00       		.byte	0
+ 1019 04c4 13       		.uleb128 0x13
+ 1020 04c5 D1010000 		.4byte	.LASF73
+ 1021 04c9 01       		.byte	0x1
+ 1022 04ca 6D       		.byte	0x6d
+ 1023 04cb 00000000 		.4byte	.LFB36
+ 1024 04cf C0000000 		.4byte	.LFE36-.LFB36
+ 1025 04d3 01       		.uleb128 0x1
+ 1026 04d4 9C       		.byte	0x9c
+ 1027 04d5 1E050000 		.4byte	0x51e
+ 1028 04d9 16       		.uleb128 0x16
+ 1029 04da 00000000 		.4byte	.Ldebug_ranges0+0
+ 1030 04de 02050000 		.4byte	0x502
+ 1031 04e2 17       		.uleb128 0x17
+ 1032 04e3 6900     		.ascii	"i\000"
+ 1033 04e5 01       		.byte	0x1
+ 1034 04e6 8C       		.byte	0x8c
+ 1035 04e7 68000000 		.4byte	0x68
+ 1036 04eb 00000000 		.4byte	.LLST0
+ 1037 04ef 18       		.uleb128 0x18
+ 1038 04f0 92000000 		.4byte	.LVL5
+ 1039 04f4 53070000 		.4byte	0x753
+ 1040 04f8 18       		.uleb128 0x18
+ 1041 04f9 9E000000 		.4byte	.LVL6
+ 1042 04fd 5E070000 		.4byte	0x75e
+ 1043 0501 00       		.byte	0
+ 1044 0502 18       		.uleb128 0x18
+ 1045 0503 06000000 		.4byte	.LVL1
+ 1046 0507 69070000 		.4byte	0x769
+ 1047 050b 18       		.uleb128 0x18
+ 1048 050c 48000000 		.4byte	.LVL2
+ 1049 0510 53070000 		.4byte	0x753
+ 1050 0514 18       		.uleb128 0x18
+ 1051 0515 54000000 		.4byte	.LVL3
+ 1052 0519 5E070000 		.4byte	0x75e
+ 1053 051d 00       		.byte	0
+ 1054 051e 19       		.uleb128 0x19
+ 1055 051f 97040000 		.4byte	0x497
+ 1056 0523 00000000 		.4byte	.LFB37
+ 1057 0527 02000000 		.4byte	.LFE37-.LFB37
+ 1058 052b 01       		.uleb128 0x1
+ 1059 052c 9C       		.byte	0x9c
+ 1060 052d 1A       		.uleb128 0x1a
+ 1061 052e 51030000 		.4byte	.LASF105
+ 1062 0532 01       		.byte	0x1
+ 1063 0533 60       		.byte	0x60
+ 1064 0534 01       		.byte	0x1
+ 1065 0535 1B       		.uleb128 0x1b
+ 1066 0536 1A040000 		.4byte	.LASF106
+ 1067 053a 01       		.byte	0x1
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 25
+
+
+ 1068 053b CE       		.byte	0xce
+ 1069 053c 68000000 		.4byte	0x68
+ 1070 0540 00000000 		.4byte	.LFB39
+ 1071 0544 88000000 		.4byte	.LFE39-.LFB39
+ 1072 0548 01       		.uleb128 0x1
+ 1073 0549 9C       		.byte	0x9c
+ 1074 054a 73060000 		.4byte	0x673
+ 1075 054e 1C       		.uleb128 0x1c
+ 1076 054f 2D050000 		.4byte	0x52d
+ 1077 0553 0C000000 		.4byte	.LBB8
+ 1078 0557 1A000000 		.4byte	.LBE8-.LBB8
+ 1079 055b 01       		.byte	0x1
+ 1080 055c D6       		.byte	0xd6
+ 1081 055d A3050000 		.4byte	0x5a3
+ 1082 0561 1D       		.uleb128 0x1d
+ 1083 0562 18000000 		.4byte	.LVL11
+ 1084 0566 75070000 		.4byte	0x775
+ 1085 056a 7F050000 		.4byte	0x57f
+ 1086 056e 15       		.uleb128 0x15
+ 1087 056f 01       		.uleb128 0x1
+ 1088 0570 50       		.byte	0x50
+ 1089 0571 02       		.uleb128 0x2
+ 1090 0572 74       		.byte	0x74
+ 1091 0573 00       		.sleb128 0
+ 1092 0574 15       		.uleb128 0x15
+ 1093 0575 01       		.uleb128 0x1
+ 1094 0576 51       		.byte	0x51
+ 1095 0577 01       		.uleb128 0x1
+ 1096 0578 30       		.byte	0x30
+ 1097 0579 15       		.uleb128 0x15
+ 1098 057a 01       		.uleb128 0x1
+ 1099 057b 52       		.byte	0x52
+ 1100 057c 01       		.uleb128 0x1
+ 1101 057d 42       		.byte	0x42
+ 1102 057e 00       		.byte	0
+ 1103 057f 18       		.uleb128 0x18
+ 1104 0580 1C000000 		.4byte	.LVL12
+ 1105 0584 7E070000 		.4byte	0x77e
+ 1106 0588 14       		.uleb128 0x14
+ 1107 0589 26000000 		.4byte	.LVL13
+ 1108 058d 89070000 		.4byte	0x789
+ 1109 0591 15       		.uleb128 0x15
+ 1110 0592 01       		.uleb128 0x1
+ 1111 0593 50       		.byte	0x50
+ 1112 0594 01       		.uleb128 0x1
+ 1113 0595 42       		.byte	0x42
+ 1114 0596 15       		.uleb128 0x15
+ 1115 0597 01       		.uleb128 0x1
+ 1116 0598 51       		.byte	0x51
+ 1117 0599 01       		.uleb128 0x1
+ 1118 059a 40       		.byte	0x40
+ 1119 059b 15       		.uleb128 0x15
+ 1120 059c 01       		.uleb128 0x1
+ 1121 059d 52       		.byte	0x52
+ 1122 059e 02       		.uleb128 0x2
+ 1123 059f 74       		.byte	0x74
+ 1124 05a0 00       		.sleb128 0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 26
+
+
+ 1125 05a1 00       		.byte	0
+ 1126 05a2 00       		.byte	0
+ 1127 05a3 18       		.uleb128 0x18
+ 1128 05a4 08000000 		.4byte	.LVL9
+ 1129 05a8 94070000 		.4byte	0x794
+ 1130 05ac 18       		.uleb128 0x18
+ 1131 05ad 0C000000 		.4byte	.LVL10
+ 1132 05b1 A0070000 		.4byte	0x7a0
+ 1133 05b5 18       		.uleb128 0x18
+ 1134 05b6 2A000000 		.4byte	.LVL14
+ 1135 05ba AB070000 		.4byte	0x7ab
+ 1136 05be 18       		.uleb128 0x18
+ 1137 05bf 2E000000 		.4byte	.LVL15
+ 1138 05c3 B6070000 		.4byte	0x7b6
+ 1139 05c7 18       		.uleb128 0x18
+ 1140 05c8 32000000 		.4byte	.LVL16
+ 1141 05cc C1070000 		.4byte	0x7c1
+ 1142 05d0 18       		.uleb128 0x18
+ 1143 05d1 36000000 		.4byte	.LVL17
+ 1144 05d5 CC070000 		.4byte	0x7cc
+ 1145 05d9 1D       		.uleb128 0x1d
+ 1146 05da 3C000000 		.4byte	.LVL18
+ 1147 05de D7070000 		.4byte	0x7d7
+ 1148 05e2 F0050000 		.4byte	0x5f0
+ 1149 05e6 15       		.uleb128 0x15
+ 1150 05e7 01       		.uleb128 0x1
+ 1151 05e8 50       		.byte	0x50
+ 1152 05e9 05       		.uleb128 0x5
+ 1153 05ea 03       		.byte	0x3
+ 1154 05eb 00000000 		.4byte	TC_InterruptHandler
+ 1155 05ef 00       		.byte	0
+ 1156 05f0 18       		.uleb128 0x18
+ 1157 05f1 40000000 		.4byte	.LVL19
+ 1158 05f5 E2070000 		.4byte	0x7e2
+ 1159 05f9 18       		.uleb128 0x18
+ 1160 05fa 48000000 		.4byte	.LVL20
+ 1161 05fe ED070000 		.4byte	0x7ed
+ 1162 0602 18       		.uleb128 0x18
+ 1163 0603 4C000000 		.4byte	.LVL21
+ 1164 0607 F8070000 		.4byte	0x7f8
+ 1165 060b 1D       		.uleb128 0x1d
+ 1166 060c 56000000 		.4byte	.LVL22
+ 1167 0610 03080000 		.4byte	0x803
+ 1168 0614 24060000 		.4byte	0x624
+ 1169 0618 15       		.uleb128 0x15
+ 1170 0619 01       		.uleb128 0x1
+ 1171 061a 50       		.byte	0x50
+ 1172 061b 02       		.uleb128 0x2
+ 1173 061c 74       		.byte	0x74
+ 1174 061d 00       		.sleb128 0
+ 1175 061e 15       		.uleb128 0x15
+ 1176 061f 01       		.uleb128 0x1
+ 1177 0620 51       		.byte	0x51
+ 1178 0621 01       		.uleb128 0x1
+ 1179 0622 32       		.byte	0x32
+ 1180 0623 00       		.byte	0
+ 1181 0624 1D       		.uleb128 0x1d
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 27
+
+
+ 1182 0625 5E000000 		.4byte	.LVL23
+ 1183 0629 03080000 		.4byte	0x803
+ 1184 062d 38060000 		.4byte	0x638
+ 1185 0631 15       		.uleb128 0x15
+ 1186 0632 01       		.uleb128 0x1
+ 1187 0633 51       		.byte	0x51
+ 1188 0634 02       		.uleb128 0x2
+ 1189 0635 08       		.byte	0x8
+ 1190 0636 90       		.byte	0x90
+ 1191 0637 00       		.byte	0
+ 1192 0638 1D       		.uleb128 0x1d
+ 1193 0639 66000000 		.4byte	.LVL24
+ 1194 063d 03080000 		.4byte	0x803
+ 1195 0641 51060000 		.4byte	0x651
+ 1196 0645 15       		.uleb128 0x15
+ 1197 0646 01       		.uleb128 0x1
+ 1198 0647 50       		.byte	0x50
+ 1199 0648 02       		.uleb128 0x2
+ 1200 0649 74       		.byte	0x74
+ 1201 064a 02       		.sleb128 2
+ 1202 064b 15       		.uleb128 0x15
+ 1203 064c 01       		.uleb128 0x1
+ 1204 064d 51       		.byte	0x51
+ 1205 064e 01       		.uleb128 0x1
+ 1206 064f 33       		.byte	0x33
+ 1207 0650 00       		.byte	0
+ 1208 0651 18       		.uleb128 0x18
+ 1209 0652 6A000000 		.4byte	.LVL25
+ 1210 0656 C4040000 		.4byte	0x4c4
+ 1211 065a 18       		.uleb128 0x18
+ 1212 065b 6E000000 		.4byte	.LVL26
+ 1213 065f CC070000 		.4byte	0x7cc
+ 1214 0663 14       		.uleb128 0x14
+ 1215 0664 74000000 		.4byte	.LVL27
+ 1216 0668 0F080000 		.4byte	0x80f
+ 1217 066c 15       		.uleb128 0x15
+ 1218 066d 01       		.uleb128 0x1
+ 1219 066e 50       		.byte	0x50
+ 1220 066f 01       		.uleb128 0x1
+ 1221 0670 3A       		.byte	0x3a
+ 1222 0671 00       		.byte	0
+ 1223 0672 00       		.byte	0
+ 1224 0673 07       		.uleb128 0x7
+ 1225 0674 83060000 		.4byte	0x683
+ 1226 0678 83060000 		.4byte	0x683
+ 1227 067c 08       		.uleb128 0x8
+ 1228 067d C6000000 		.4byte	0xc6
+ 1229 0681 01       		.byte	0x1
+ 1230 0682 00       		.byte	0
+ 1231 0683 1E       		.uleb128 0x1e
+ 1232 0684 81000000 		.4byte	0x81
+ 1233 0688 1F       		.uleb128 0x1f
+ 1234 0689 34020000 		.4byte	.LASF74
+ 1235 068d 01       		.byte	0x1
+ 1236 068e 31       		.byte	0x31
+ 1237 068f 99060000 		.4byte	0x699
+ 1238 0693 05       		.uleb128 0x5
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 28
+
+
+ 1239 0694 03       		.byte	0x3
+ 1240 0695 00000000 		.4byte	header
+ 1241 0699 1E       		.uleb128 0x1e
+ 1242 069a 73060000 		.4byte	0x673
+ 1243 069e 07       		.uleb128 0x7
+ 1244 069f 83060000 		.4byte	0x683
+ 1245 06a3 AE060000 		.4byte	0x6ae
+ 1246 06a7 08       		.uleb128 0x8
+ 1247 06a8 C6000000 		.4byte	0xc6
+ 1248 06ac 02       		.byte	0x2
+ 1249 06ad 00       		.byte	0
+ 1250 06ae 1F       		.uleb128 0x1f
+ 1251 06af E5020000 		.4byte	.LASF75
+ 1252 06b3 01       		.byte	0x1
+ 1253 06b4 32       		.byte	0x32
+ 1254 06b5 BF060000 		.4byte	0x6bf
+ 1255 06b9 05       		.uleb128 0x5
+ 1256 06ba 03       		.byte	0x3
+ 1257 06bb 02000000 		.4byte	tail
+ 1258 06bf 1E       		.uleb128 0x1e
+ 1259 06c0 9E060000 		.4byte	0x69e
+ 1260 06c4 20       		.uleb128 0x20
+ 1261 06c5 69020000 		.4byte	.LASF76
+ 1262 06c9 06       		.byte	0x6
+ 1263 06ca 8704     		.2byte	0x487
+ 1264 06cc DE030000 		.4byte	0x3de
+ 1265 06d0 21       		.uleb128 0x21
+ 1266 06d1 69326300 		.ascii	"i2c\000"
+ 1267 06d5 01       		.byte	0x1
+ 1268 06d6 4D       		.byte	0x4d
+ 1269 06d7 8C040000 		.4byte	0x48c
+ 1270 06db 05       		.uleb128 0x5
+ 1271 06dc 03       		.byte	0x3
+ 1272 06dd 00000000 		.4byte	i2c
+ 1273 06e1 22       		.uleb128 0x22
+ 1274 06e2 1A050000 		.4byte	.LASF77
+ 1275 06e6 01       		.byte	0x1
+ 1276 06e7 51       		.byte	0x51
+ 1277 06e8 81000000 		.4byte	0x81
+ 1278 06ec 05       		.uleb128 0x5
+ 1279 06ed 03       		.byte	0x3
+ 1280 06ee 00000000 		.4byte	capsense_status
+ 1281 06f2 22       		.uleb128 0x22
+ 1282 06f3 CE040000 		.4byte	.LASF78
+ 1283 06f7 01       		.byte	0x1
+ 1284 06f8 52       		.byte	0x52
+ 1285 06f9 81000000 		.4byte	0x81
+ 1286 06fd 05       		.uleb128 0x5
+ 1287 06fe 03       		.byte	0x3
+ 1288 06ff 00000000 		.4byte	send_status
+ 1289 0703 22       		.uleb128 0x22
+ 1290 0704 ED040000 		.4byte	.LASF79
+ 1291 0708 01       		.byte	0x1
+ 1292 0709 53       		.byte	0x53
+ 1293 070a 81000000 		.4byte	0x81
+ 1294 070e 05       		.uleb128 0x5
+ 1295 070f 03       		.byte	0x3
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 29
+
+
+ 1296 0710 00000000 		.4byte	time_counts
+ 1297 0714 22       		.uleb128 0x22
+ 1298 0715 FE050000 		.4byte	.LASF80
+ 1299 0719 01       		.byte	0x1
+ 1300 071a 54       		.byte	0x54
+ 1301 071b 81000000 		.4byte	0x81
+ 1302 071f 05       		.uleb128 0x5
+ 1303 0720 03       		.byte	0x3
+ 1304 0721 00000000 		.4byte	last_capsense
+ 1305 0725 22       		.uleb128 0x22
+ 1306 0726 90000000 		.4byte	.LASF81
+ 1307 072a 01       		.byte	0x1
+ 1308 072b 55       		.byte	0x55
+ 1309 072c EA030000 		.4byte	0x3ea
+ 1310 0730 05       		.uleb128 0x5
+ 1311 0731 03       		.byte	0x3
+ 1312 0732 00000000 		.4byte	temp
+ 1313 0736 22       		.uleb128 0x22
+ 1314 0737 FC000000 		.4byte	.LASF82
+ 1315 073b 01       		.byte	0x1
+ 1316 073c 57       		.byte	0x57
+ 1317 073d CE030000 		.4byte	0x3ce
+ 1318 0741 05       		.uleb128 0x5
+ 1319 0742 03       		.byte	0x3
+ 1320 0743 00000000 		.4byte	key_buf
+ 1321 0747 23       		.uleb128 0x23
+ 1322 0748 D0020000 		.4byte	.LASF83
+ 1323 074c D0020000 		.4byte	.LASF83
+ 1324 0750 08       		.byte	0x8
+ 1325 0751 4701     		.2byte	0x147
+ 1326 0753 24       		.uleb128 0x24
+ 1327 0754 1E020000 		.4byte	.LASF84
+ 1328 0758 1E020000 		.4byte	.LASF84
+ 1329 075c 09       		.byte	0x9
+ 1330 075d 32       		.byte	0x32
+ 1331 075e 24       		.uleb128 0x24
+ 1332 075f 3B020000 		.4byte	.LASF85
+ 1333 0763 3B020000 		.4byte	.LASF85
+ 1334 0767 09       		.byte	0x9
+ 1335 0768 33       		.byte	0x33
+ 1336 0769 23       		.uleb128 0x23
+ 1337 076a 57010000 		.4byte	.LASF86
+ 1338 076e 57010000 		.4byte	.LASF86
+ 1339 0772 06       		.byte	0x6
+ 1340 0773 A204     		.2byte	0x4a2
+ 1341 0775 25       		.uleb128 0x25
+ 1342 0776 38050000 		.4byte	.LASF107
+ 1343 077a 38050000 		.4byte	.LASF107
+ 1344 077e 24       		.uleb128 0x24
+ 1345 077f A8020000 		.4byte	.LASF87
+ 1346 0783 A8020000 		.4byte	.LASF87
+ 1347 0787 0A       		.byte	0xa
+ 1348 0788 72       		.byte	0x72
+ 1349 0789 24       		.uleb128 0x24
+ 1350 078a 8F030000 		.4byte	.LASF88
+ 1351 078e 8F030000 		.4byte	.LASF88
+ 1352 0792 0B       		.byte	0xb
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 30
+
+
+ 1353 0793 A2       		.byte	0xa2
+ 1354 0794 23       		.uleb128 0x23
+ 1355 0795 0E050000 		.4byte	.LASF89
+ 1356 0799 0E050000 		.4byte	.LASF89
+ 1357 079d 08       		.byte	0x8
+ 1358 079e 3201     		.2byte	0x132
+ 1359 07a0 24       		.uleb128 0x24
+ 1360 07a1 1F040000 		.4byte	.LASF90
+ 1361 07a5 1F040000 		.4byte	.LASF90
+ 1362 07a9 0C       		.byte	0xc
+ 1363 07aa 72       		.byte	0x72
+ 1364 07ab 24       		.uleb128 0x24
+ 1365 07ac 73030000 		.4byte	.LASF91
+ 1366 07b0 73030000 		.4byte	.LASF91
+ 1367 07b4 0D       		.byte	0xd
+ 1368 07b5 3B       		.byte	0x3b
+ 1369 07b6 24       		.uleb128 0x24
+ 1370 07b7 3A000000 		.4byte	.LASF92
+ 1371 07bb 3A000000 		.4byte	.LASF92
+ 1372 07bf 0E       		.byte	0xe
+ 1373 07c0 54       		.byte	0x54
+ 1374 07c1 24       		.uleb128 0x24
+ 1375 07c2 68000000 		.4byte	.LASF93
+ 1376 07c6 68000000 		.4byte	.LASF93
+ 1377 07ca 0F       		.byte	0xf
+ 1378 07cb 43       		.byte	0x43
+ 1379 07cc 24       		.uleb128 0x24
+ 1380 07cd BD030000 		.4byte	.LASF94
+ 1381 07d1 BD030000 		.4byte	.LASF94
+ 1382 07d5 10       		.byte	0x10
+ 1383 07d6 59       		.byte	0x59
+ 1384 07d7 24       		.uleb128 0x24
+ 1385 07d8 2A010000 		.4byte	.LASF95
+ 1386 07dc 2A010000 		.4byte	.LASF95
+ 1387 07e0 11       		.byte	0x11
+ 1388 07e1 18       		.byte	0x18
+ 1389 07e2 24       		.uleb128 0x24
+ 1390 07e3 3F050000 		.4byte	.LASF96
+ 1391 07e7 3F050000 		.4byte	.LASF96
+ 1392 07eb 10       		.byte	0x10
+ 1393 07ec 5A       		.byte	0x5a
+ 1394 07ed 24       		.uleb128 0x24
+ 1395 07ee 02030000 		.4byte	.LASF97
+ 1396 07f2 02030000 		.4byte	.LASF97
+ 1397 07f6 0D       		.byte	0xd
+ 1398 07f7 3F       		.byte	0x3f
+ 1399 07f8 24       		.uleb128 0x24
+ 1400 07f9 00000000 		.4byte	.LASF98
+ 1401 07fd 00000000 		.4byte	.LASF98
+ 1402 0801 0E       		.byte	0xe
+ 1403 0802 49       		.byte	0x49
+ 1404 0803 23       		.uleb128 0x23
+ 1405 0804 F9040000 		.4byte	.LASF99
+ 1406 0808 F9040000 		.4byte	.LASF99
+ 1407 080c 12       		.byte	0x12
+ 1408 080d 4503     		.2byte	0x345
+ 1409 080f 24       		.uleb128 0x24
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 31
+
+
+ 1410 0810 0C060000 		.4byte	.LASF100
+ 1411 0814 0C060000 		.4byte	.LASF100
+ 1412 0818 13       		.byte	0x13
+ 1413 0819 D9       		.byte	0xd9
+ 1414 081a 00       		.byte	0
+ 1415              		.section	.debug_abbrev,"",%progbits
+ 1416              	.Ldebug_abbrev0:
+ 1417 0000 01       		.uleb128 0x1
+ 1418 0001 11       		.uleb128 0x11
+ 1419 0002 01       		.byte	0x1
+ 1420 0003 25       		.uleb128 0x25
+ 1421 0004 0E       		.uleb128 0xe
+ 1422 0005 13       		.uleb128 0x13
+ 1423 0006 0B       		.uleb128 0xb
+ 1424 0007 03       		.uleb128 0x3
+ 1425 0008 0E       		.uleb128 0xe
+ 1426 0009 1B       		.uleb128 0x1b
+ 1427 000a 0E       		.uleb128 0xe
+ 1428 000b 55       		.uleb128 0x55
+ 1429 000c 17       		.uleb128 0x17
+ 1430 000d 11       		.uleb128 0x11
+ 1431 000e 01       		.uleb128 0x1
+ 1432 000f 10       		.uleb128 0x10
+ 1433 0010 17       		.uleb128 0x17
+ 1434 0011 00       		.byte	0
+ 1435 0012 00       		.byte	0
+ 1436 0013 02       		.uleb128 0x2
+ 1437 0014 24       		.uleb128 0x24
+ 1438 0015 00       		.byte	0
+ 1439 0016 0B       		.uleb128 0xb
+ 1440 0017 0B       		.uleb128 0xb
+ 1441 0018 3E       		.uleb128 0x3e
+ 1442 0019 0B       		.uleb128 0xb
+ 1443 001a 03       		.uleb128 0x3
+ 1444 001b 0E       		.uleb128 0xe
+ 1445 001c 00       		.byte	0
+ 1446 001d 00       		.byte	0
+ 1447 001e 03       		.uleb128 0x3
+ 1448 001f 16       		.uleb128 0x16
+ 1449 0020 00       		.byte	0
+ 1450 0021 03       		.uleb128 0x3
+ 1451 0022 0E       		.uleb128 0xe
+ 1452 0023 3A       		.uleb128 0x3a
+ 1453 0024 0B       		.uleb128 0xb
+ 1454 0025 3B       		.uleb128 0x3b
+ 1455 0026 0B       		.uleb128 0xb
+ 1456 0027 49       		.uleb128 0x49
+ 1457 0028 13       		.uleb128 0x13
+ 1458 0029 00       		.byte	0
+ 1459 002a 00       		.byte	0
+ 1460 002b 04       		.uleb128 0x4
+ 1461 002c 24       		.uleb128 0x24
+ 1462 002d 00       		.byte	0
+ 1463 002e 0B       		.uleb128 0xb
+ 1464 002f 0B       		.uleb128 0xb
+ 1465 0030 3E       		.uleb128 0x3e
+ 1466 0031 0B       		.uleb128 0xb
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 32
+
+
+ 1467 0032 03       		.uleb128 0x3
+ 1468 0033 08       		.uleb128 0x8
+ 1469 0034 00       		.byte	0
+ 1470 0035 00       		.byte	0
+ 1471 0036 05       		.uleb128 0x5
+ 1472 0037 16       		.uleb128 0x16
+ 1473 0038 00       		.byte	0
+ 1474 0039 03       		.uleb128 0x3
+ 1475 003a 0E       		.uleb128 0xe
+ 1476 003b 3A       		.uleb128 0x3a
+ 1477 003c 0B       		.uleb128 0xb
+ 1478 003d 3B       		.uleb128 0x3b
+ 1479 003e 05       		.uleb128 0x5
+ 1480 003f 49       		.uleb128 0x49
+ 1481 0040 13       		.uleb128 0x13
+ 1482 0041 00       		.byte	0
+ 1483 0042 00       		.byte	0
+ 1484 0043 06       		.uleb128 0x6
+ 1485 0044 35       		.uleb128 0x35
+ 1486 0045 00       		.byte	0
+ 1487 0046 49       		.uleb128 0x49
+ 1488 0047 13       		.uleb128 0x13
+ 1489 0048 00       		.byte	0
+ 1490 0049 00       		.byte	0
+ 1491 004a 07       		.uleb128 0x7
+ 1492 004b 01       		.uleb128 0x1
+ 1493 004c 01       		.byte	0x1
+ 1494 004d 49       		.uleb128 0x49
+ 1495 004e 13       		.uleb128 0x13
+ 1496 004f 01       		.uleb128 0x1
+ 1497 0050 13       		.uleb128 0x13
+ 1498 0051 00       		.byte	0
+ 1499 0052 00       		.byte	0
+ 1500 0053 08       		.uleb128 0x8
+ 1501 0054 21       		.uleb128 0x21
+ 1502 0055 00       		.byte	0
+ 1503 0056 49       		.uleb128 0x49
+ 1504 0057 13       		.uleb128 0x13
+ 1505 0058 2F       		.uleb128 0x2f
+ 1506 0059 0B       		.uleb128 0xb
+ 1507 005a 00       		.byte	0
+ 1508 005b 00       		.byte	0
+ 1509 005c 09       		.uleb128 0x9
+ 1510 005d 13       		.uleb128 0x13
+ 1511 005e 01       		.byte	0x1
+ 1512 005f 0B       		.uleb128 0xb
+ 1513 0060 0B       		.uleb128 0xb
+ 1514 0061 3A       		.uleb128 0x3a
+ 1515 0062 0B       		.uleb128 0xb
+ 1516 0063 3B       		.uleb128 0x3b
+ 1517 0064 0B       		.uleb128 0xb
+ 1518 0065 01       		.uleb128 0x1
+ 1519 0066 13       		.uleb128 0x13
+ 1520 0067 00       		.byte	0
+ 1521 0068 00       		.byte	0
+ 1522 0069 0A       		.uleb128 0xa
+ 1523 006a 0D       		.uleb128 0xd
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 33
+
+
+ 1524 006b 00       		.byte	0
+ 1525 006c 03       		.uleb128 0x3
+ 1526 006d 0E       		.uleb128 0xe
+ 1527 006e 3A       		.uleb128 0x3a
+ 1528 006f 0B       		.uleb128 0xb
+ 1529 0070 3B       		.uleb128 0x3b
+ 1530 0071 0B       		.uleb128 0xb
+ 1531 0072 49       		.uleb128 0x49
+ 1532 0073 13       		.uleb128 0x13
+ 1533 0074 38       		.uleb128 0x38
+ 1534 0075 0B       		.uleb128 0xb
+ 1535 0076 00       		.byte	0
+ 1536 0077 00       		.byte	0
+ 1537 0078 0B       		.uleb128 0xb
+ 1538 0079 0D       		.uleb128 0xd
+ 1539 007a 00       		.byte	0
+ 1540 007b 03       		.uleb128 0x3
+ 1541 007c 0E       		.uleb128 0xe
+ 1542 007d 3A       		.uleb128 0x3a
+ 1543 007e 0B       		.uleb128 0xb
+ 1544 007f 3B       		.uleb128 0x3b
+ 1545 0080 05       		.uleb128 0x5
+ 1546 0081 49       		.uleb128 0x49
+ 1547 0082 13       		.uleb128 0x13
+ 1548 0083 38       		.uleb128 0x38
+ 1549 0084 0B       		.uleb128 0xb
+ 1550 0085 00       		.byte	0
+ 1551 0086 00       		.byte	0
+ 1552 0087 0C       		.uleb128 0xc
+ 1553 0088 13       		.uleb128 0x13
+ 1554 0089 01       		.byte	0x1
+ 1555 008a 0B       		.uleb128 0xb
+ 1556 008b 0B       		.uleb128 0xb
+ 1557 008c 3A       		.uleb128 0x3a
+ 1558 008d 0B       		.uleb128 0xb
+ 1559 008e 3B       		.uleb128 0x3b
+ 1560 008f 05       		.uleb128 0x5
+ 1561 0090 01       		.uleb128 0x1
+ 1562 0091 13       		.uleb128 0x13
+ 1563 0092 00       		.byte	0
+ 1564 0093 00       		.byte	0
+ 1565 0094 0D       		.uleb128 0xd
+ 1566 0095 0D       		.uleb128 0xd
+ 1567 0096 00       		.byte	0
+ 1568 0097 03       		.uleb128 0x3
+ 1569 0098 08       		.uleb128 0x8
+ 1570 0099 3A       		.uleb128 0x3a
+ 1571 009a 0B       		.uleb128 0xb
+ 1572 009b 3B       		.uleb128 0x3b
+ 1573 009c 05       		.uleb128 0x5
+ 1574 009d 49       		.uleb128 0x49
+ 1575 009e 13       		.uleb128 0x13
+ 1576 009f 38       		.uleb128 0x38
+ 1577 00a0 0B       		.uleb128 0xb
+ 1578 00a1 00       		.byte	0
+ 1579 00a2 00       		.byte	0
+ 1580 00a3 0E       		.uleb128 0xe
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 34
+
+
+ 1581 00a4 17       		.uleb128 0x17
+ 1582 00a5 01       		.byte	0x1
+ 1583 00a6 0B       		.uleb128 0xb
+ 1584 00a7 0B       		.uleb128 0xb
+ 1585 00a8 3A       		.uleb128 0x3a
+ 1586 00a9 0B       		.uleb128 0xb
+ 1587 00aa 3B       		.uleb128 0x3b
+ 1588 00ab 0B       		.uleb128 0xb
+ 1589 00ac 01       		.uleb128 0x1
+ 1590 00ad 13       		.uleb128 0x13
+ 1591 00ae 00       		.byte	0
+ 1592 00af 00       		.byte	0
+ 1593 00b0 0F       		.uleb128 0xf
+ 1594 00b1 0D       		.uleb128 0xd
+ 1595 00b2 00       		.byte	0
+ 1596 00b3 03       		.uleb128 0x3
+ 1597 00b4 08       		.uleb128 0x8
+ 1598 00b5 3A       		.uleb128 0x3a
+ 1599 00b6 0B       		.uleb128 0xb
+ 1600 00b7 3B       		.uleb128 0x3b
+ 1601 00b8 0B       		.uleb128 0xb
+ 1602 00b9 49       		.uleb128 0x49
+ 1603 00ba 13       		.uleb128 0x13
+ 1604 00bb 00       		.byte	0
+ 1605 00bc 00       		.byte	0
+ 1606 00bd 10       		.uleb128 0x10
+ 1607 00be 0D       		.uleb128 0xd
+ 1608 00bf 00       		.byte	0
+ 1609 00c0 03       		.uleb128 0x3
+ 1610 00c1 0E       		.uleb128 0xe
+ 1611 00c2 3A       		.uleb128 0x3a
+ 1612 00c3 0B       		.uleb128 0xb
+ 1613 00c4 3B       		.uleb128 0x3b
+ 1614 00c5 0B       		.uleb128 0xb
+ 1615 00c6 49       		.uleb128 0x49
+ 1616 00c7 13       		.uleb128 0x13
+ 1617 00c8 00       		.byte	0
+ 1618 00c9 00       		.byte	0
+ 1619 00ca 11       		.uleb128 0x11
+ 1620 00cb 0D       		.uleb128 0xd
+ 1621 00cc 00       		.byte	0
+ 1622 00cd 03       		.uleb128 0x3
+ 1623 00ce 08       		.uleb128 0x8
+ 1624 00cf 3A       		.uleb128 0x3a
+ 1625 00d0 0B       		.uleb128 0xb
+ 1626 00d1 3B       		.uleb128 0x3b
+ 1627 00d2 0B       		.uleb128 0xb
+ 1628 00d3 49       		.uleb128 0x49
+ 1629 00d4 13       		.uleb128 0x13
+ 1630 00d5 38       		.uleb128 0x38
+ 1631 00d6 0B       		.uleb128 0xb
+ 1632 00d7 00       		.byte	0
+ 1633 00d8 00       		.byte	0
+ 1634 00d9 12       		.uleb128 0x12
+ 1635 00da 2E       		.uleb128 0x2e
+ 1636 00db 00       		.byte	0
+ 1637 00dc 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 35
+
+
+ 1638 00dd 19       		.uleb128 0x19
+ 1639 00de 03       		.uleb128 0x3
+ 1640 00df 0E       		.uleb128 0xe
+ 1641 00e0 3A       		.uleb128 0x3a
+ 1642 00e1 0B       		.uleb128 0xb
+ 1643 00e2 3B       		.uleb128 0x3b
+ 1644 00e3 0B       		.uleb128 0xb
+ 1645 00e4 20       		.uleb128 0x20
+ 1646 00e5 0B       		.uleb128 0xb
+ 1647 00e6 00       		.byte	0
+ 1648 00e7 00       		.byte	0
+ 1649 00e8 13       		.uleb128 0x13
+ 1650 00e9 2E       		.uleb128 0x2e
+ 1651 00ea 01       		.byte	0x1
+ 1652 00eb 3F       		.uleb128 0x3f
+ 1653 00ec 19       		.uleb128 0x19
+ 1654 00ed 03       		.uleb128 0x3
+ 1655 00ee 0E       		.uleb128 0xe
+ 1656 00ef 3A       		.uleb128 0x3a
+ 1657 00f0 0B       		.uleb128 0xb
+ 1658 00f1 3B       		.uleb128 0x3b
+ 1659 00f2 0B       		.uleb128 0xb
+ 1660 00f3 27       		.uleb128 0x27
+ 1661 00f4 19       		.uleb128 0x19
+ 1662 00f5 11       		.uleb128 0x11
+ 1663 00f6 01       		.uleb128 0x1
+ 1664 00f7 12       		.uleb128 0x12
+ 1665 00f8 06       		.uleb128 0x6
+ 1666 00f9 40       		.uleb128 0x40
+ 1667 00fa 18       		.uleb128 0x18
+ 1668 00fb 9742     		.uleb128 0x2117
+ 1669 00fd 19       		.uleb128 0x19
+ 1670 00fe 01       		.uleb128 0x1
+ 1671 00ff 13       		.uleb128 0x13
+ 1672 0100 00       		.byte	0
+ 1673 0101 00       		.byte	0
+ 1674 0102 14       		.uleb128 0x14
+ 1675 0103 898201   		.uleb128 0x4109
+ 1676 0106 01       		.byte	0x1
+ 1677 0107 11       		.uleb128 0x11
+ 1678 0108 01       		.uleb128 0x1
+ 1679 0109 31       		.uleb128 0x31
+ 1680 010a 13       		.uleb128 0x13
+ 1681 010b 00       		.byte	0
+ 1682 010c 00       		.byte	0
+ 1683 010d 15       		.uleb128 0x15
+ 1684 010e 8A8201   		.uleb128 0x410a
+ 1685 0111 00       		.byte	0
+ 1686 0112 02       		.uleb128 0x2
+ 1687 0113 18       		.uleb128 0x18
+ 1688 0114 9142     		.uleb128 0x2111
+ 1689 0116 18       		.uleb128 0x18
+ 1690 0117 00       		.byte	0
+ 1691 0118 00       		.byte	0
+ 1692 0119 16       		.uleb128 0x16
+ 1693 011a 0B       		.uleb128 0xb
+ 1694 011b 01       		.byte	0x1
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 36
+
+
+ 1695 011c 55       		.uleb128 0x55
+ 1696 011d 17       		.uleb128 0x17
+ 1697 011e 01       		.uleb128 0x1
+ 1698 011f 13       		.uleb128 0x13
+ 1699 0120 00       		.byte	0
+ 1700 0121 00       		.byte	0
+ 1701 0122 17       		.uleb128 0x17
+ 1702 0123 34       		.uleb128 0x34
+ 1703 0124 00       		.byte	0
+ 1704 0125 03       		.uleb128 0x3
+ 1705 0126 08       		.uleb128 0x8
+ 1706 0127 3A       		.uleb128 0x3a
+ 1707 0128 0B       		.uleb128 0xb
+ 1708 0129 3B       		.uleb128 0x3b
+ 1709 012a 0B       		.uleb128 0xb
+ 1710 012b 49       		.uleb128 0x49
+ 1711 012c 13       		.uleb128 0x13
+ 1712 012d 02       		.uleb128 0x2
+ 1713 012e 17       		.uleb128 0x17
+ 1714 012f 00       		.byte	0
+ 1715 0130 00       		.byte	0
+ 1716 0131 18       		.uleb128 0x18
+ 1717 0132 898201   		.uleb128 0x4109
+ 1718 0135 00       		.byte	0
+ 1719 0136 11       		.uleb128 0x11
+ 1720 0137 01       		.uleb128 0x1
+ 1721 0138 31       		.uleb128 0x31
+ 1722 0139 13       		.uleb128 0x13
+ 1723 013a 00       		.byte	0
+ 1724 013b 00       		.byte	0
+ 1725 013c 19       		.uleb128 0x19
+ 1726 013d 2E       		.uleb128 0x2e
+ 1727 013e 00       		.byte	0
+ 1728 013f 31       		.uleb128 0x31
+ 1729 0140 13       		.uleb128 0x13
+ 1730 0141 11       		.uleb128 0x11
+ 1731 0142 01       		.uleb128 0x1
+ 1732 0143 12       		.uleb128 0x12
+ 1733 0144 06       		.uleb128 0x6
+ 1734 0145 40       		.uleb128 0x40
+ 1735 0146 18       		.uleb128 0x18
+ 1736 0147 9742     		.uleb128 0x2117
+ 1737 0149 19       		.uleb128 0x19
+ 1738 014a 00       		.byte	0
+ 1739 014b 00       		.byte	0
+ 1740 014c 1A       		.uleb128 0x1a
+ 1741 014d 2E       		.uleb128 0x2e
+ 1742 014e 00       		.byte	0
+ 1743 014f 03       		.uleb128 0x3
+ 1744 0150 0E       		.uleb128 0xe
+ 1745 0151 3A       		.uleb128 0x3a
+ 1746 0152 0B       		.uleb128 0xb
+ 1747 0153 3B       		.uleb128 0x3b
+ 1748 0154 0B       		.uleb128 0xb
+ 1749 0155 20       		.uleb128 0x20
+ 1750 0156 0B       		.uleb128 0xb
+ 1751 0157 00       		.byte	0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 37
+
+
+ 1752 0158 00       		.byte	0
+ 1753 0159 1B       		.uleb128 0x1b
+ 1754 015a 2E       		.uleb128 0x2e
+ 1755 015b 01       		.byte	0x1
+ 1756 015c 3F       		.uleb128 0x3f
+ 1757 015d 19       		.uleb128 0x19
+ 1758 015e 03       		.uleb128 0x3
+ 1759 015f 0E       		.uleb128 0xe
+ 1760 0160 3A       		.uleb128 0x3a
+ 1761 0161 0B       		.uleb128 0xb
+ 1762 0162 3B       		.uleb128 0x3b
+ 1763 0163 0B       		.uleb128 0xb
+ 1764 0164 27       		.uleb128 0x27
+ 1765 0165 19       		.uleb128 0x19
+ 1766 0166 49       		.uleb128 0x49
+ 1767 0167 13       		.uleb128 0x13
+ 1768 0168 8701     		.uleb128 0x87
+ 1769 016a 19       		.uleb128 0x19
+ 1770 016b 11       		.uleb128 0x11
+ 1771 016c 01       		.uleb128 0x1
+ 1772 016d 12       		.uleb128 0x12
+ 1773 016e 06       		.uleb128 0x6
+ 1774 016f 40       		.uleb128 0x40
+ 1775 0170 18       		.uleb128 0x18
+ 1776 0171 9742     		.uleb128 0x2117
+ 1777 0173 19       		.uleb128 0x19
+ 1778 0174 01       		.uleb128 0x1
+ 1779 0175 13       		.uleb128 0x13
+ 1780 0176 00       		.byte	0
+ 1781 0177 00       		.byte	0
+ 1782 0178 1C       		.uleb128 0x1c
+ 1783 0179 1D       		.uleb128 0x1d
+ 1784 017a 01       		.byte	0x1
+ 1785 017b 31       		.uleb128 0x31
+ 1786 017c 13       		.uleb128 0x13
+ 1787 017d 11       		.uleb128 0x11
+ 1788 017e 01       		.uleb128 0x1
+ 1789 017f 12       		.uleb128 0x12
+ 1790 0180 06       		.uleb128 0x6
+ 1791 0181 58       		.uleb128 0x58
+ 1792 0182 0B       		.uleb128 0xb
+ 1793 0183 59       		.uleb128 0x59
+ 1794 0184 0B       		.uleb128 0xb
+ 1795 0185 01       		.uleb128 0x1
+ 1796 0186 13       		.uleb128 0x13
+ 1797 0187 00       		.byte	0
+ 1798 0188 00       		.byte	0
+ 1799 0189 1D       		.uleb128 0x1d
+ 1800 018a 898201   		.uleb128 0x4109
+ 1801 018d 01       		.byte	0x1
+ 1802 018e 11       		.uleb128 0x11
+ 1803 018f 01       		.uleb128 0x1
+ 1804 0190 31       		.uleb128 0x31
+ 1805 0191 13       		.uleb128 0x13
+ 1806 0192 01       		.uleb128 0x1
+ 1807 0193 13       		.uleb128 0x13
+ 1808 0194 00       		.byte	0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 38
+
+
+ 1809 0195 00       		.byte	0
+ 1810 0196 1E       		.uleb128 0x1e
+ 1811 0197 26       		.uleb128 0x26
+ 1812 0198 00       		.byte	0
+ 1813 0199 49       		.uleb128 0x49
+ 1814 019a 13       		.uleb128 0x13
+ 1815 019b 00       		.byte	0
+ 1816 019c 00       		.byte	0
+ 1817 019d 1F       		.uleb128 0x1f
+ 1818 019e 34       		.uleb128 0x34
+ 1819 019f 00       		.byte	0
+ 1820 01a0 03       		.uleb128 0x3
+ 1821 01a1 0E       		.uleb128 0xe
+ 1822 01a2 3A       		.uleb128 0x3a
+ 1823 01a3 0B       		.uleb128 0xb
+ 1824 01a4 3B       		.uleb128 0x3b
+ 1825 01a5 0B       		.uleb128 0xb
+ 1826 01a6 49       		.uleb128 0x49
+ 1827 01a7 13       		.uleb128 0x13
+ 1828 01a8 02       		.uleb128 0x2
+ 1829 01a9 18       		.uleb128 0x18
+ 1830 01aa 00       		.byte	0
+ 1831 01ab 00       		.byte	0
+ 1832 01ac 20       		.uleb128 0x20
+ 1833 01ad 34       		.uleb128 0x34
+ 1834 01ae 00       		.byte	0
+ 1835 01af 03       		.uleb128 0x3
+ 1836 01b0 0E       		.uleb128 0xe
+ 1837 01b1 3A       		.uleb128 0x3a
+ 1838 01b2 0B       		.uleb128 0xb
+ 1839 01b3 3B       		.uleb128 0x3b
+ 1840 01b4 05       		.uleb128 0x5
+ 1841 01b5 49       		.uleb128 0x49
+ 1842 01b6 13       		.uleb128 0x13
+ 1843 01b7 3F       		.uleb128 0x3f
+ 1844 01b8 19       		.uleb128 0x19
+ 1845 01b9 3C       		.uleb128 0x3c
+ 1846 01ba 19       		.uleb128 0x19
+ 1847 01bb 00       		.byte	0
+ 1848 01bc 00       		.byte	0
+ 1849 01bd 21       		.uleb128 0x21
+ 1850 01be 34       		.uleb128 0x34
+ 1851 01bf 00       		.byte	0
+ 1852 01c0 03       		.uleb128 0x3
+ 1853 01c1 08       		.uleb128 0x8
+ 1854 01c2 3A       		.uleb128 0x3a
+ 1855 01c3 0B       		.uleb128 0xb
+ 1856 01c4 3B       		.uleb128 0x3b
+ 1857 01c5 0B       		.uleb128 0xb
+ 1858 01c6 49       		.uleb128 0x49
+ 1859 01c7 13       		.uleb128 0x13
+ 1860 01c8 3F       		.uleb128 0x3f
+ 1861 01c9 19       		.uleb128 0x19
+ 1862 01ca 02       		.uleb128 0x2
+ 1863 01cb 18       		.uleb128 0x18
+ 1864 01cc 00       		.byte	0
+ 1865 01cd 00       		.byte	0
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 39
+
+
+ 1866 01ce 22       		.uleb128 0x22
+ 1867 01cf 34       		.uleb128 0x34
+ 1868 01d0 00       		.byte	0
+ 1869 01d1 03       		.uleb128 0x3
+ 1870 01d2 0E       		.uleb128 0xe
+ 1871 01d3 3A       		.uleb128 0x3a
+ 1872 01d4 0B       		.uleb128 0xb
+ 1873 01d5 3B       		.uleb128 0x3b
+ 1874 01d6 0B       		.uleb128 0xb
+ 1875 01d7 49       		.uleb128 0x49
+ 1876 01d8 13       		.uleb128 0x13
+ 1877 01d9 3F       		.uleb128 0x3f
+ 1878 01da 19       		.uleb128 0x19
+ 1879 01db 02       		.uleb128 0x2
+ 1880 01dc 18       		.uleb128 0x18
+ 1881 01dd 00       		.byte	0
+ 1882 01de 00       		.byte	0
+ 1883 01df 23       		.uleb128 0x23
+ 1884 01e0 2E       		.uleb128 0x2e
+ 1885 01e1 00       		.byte	0
+ 1886 01e2 3F       		.uleb128 0x3f
+ 1887 01e3 19       		.uleb128 0x19
+ 1888 01e4 3C       		.uleb128 0x3c
+ 1889 01e5 19       		.uleb128 0x19
+ 1890 01e6 6E       		.uleb128 0x6e
+ 1891 01e7 0E       		.uleb128 0xe
+ 1892 01e8 03       		.uleb128 0x3
+ 1893 01e9 0E       		.uleb128 0xe
+ 1894 01ea 3A       		.uleb128 0x3a
+ 1895 01eb 0B       		.uleb128 0xb
+ 1896 01ec 3B       		.uleb128 0x3b
+ 1897 01ed 05       		.uleb128 0x5
+ 1898 01ee 00       		.byte	0
+ 1899 01ef 00       		.byte	0
+ 1900 01f0 24       		.uleb128 0x24
+ 1901 01f1 2E       		.uleb128 0x2e
+ 1902 01f2 00       		.byte	0
+ 1903 01f3 3F       		.uleb128 0x3f
+ 1904 01f4 19       		.uleb128 0x19
+ 1905 01f5 3C       		.uleb128 0x3c
+ 1906 01f6 19       		.uleb128 0x19
+ 1907 01f7 6E       		.uleb128 0x6e
+ 1908 01f8 0E       		.uleb128 0xe
+ 1909 01f9 03       		.uleb128 0x3
+ 1910 01fa 0E       		.uleb128 0xe
+ 1911 01fb 3A       		.uleb128 0x3a
+ 1912 01fc 0B       		.uleb128 0xb
+ 1913 01fd 3B       		.uleb128 0x3b
+ 1914 01fe 0B       		.uleb128 0xb
+ 1915 01ff 00       		.byte	0
+ 1916 0200 00       		.byte	0
+ 1917 0201 25       		.uleb128 0x25
+ 1918 0202 2E       		.uleb128 0x2e
+ 1919 0203 00       		.byte	0
+ 1920 0204 3F       		.uleb128 0x3f
+ 1921 0205 19       		.uleb128 0x19
+ 1922 0206 3C       		.uleb128 0x3c
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 40
+
+
+ 1923 0207 19       		.uleb128 0x19
+ 1924 0208 6E       		.uleb128 0x6e
+ 1925 0209 0E       		.uleb128 0xe
+ 1926 020a 03       		.uleb128 0x3
+ 1927 020b 0E       		.uleb128 0xe
+ 1928 020c 00       		.byte	0
+ 1929 020d 00       		.byte	0
+ 1930 020e 00       		.byte	0
+ 1931              		.section	.debug_loc,"",%progbits
+ 1932              	.Ldebug_loc0:
+ 1933              	.LLST0:
+ 1934 0000 7C000000 		.4byte	.LVL4
+ 1935 0004 AA000000 		.4byte	.LVL8
+ 1936 0008 0100     		.2byte	0x1
+ 1937 000a 55       		.byte	0x55
+ 1938 000b 00000000 		.4byte	0
+ 1939 000f 00000000 		.4byte	0
+ 1940              		.section	.debug_aranges,"",%progbits
+ 1941 0000 34000000 		.4byte	0x34
+ 1942 0004 0200     		.2byte	0x2
+ 1943 0006 00000000 		.4byte	.Ldebug_info0
+ 1944 000a 04       		.byte	0x4
+ 1945 000b 00       		.byte	0
+ 1946 000c 0000     		.2byte	0
+ 1947 000e 0000     		.2byte	0
+ 1948 0010 00000000 		.4byte	.LFB38
+ 1949 0014 18000000 		.4byte	.LFE38-.LFB38
+ 1950 0018 00000000 		.4byte	.LFB36
+ 1951 001c C0000000 		.4byte	.LFE36-.LFB36
+ 1952 0020 00000000 		.4byte	.LFB37
+ 1953 0024 02000000 		.4byte	.LFE37-.LFB37
+ 1954 0028 00000000 		.4byte	.LFB39
+ 1955 002c 88000000 		.4byte	.LFE39-.LFB39
+ 1956 0030 00000000 		.4byte	0
+ 1957 0034 00000000 		.4byte	0
+ 1958              		.section	.debug_ranges,"",%progbits
+ 1959              	.Ldebug_ranges0:
+ 1960 0000 74000000 		.4byte	.LBB4
+ 1961 0004 78000000 		.4byte	.LBE4
+ 1962 0008 7C000000 		.4byte	.LBB5
+ 1963 000c AA000000 		.4byte	.LBE5
+ 1964 0010 00000000 		.4byte	0
+ 1965 0014 00000000 		.4byte	0
+ 1966 0018 00000000 		.4byte	.LFB38
+ 1967 001c 18000000 		.4byte	.LFE38
+ 1968 0020 00000000 		.4byte	.LFB36
+ 1969 0024 C0000000 		.4byte	.LFE36
+ 1970 0028 00000000 		.4byte	.LFB37
+ 1971 002c 02000000 		.4byte	.LFE37
+ 1972 0030 00000000 		.4byte	.LFB39
+ 1973 0034 88000000 		.4byte	.LFE39
+ 1974 0038 00000000 		.4byte	0
+ 1975 003c 00000000 		.4byte	0
+ 1976              		.section	.debug_line,"",%progbits
+ 1977              	.Ldebug_line0:
+ 1978 0000 E1020000 		.section	.debug_str,"MS",%progbits,1
+ 1978      02004002 
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 41
+
+
+ 1978      00000201 
+ 1978      FB0E0D00 
+ 1978      01010101 
+ 1979              	.LASF98:
+ 1980 0000 43617053 		.ascii	"CapSense_RunTuner\000"
+ 1980      656E7365 
+ 1980      5F52756E 
+ 1980      54756E65 
+ 1980      7200
+ 1981              	.LASF55:
+ 1982 0012 77646774 		.ascii	"wdgtList\000"
+ 1982      4C697374 
+ 1982      00
+ 1983              	.LASF60:
+ 1984 001b 736E7254 		.ascii	"snrTestRawCount\000"
+ 1984      65737452 
+ 1984      6177436F 
+ 1984      756E7400 
+ 1985              	.LASF62:
+ 1986 002b 7363616E 		.ascii	"scanCurrentISC\000"
+ 1986      43757272 
+ 1986      656E7449 
+ 1986      534300
+ 1987              	.LASF92:
+ 1988 003a 43617053 		.ascii	"CapSense_TuInitialize\000"
+ 1988      656E7365 
+ 1988      5F547549 
+ 1988      6E697469 
+ 1988      616C697A 
+ 1989              	.LASF37:
+ 1990 0050 62736C6E 		.ascii	"bsln\000"
+ 1990      00
+ 1991              	.LASF29:
+ 1992 0055 69646163 		.ascii	"idacGainIndex\000"
+ 1992      4761696E 
+ 1992      496E6465 
+ 1992      7800
+ 1993              	.LASF39:
+ 1994 0063 64696666 		.ascii	"diff\000"
+ 1994      00
+ 1995              	.LASF93:
+ 1996 0068 43617053 		.ascii	"CapSense_InitializeAllBaselines\000"
+ 1996      656E7365 
+ 1996      5F496E69 
+ 1996      7469616C 
+ 1996      697A6541 
+ 1997              	.LASF28:
+ 1998 0088 69646163 		.ascii	"idacMod\000"
+ 1998      4D6F6400 
+ 1999              	.LASF81:
+ 2000 0090 74656D70 		.ascii	"temp\000"
+ 2000      00
+ 2001              	.LASF2:
+ 2002 0095 73686F72 		.ascii	"short int\000"
+ 2002      7420696E 
+ 2002      7400
+ 2003              	.LASF32:
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 42
+
+
+ 2004 009f 43617053 		.ascii	"CapSense_RAM_WD_BUTTON_STRUCT\000"
+ 2004      656E7365 
+ 2004      5F52414D 
+ 2004      5F57445F 
+ 2004      42555454 
+ 2005              	.LASF26:
+ 2006 00bd 6F6E4465 		.ascii	"onDebounce\000"
+ 2006      626F756E 
+ 2006      636500
+ 2007              	.LASF18:
+ 2008 00c8 73697A65 		.ascii	"sizetype\000"
+ 2008      74797065 
+ 2008      00
+ 2009              	.LASF44:
+ 2010 00d1 636F6E66 		.ascii	"configId\000"
+ 2010      69674964 
+ 2010      00
+ 2011              	.LASF41:
+ 2012 00da 69646163 		.ascii	"idacComp\000"
+ 2012      436F6D70 
+ 2012      00
+ 2013              	.LASF53:
+ 2014 00e3 63736430 		.ascii	"csd0Config\000"
+ 2014      436F6E66 
+ 2014      696700
+ 2015              	.LASF6:
+ 2016 00ee 6C6F6E67 		.ascii	"long long int\000"
+ 2016      206C6F6E 
+ 2016      6720696E 
+ 2016      7400
+ 2017              	.LASF82:
+ 2018 00fc 6B65795F 		.ascii	"key_buf\000"
+ 2018      62756600 
+ 2019              	.LASF64:
+ 2020 0104 75696E74 		.ascii	"uint\000"
+ 2020      00
+ 2021              	.LASF31:
+ 2022 0109 736E7343 		.ascii	"snsClkSource\000"
+ 2022      6C6B536F 
+ 2022      75726365 
+ 2022      00
+ 2023              	.LASF72:
+ 2024 0116 54435F49 		.ascii	"TC_InterruptHandler\000"
+ 2024      6E746572 
+ 2024      72757074 
+ 2024      48616E64 
+ 2024      6C657200 
+ 2025              	.LASF95:
+ 2026 012a 54435F49 		.ascii	"TC_Interrupt_StartEx\000"
+ 2026      6E746572 
+ 2026      72757074 
+ 2026      5F537461 
+ 2026      72744578 
+ 2027              	.LASF23:
+ 2028 013f 6E6F6973 		.ascii	"noiseTh\000"
+ 2028      65546800 
+ 2029              	.LASF45:
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 43
+
+
+ 2030 0147 64657669 		.ascii	"deviceId\000"
+ 2030      63654964 
+ 2030      00
+ 2031              	.LASF12:
+ 2032 0150 75696E74 		.ascii	"uint16\000"
+ 2032      313600
+ 2033              	.LASF86:
+ 2034 0157 43617053 		.ascii	"CapSense_IsAnyWidgetActive\000"
+ 2034      656E7365 
+ 2034      5F497341 
+ 2034      6E795769 
+ 2034      64676574 
+ 2035              	.LASF69:
+ 2036 0172 62757474 		.ascii	"button_stat\000"
+ 2036      6F6E5F73 
+ 2036      74617400 
+ 2037              	.LASF10:
+ 2038 017e 75696E74 		.ascii	"uint8_t\000"
+ 2038      385F7400 
+ 2039              	.LASF11:
+ 2040 0186 75696E74 		.ascii	"uint8\000"
+ 2040      3800
+ 2041              	.LASF103:
+ 2042 018c 443A5C5F 		.ascii	"D:\\_Project\\_MD\\cypress_button\\EZIIC_button.cyd"
+ 2042      50726F6A 
+ 2042      6563745C 
+ 2042      5F4D445C 
+ 2042      63797072 
+ 2043 01bb 736E00   		.ascii	"sn\000"
+ 2044              	.LASF30:
+ 2045 01be 736E7343 		.ascii	"snsClk\000"
+ 2045      6C6B00
+ 2046              	.LASF0:
+ 2047 01c5 7369676E 		.ascii	"signed char\000"
+ 2047      65642063 
+ 2047      68617200 
+ 2048              	.LASF73:
+ 2049 01d1 6B65795F 		.ascii	"key_event\000"
+ 2049      6576656E 
+ 2049      7400
+ 2050              	.LASF65:
+ 2051 01db 72657365 		.ascii	"reserve_reg\000"
+ 2051      7276655F 
+ 2051      72656700 
+ 2052              	.LASF14:
+ 2053 01e7 666C6F61 		.ascii	"float\000"
+ 2053      7400
+ 2054              	.LASF36:
+ 2055 01ed 43617053 		.ascii	"CapSense_RAM_WD_LIST_STRUCT\000"
+ 2055      656E7365 
+ 2055      5F52414D 
+ 2055      5F57445F 
+ 2055      4C495354 
+ 2056              	.LASF58:
+ 2057 0209 736E7254 		.ascii	"snrTestSensorId\000"
+ 2057      65737453 
+ 2057      656E736F 
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 44
+
+
+ 2057      72496400 
+ 2058              	.LASF16:
+ 2059 0219 63686172 		.ascii	"char\000"
+ 2059      00
+ 2060              	.LASF84:
+ 2061 021e 4341505F 		.ascii	"CAP_INT_Read\000"
+ 2061      494E545F 
+ 2061      52656164 
+ 2061      00
+ 2062              	.LASF4:
+ 2063 022b 6C6F6E67 		.ascii	"long int\000"
+ 2063      20696E74 
+ 2063      00
+ 2064              	.LASF74:
+ 2065 0234 68656164 		.ascii	"header\000"
+ 2065      657200
+ 2066              	.LASF85:
+ 2067 023b 4341505F 		.ascii	"CAP_INT_Write\000"
+ 2067      494E545F 
+ 2067      57726974 
+ 2067      6500
+ 2068              	.LASF22:
+ 2069 0249 66696E67 		.ascii	"fingerTh\000"
+ 2069      65725468 
+ 2069      00
+ 2070              	.LASF70:
+ 2071 0252 62757474 		.ascii	"button_value\000"
+ 2071      6F6E5F76 
+ 2071      616C7565 
+ 2071      00
+ 2072              	.LASF9:
+ 2073 025f 5F5F7569 		.ascii	"__uint8_t\000"
+ 2073      6E74385F 
+ 2073      7400
+ 2074              	.LASF76:
+ 2075 0269 43617053 		.ascii	"CapSense_dsRam\000"
+ 2075      656E7365 
+ 2075      5F647352 
+ 2075      616D00
+ 2076              	.LASF1:
+ 2077 0278 756E7369 		.ascii	"unsigned char\000"
+ 2077      676E6564 
+ 2077      20636861 
+ 2077      7200
+ 2078              	.LASF25:
+ 2079 0286 68797374 		.ascii	"hysteresis\000"
+ 2079      65726573 
+ 2079      697300
+ 2080              	.LASF50:
+ 2081 0291 77646774 		.ascii	"wdgtEnable\000"
+ 2081      456E6162 
+ 2081      6C6500
+ 2082              	.LASF17:
+ 2083 029c 6C6F6E67 		.ascii	"long double\000"
+ 2083      20646F75 
+ 2083      626C6500 
+ 2084              	.LASF87:
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 45
+
+
+ 2085 02a8 455A4932 		.ascii	"EZI2C_Start\000"
+ 2085      435F5374 
+ 2085      61727400 
+ 2086              	.LASF51:
+ 2087 02b4 77646774 		.ascii	"wdgtStatus\000"
+ 2087      53746174 
+ 2087      757300
+ 2088              	.LASF35:
+ 2089 02bf 72696768 		.ascii	"right\000"
+ 2089      7400
+ 2090              	.LASF27:
+ 2091 02c5 6C6F7742 		.ascii	"lowBslnRst\000"
+ 2091      736C6E52 
+ 2091      737400
+ 2092              	.LASF83:
+ 2093 02d0 54696D65 		.ascii	"Timer_ClearInterrupt\000"
+ 2093      725F436C 
+ 2093      65617249 
+ 2093      6E746572 
+ 2093      72757074 
+ 2094              	.LASF75:
+ 2095 02e5 7461696C 		.ascii	"tail\000"
+ 2095      00
+ 2096              	.LASF19:
+ 2097 02ea 43617053 		.ascii	"CapSense_THRESHOLD_TYPE\000"
+ 2097      656E7365 
+ 2097      5F544852 
+ 2097      4553484F 
+ 2097      4C445F54 
+ 2098              	.LASF97:
+ 2099 0302 43617053 		.ascii	"CapSense_ProcessAllWidgets\000"
+ 2099      656E7365 
+ 2099      5F50726F 
+ 2099      63657373 
+ 2099      416C6C57 
+ 2100              	.LASF43:
+ 2101 031d 43617053 		.ascii	"CapSense_RAM_SNS_LIST_STRUCT\000"
+ 2101      656E7365 
+ 2101      5F52414D 
+ 2101      5F534E53 
+ 2101      5F4C4953 
+ 2102              	.LASF7:
+ 2103 033a 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2103      206C6F6E 
+ 2103      6720756E 
+ 2103      7369676E 
+ 2103      65642069 
+ 2104              	.LASF105:
+ 2105 0351 496E6974 		.ascii	"Init_I2C_Communication\000"
+ 2105      5F493243 
+ 2105      5F436F6D 
+ 2105      6D756E69 
+ 2105      63617469 
+ 2106              	.LASF68:
+ 2107 0368 52575F49 		.ascii	"RW_I2C_REG\000"
+ 2107      32435F52 
+ 2107      454700
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 46
+
+
+ 2108              	.LASF91:
+ 2109 0373 43617053 		.ascii	"CapSense_Start\000"
+ 2109      656E7365 
+ 2109      5F537461 
+ 2109      727400
+ 2110              	.LASF8:
+ 2111 0382 756E7369 		.ascii	"unsigned int\000"
+ 2111      676E6564 
+ 2111      20696E74 
+ 2111      00
+ 2112              	.LASF88:
+ 2113 038f 455A4932 		.ascii	"EZI2C_EzI2CSetBuffer1\000"
+ 2113      435F457A 
+ 2113      49324353 
+ 2113      65744275 
+ 2113      66666572 
+ 2114              	.LASF42:
+ 2115 03a5 43617053 		.ascii	"CapSense_RAM_SNS_STRUCT\000"
+ 2115      656E7365 
+ 2115      5F52414D 
+ 2115      5F534E53 
+ 2115      5F535452 
+ 2116              	.LASF94:
+ 2117 03bd 43617053 		.ascii	"CapSense_ScanAllWidgets\000"
+ 2117      656E7365 
+ 2117      5F536361 
+ 2117      6E416C6C 
+ 2117      57696467 
+ 2118              	.LASF71:
+ 2119 03d5 4932435F 		.ascii	"I2C_REG\000"
+ 2119      52454700 
+ 2120              	.LASF20:
+ 2121 03dd 43617053 		.ascii	"CapSense_LOW_BSLN_RST_TYPE\000"
+ 2121      656E7365 
+ 2121      5F4C4F57 
+ 2121      5F42534C 
+ 2121      4E5F5253 
+ 2122              	.LASF49:
+ 2123 03f8 73746174 		.ascii	"status\000"
+ 2123      757300
+ 2124              	.LASF46:
+ 2125 03ff 6877436C 		.ascii	"hwClock\000"
+ 2125      6F636B00 
+ 2126              	.LASF59:
+ 2127 0407 736E7254 		.ascii	"snrTestScanCounter\000"
+ 2127      65737453 
+ 2127      63616E43 
+ 2127      6F756E74 
+ 2127      657200
+ 2128              	.LASF106:
+ 2129 041a 6D61696E 		.ascii	"main\000"
+ 2129      00
+ 2130              	.LASF90:
+ 2131 041f 55415254 		.ascii	"UART_Start\000"
+ 2131      5F537461 
+ 2131      727400
+ 2132              	.LASF34:
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 47
+
+
+ 2133 042a 6C656674 		.ascii	"left\000"
+ 2133      00
+ 2134              	.LASF21:
+ 2135 042f 7265736F 		.ascii	"resolution\000"
+ 2135      6C757469 
+ 2135      6F6E00
+ 2136              	.LASF47:
+ 2137 043a 74756E65 		.ascii	"tunerCmd\000"
+ 2137      72436D64 
+ 2137      00
+ 2138              	.LASF3:
+ 2139 0443 73686F72 		.ascii	"short unsigned int\000"
+ 2139      7420756E 
+ 2139      7369676E 
+ 2139      65642069 
+ 2139      6E7400
+ 2140              	.LASF104:
+ 2141 0456 50726F63 		.ascii	"ProcessI2CCommand\000"
+ 2141      65737349 
+ 2141      3243436F 
+ 2141      6D6D616E 
+ 2141      6400
+ 2142              	.LASF56:
+ 2143 0468 736E734C 		.ascii	"snsList\000"
+ 2143      69737400 
+ 2144              	.LASF54:
+ 2145 0470 6D6F6443 		.ascii	"modCsdClk\000"
+ 2145      7364436C 
+ 2145      6B00
+ 2146              	.LASF48:
+ 2147 047a 7363616E 		.ascii	"scanCounter\000"
+ 2147      436F756E 
+ 2147      74657200 
+ 2148              	.LASF24:
+ 2149 0486 6E4E6F69 		.ascii	"nNoiseTh\000"
+ 2149      73655468 
+ 2149      00
+ 2150              	.LASF63:
+ 2151 048f 43617053 		.ascii	"CapSense_RAM_STRUCT\000"
+ 2151      656E7365 
+ 2151      5F52414D 
+ 2151      5F535452 
+ 2151      55435400 
+ 2152              	.LASF13:
+ 2153 04a3 75696E74 		.ascii	"uint32\000"
+ 2153      333200
+ 2154              	.LASF102:
+ 2155 04aa 6D61696E 		.ascii	"main.c\000"
+ 2155      2E6300
+ 2156              	.LASF61:
+ 2157 04b1 7363616E 		.ascii	"scanCsdISC\000"
+ 2157      43736449 
+ 2157      534300
+ 2158              	.LASF5:
+ 2159 04bc 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2159      20756E73 
+ 2159      69676E65 
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 48
+
+
+ 2159      6420696E 
+ 2159      7400
+ 2160              	.LASF78:
+ 2161 04ce 73656E64 		.ascii	"send_status\000"
+ 2161      5F737461 
+ 2161      74757300 
+ 2162              	.LASF66:
+ 2163 04da 75706461 		.ascii	"updat_posc\000"
+ 2163      745F706F 
+ 2163      736300
+ 2164              	.LASF38:
+ 2165 04e5 62736C6E 		.ascii	"bslnExt\000"
+ 2165      45787400 
+ 2166              	.LASF79:
+ 2167 04ed 74696D65 		.ascii	"time_counts\000"
+ 2167      5F636F75 
+ 2167      6E747300 
+ 2168              	.LASF99:
+ 2169 04f9 55415254 		.ascii	"UART_SpiUartPutArray\000"
+ 2169      5F537069 
+ 2169      55617274 
+ 2169      50757441 
+ 2169      72726179 
+ 2170              	.LASF89:
+ 2171 050e 54696D65 		.ascii	"Timer_Start\000"
+ 2171      725F5374 
+ 2171      61727400 
+ 2172              	.LASF77:
+ 2173 051a 63617073 		.ascii	"capsense_status\000"
+ 2173      656E7365 
+ 2173      5F737461 
+ 2173      74757300 
+ 2174              	.LASF40:
+ 2175 052a 6E656742 		.ascii	"negBslnRstCnt\000"
+ 2175      736C6E52 
+ 2175      7374436E 
+ 2175      7400
+ 2176              	.LASF107:
+ 2177 0538 6D656D73 		.ascii	"memset\000"
+ 2177      657400
+ 2178              	.LASF96:
+ 2179 053f 43617053 		.ascii	"CapSense_IsBusy\000"
+ 2179      656E7365 
+ 2179      5F497342 
+ 2179      75737900 
+ 2180              	.LASF101:
+ 2181 054f 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 2181      43313120 
+ 2181      352E342E 
+ 2181      31203230 
+ 2181      31363036 
+ 2182 0582 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 2182      20726576 
+ 2182      6973696F 
+ 2182      6E203233 
+ 2182      37373135 
+ 2183 05b5 73202D66 		.ascii	"s -ffunction-sections -ffat-lto-objects\000"
+ARM GAS  C:\Users\zack.li\AppData\Local\Temp\cciU6y62.s 			page 49
+
+
+ 2183      66756E63 
+ 2183      74696F6E 
+ 2183      2D736563 
+ 2183      74696F6E 
+ 2184              	.LASF67:
+ 2185 05dd 7265675F 		.ascii	"reg_array\000"
+ 2185      61727261 
+ 2185      7900
+ 2186              	.LASF15:
+ 2187 05e7 646F7562 		.ascii	"double\000"
+ 2187      6C6500
+ 2188              	.LASF57:
+ 2189 05ee 736E7254 		.ascii	"snrTestWidgetId\000"
+ 2189      65737457 
+ 2189      69646765 
+ 2189      74496400 
+ 2190              	.LASF80:
+ 2191 05fe 6C617374 		.ascii	"last_capsense\000"
+ 2191      5F636170 
+ 2191      73656E73 
+ 2191      6500
+ 2192              	.LASF100:
+ 2193 060c 43794465 		.ascii	"CyDelay\000"
+ 2193      6C617900 
+ 2194              	.LASF33:
+ 2195 0614 646F776E 		.ascii	"down\000"
+ 2195      00
+ 2196              	.LASF52:
+ 2197 0619 736E7353 		.ascii	"snsStatus\000"
+ 2197      74617475 
+ 2197      7300
+ 2198              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
